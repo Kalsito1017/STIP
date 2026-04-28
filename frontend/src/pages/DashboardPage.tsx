@@ -1,7 +1,10 @@
 import { Bus, Clock, TrendingUp, AlertTriangle } from 'lucide-react';
 import { StatCard } from '../components/StatCard';
+import { AlertBanner } from '../components/AlertBanner';
+import { TripUpdatesList } from '../components/TripUpdatesList';
 import { useLiveVehicles } from '../hooks/useVehicles';
 import { useReliabilityRanking, usePeakHours } from '../hooks/useDelays';
+import { useAppStore } from '../store/useAppStore';
 import { useMemo } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -12,6 +15,7 @@ export function DashboardPage() {
   const { data: ranking } = useReliabilityRanking(10, true);
   const { data: worstRanking } = useReliabilityRanking(5, false);
   const { data: peakHours } = usePeakHours();
+  const alerts = useAppStore((s) => s.alerts);
   const avgDelay = useMemo(() => {
     if (!ranking?.length) return 0;
     return Math.round(ranking.reduce((sum: number, r: { avgDelaySeconds: number }) => sum + r.avgDelaySeconds, 0) / ranking.length);
@@ -42,14 +46,17 @@ export function DashboardPage() {
           icon={TrendingUp}
         />
         <StatCard
-          title="Worst Route"
-          value={worstRanking?.[0]?.shortName ?? '—'}
-          subtitle={`Score: ${Math.round(worstRanking?.[0]?.score ?? 0)}`}
+          title="Active Alerts"
+          value={alerts.length}
+          subtitle={alerts.some(a => a.severity === 3) ? 'Severe active' : 'Monitoring'}
           icon={AlertTriangle}
+          trend={alerts.length === 0 ? 'up' : 'down'}
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <AlertBanner />
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="bg-white rounded-lg border border-slate-200 p-5 shadow-sm">
           <h3 className="text-sm font-semibold text-slate-700 mb-4">Peak Hour Delays</h3>
           {peakHours?.length ? (
@@ -91,6 +98,8 @@ export function DashboardPage() {
           )}
         </div>
       </div>
+
+      <TripUpdatesList />
     </div>
   );
 }

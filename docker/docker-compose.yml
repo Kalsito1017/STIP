@@ -6,9 +6,9 @@ services:
     environment:
       POSTGRES_DB: sofia_transport
       POSTGRES_USER: stip_app
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ../database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
@@ -22,7 +22,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -36,11 +36,12 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:5000
-      DB_CONNECTION_STRING: Host=postgres;Database=sofia_transport;Username=stip_app;Password=${DB_PASSWORD:-changeme}
+      DB_CONNECTION_STRING: Host=postgres;Database=sofia_transport;Username=stip_app;Password=${DB_PASSWORD}
       REDIS_CONNECTION: redis:6379
       GTFS_RT_FEED_URL: ${GTFS_RT_FEED_URL}
       GTFS_STATIC_URL: ${GTFS_STATIC_URL}
       ML_SERVICE_URL: http://ml:8000
+      ML_INTERNAL_SECRET: ${ML_INTERNAL_SECRET:-}
       POLL_INTERVAL_SECONDS: 15
     ports:
       - "5000:5000"
@@ -55,11 +56,12 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.worker
     environment:
-      DB_CONNECTION_STRING: Host=postgres;Database=sofia_transport;Username=stip_app;Password=${DB_PASSWORD:-changeme}
+      DB_CONNECTION_STRING: Host=postgres;Database=sofia_transport;Username=stip_app;Password=${DB_PASSWORD}
       REDIS_CONNECTION: redis:6379
       GTFS_RT_FEED_URL: ${GTFS_RT_FEED_URL}
       GTFS_STATIC_URL: ${GTFS_STATIC_URL}
       ML_SERVICE_URL: http://ml:8000
+      ML_INTERNAL_SECRET: ${ML_INTERNAL_SECRET:-}
       POLL_INTERVAL_SECONDS: 15
     depends_on:
       postgres:
@@ -72,9 +74,16 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.ml
     environment:
-      DB_CONNECTION_STRING: Host=postgres;Database=sofia_transport;Username=stip_app;Password=${DB_PASSWORD:-changeme}
+      DB_CONNECTION_STRING: Host=postgres;Database=sofia_transport;Username=stip_app;Password=${DB_PASSWORD}
+      ML_INTERNAL_SECRET: ${ML_INTERNAL_SECRET:-}
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     depends_on:
       postgres:
         condition: service_healthy

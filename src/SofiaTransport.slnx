@@ -1,4 +1,7 @@
 <Solution>
+  <Project Path="../tests/SofiaTransport.Api.Tests/SofiaTransport.Api.Tests.csproj" />
+  <Project Path="../tests/SofiaTransport.Application.Tests/SofiaTransport.Application.Tests.csproj" />
+  <Project Path="../tests/SofiaTransport.Domain.Tests/SofiaTransport.Domain.Tests.csproj" />
   <Project Path="SofiaTransport.Api/SofiaTransport.Api.csproj" />
   <Project Path="SofiaTransport.Application/SofiaTransport.Application.csproj" />
   <Project Path="SofiaTransport.Domain/SofiaTransport.Domain.csproj" />

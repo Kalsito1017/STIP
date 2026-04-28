@@ -23,6 +23,16 @@ export const vehiclesApi = {
     api.get('/vehicles/live', { params: { routeId } }).then(r => r.data),
 };
 
+export const tripUpdatesApi = {
+  getLive: (routeId?: string) =>
+    api.get('/tripupdates/live', { params: { routeId } }).then(r => r.data),
+};
+
+export const alertsApi = {
+  getActive: (routeId?: string) =>
+    api.get('/alerts', { params: { routeId } }).then(r => r.data),
+};
+
 export const analyticsApi = {
   getHeatmap: (from?: string, to?: string) =>
     api.get('/analytics/heatmap/delays', { params: { from, to } }).then(r => r.data),
@@ -30,6 +40,27 @@ export const analyticsApi = {
     api.get('/analytics/reliability/ranking', { params: { top, best } }).then(r => r.data),
   getPeakHours: (date?: string) =>
     api.get('/analytics/peak-hours', { params: { date } }).then(r => r.data),
+};
+
+export interface DelayPredictionRequest {
+  routeId: string;
+  stopId: string;
+  hour: number;
+  dayOfWeek: number;
+}
+
+export interface DelayPredictionResponse {
+  predictedDelaySeconds: number;
+  confidenceLower: number;
+  confidenceUpper: number;
+  modelVersion: string;
+}
+
+export const predictionsApi = {
+  predictDelay: (body: DelayPredictionRequest) =>
+    api.post<DelayPredictionResponse>('/predictions/delay', body).then(r => r.data),
+  predictTravelTime: (fromStop: string, toStop: string, departureTime: string) =>
+    api.post('/predictions/travel-time', { fromStop, toStop, departureTime }).then(r => r.data),
 };
 
 export default api;

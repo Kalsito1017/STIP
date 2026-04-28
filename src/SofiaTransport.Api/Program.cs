@@ -25,6 +25,7 @@ try
 
     app.UseExceptionHandling();
     app.UseSecurityHeaders();
+    app.UseRateLimiting();
 
     if (app.Environment.IsDevelopment())
     {

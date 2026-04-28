@@ -1,4 +1,8 @@
 using System.Reflection;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using MediatR;
+using SofiaTransport.Application.Common.Behaviors;
 using SofiaTransport.Application.Common.Interfaces;
 
 namespace SofiaTransport.Api.DependencyInjection;
@@ -8,8 +12,14 @@ public static class ApiServiceRegistration
     public static IServiceCollection AddApiServices(this IServiceCollection services)
     {
         services.AddMediatR(cfg =>
+        {
             cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(
-                typeof(SofiaTransport.Application.Routes.GetRoutesQuery))!));
+                typeof(SofiaTransport.Application.Routes.GetRoutesQuery))!);
+            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        });
+
+        services.AddValidatorsFromAssemblyContaining<SofiaTransport.Application.Routes.GetRoutesQuery>();
+        services.AddFluentValidationAutoValidation();
 
         services.AddControllers();
         services.AddSignalR();

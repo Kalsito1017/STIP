@@ -4,6 +4,21 @@ using SofiaTransport.Application.Predictions;
 
 namespace SofiaTransport.Api.Controllers;
 
+public record PredictDelayRequest(
+    string RouteId,
+    string StopId,
+    int Hour,
+    int DayOfWeek,
+    int StopSequence
+);
+
+public record PredictTravelTimeRequest(
+    string FromStopId,
+    string ToStopId,
+    string RouteId,
+    DateTime DepartureTime
+);
+
 [ApiController]
 [Route("api/predictions")]
 public class PredictionsController : ControllerBase
@@ -13,11 +28,21 @@ public class PredictionsController : ControllerBase
     public PredictionsController(IMediator mediator) => _mediator = mediator;
 
     [HttpPost("delay")]
-    public async Task<IActionResult> PredictDelay([FromBody] PredictDelayRequest request)
+    [ProducesResponseType(typeof(PredictDelayResponse), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PredictDelayResponse>> PredictDelay([FromBody] PredictDelayRequest request)
     {
         var result = await _mediator.Send(new PredictDelayCommand(
             request.RouteId, request.StopId, request.Hour,
             request.DayOfWeek, request.StopSequence));
+        return Ok(result);
+    }
+
+    [HttpPost("travel-time")]
+    [ProducesResponseType(typeof(TravelTimePredictionResponse), StatusCodes.Status200OK)]
+    public async Task<ActionResult<TravelTimePredictionResponse>> PredictTravelTime([FromBody] PredictTravelTimeRequest request)
+    {
+        var result = await _mediator.Send(new PredictTravelTimeCommand(
+            request.FromStopId, request.ToStopId, request.RouteId, request.DepartureTime));
         return Ok(result);
     }
 }

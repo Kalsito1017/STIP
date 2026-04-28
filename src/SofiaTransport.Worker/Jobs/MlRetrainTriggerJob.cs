@@ -44,9 +44,12 @@ public class MlRetrainTriggerJob : IJob
             .ToListAsync(context.CancellationToken);
 
         var mlUrl = _config["ML_SERVICE_URL"] ?? "http://ml:8000";
+        var mlSecret = _config["ML_INTERNAL_SECRET"] ?? "";
         var client = _httpClientFactory.CreateClient();
         var json = System.Text.Json.JsonSerializer.Serialize(new { delay_logs = logs });
         var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+        if (!string.IsNullOrEmpty(mlSecret))
+            content.Headers.Add("X-Internal-Secret", mlSecret);
         var response = await client.PostAsync($"{mlUrl}/internal/retrain", content, context.CancellationToken);
 
         if (response.IsSuccessStatusCode)

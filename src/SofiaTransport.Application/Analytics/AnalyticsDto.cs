@@ -20,3 +20,10 @@ public record PeakHourDto(
     double AvgDelaySeconds,
     int VehicleCount
 );
+
+public record SystemOverviewDto(
+    int LiveVehicleCount,
+    double AvgDelaySecondsLastHour,
+    int TotalRoutes,
+    int TotalStops
+);

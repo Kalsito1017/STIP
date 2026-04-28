@@ -6,6 +6,7 @@ import { useRealtime } from '../hooks/useRealtime';
 import { useRoutes } from '../hooks/useRoutes';
 import { useLiveVehicles } from '../hooks/useVehicles';
 import { useStops } from '../hooks/useStops';
+import { AlertBanner } from '../components/AlertBanner';
 import type { Vehicle } from '../store/useAppStore';
 
 const busIcon = L.divIcon({
@@ -46,6 +47,7 @@ export function LiveMapPage() {
 
   return (
     <div className="space-y-4">
+      <AlertBanner />
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-slate-900">Live Map</h1>
         <div className="flex items-center gap-3">

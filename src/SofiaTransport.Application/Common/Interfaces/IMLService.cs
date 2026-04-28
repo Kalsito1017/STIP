@@ -6,4 +6,7 @@ public interface IMLService
 {
     Task<PredictDelayResponse> PredictDelayAsync(string routeId, string stopId,
         int hour, int dayOfWeek, int stopSequence, CancellationToken ct);
+
+    Task<TravelTimePredictionResponse> PredictTravelTimeAsync(string fromStopId, string toStopId,
+        string routeId, DateTime departureTime, CancellationToken ct);
 }

@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Polly;
+using Polly.Extensions.Http;
 using SofiaTransport.Application.Common.Interfaces;
 using SofiaTransport.Infrastructure.Cache;
 using SofiaTransport.Infrastructure.GTFS;
@@ -24,13 +26,42 @@ public static class InfrastructureServiceRegistration
             ConnectionMultiplexer.Connect(configuration["REDIS_CONNECTION"] ?? "localhost:6379"));
 
         services.AddSingleton<IVehicleCache, RedisVehicleCache>();
+        services.AddSingleton<ITripUpdateCache, RedisTripUpdateCache>();
+        services.AddSingleton<IAlertCache, RedisAlertCache>();
         services.AddSingleton<IVehicleBroadcaster, VehicleBroadcaster>();
+        services.AddSingleton<IRealtimeBroadcaster, RealtimeBroadcaster>();
+
+        var retryPolicy = HttpPolicyExtensions
+            .HandleTransientHttpError()
+            .Or<HttpRequestException>()
+            .WaitAndRetryAsync(3, retryAttempt =>
+                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 
         services.AddHttpClient<IGtfsFeedClient, GtfsFeedClient>(client =>
         {
             client.BaseAddress = new Uri(configuration["GTFS_RT_FEED_URL"] ?? "https://localhost");
             client.Timeout = TimeSpan.FromSeconds(30);
-        });
+        }).AddPolicyHandler(retryPolicy);
+
+        var tripUpdatesUrl = configuration["GTFS_RT_TRIP_UPDATES_URL"];
+        if (!string.IsNullOrEmpty(tripUpdatesUrl))
+        {
+            services.AddHttpClient<ITripUpdateFeedClient, TripUpdateFeedClient>(client =>
+            {
+                client.BaseAddress = new Uri(tripUpdatesUrl);
+                client.Timeout = TimeSpan.FromSeconds(30);
+            }).AddPolicyHandler(retryPolicy);
+        }
+
+        var alertsUrl = configuration["GTFS_RT_ALERTS_URL"];
+        if (!string.IsNullOrEmpty(alertsUrl))
+        {
+            services.AddHttpClient<IAlertFeedClient, AlertFeedClient>(client =>
+            {
+                client.BaseAddress = new Uri(alertsUrl);
+                client.Timeout = TimeSpan.FromSeconds(30);
+            }).AddPolicyHandler(retryPolicy);
+        }
 
         services.AddHttpClient<IMLService, ML.MLService>(client =>
         {

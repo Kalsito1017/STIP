@@ -13,3 +13,9 @@ public record PredictDelayResponse(
     List<double> ConfidenceInterval,
     string ModelVersion
 );
+
+public record TravelTimePredictionResponse(
+    double PredictedTravelTimeSeconds,
+    List<double> ConfidenceInterval,
+    string ModelVersion
+);

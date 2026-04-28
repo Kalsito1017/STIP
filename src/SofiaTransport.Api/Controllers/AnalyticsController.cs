@@ -12,22 +12,33 @@ public class AnalyticsController : ControllerBase
 
     public AnalyticsController(IMediator mediator) => _mediator = mediator;
 
+    [HttpGet("overview")]
+    [ProducesResponseType(typeof(SystemOverviewDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<SystemOverviewDto>> GetOverview()
+    {
+        var overview = await _mediator.Send(new GetSystemOverviewQuery());
+        return Ok(overview);
+    }
+
     [HttpGet("heatmap/delays")]
-    public async Task<IActionResult> GetDelayHeatmap([FromQuery] DateTime? from, [FromQuery] DateTime? to)
+    [ProducesResponseType(typeof(IReadOnlyList<HeatmapPointDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IReadOnlyList<HeatmapPointDto>>> GetDelayHeatmap([FromQuery] DateTime? from, [FromQuery] DateTime? to)
     {
         var heatmap = await _mediator.Send(new GetDelayHeatmapQuery(from, to));
         return Ok(heatmap);
     }
 
     [HttpGet("reliability/ranking")]
-    public async Task<IActionResult> GetReliabilityRanking([FromQuery] int top = 10, [FromQuery] bool best = true)
+    [ProducesResponseType(typeof(IReadOnlyList<ReliabilityRankingDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IReadOnlyList<ReliabilityRankingDto>>> GetReliabilityRanking([FromQuery] int top = 10, [FromQuery] bool best = true)
     {
         var ranking = await _mediator.Send(new GetReliabilityRankingQuery(top, best));
         return Ok(ranking);
     }
 
     [HttpGet("peak-hours")]
-    public async Task<IActionResult> GetPeakHours([FromQuery] DateTime? date)
+    [ProducesResponseType(typeof(IReadOnlyList<PeakHourDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IReadOnlyList<PeakHourDto>>> GetPeakHours([FromQuery] DateTime? date)
     {
         var peakHours = await _mediator.Send(new GetPeakHoursQuery(date));
         return Ok(peakHours);

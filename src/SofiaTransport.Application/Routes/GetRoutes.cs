@@ -1,9 +1,10 @@
 using MediatR;
 using SofiaTransport.Application.Common.Interfaces;
+using SofiaTransport.Domain.Enums;
 
 namespace SofiaTransport.Application.Routes;
 
-public record GetRoutesQuery : IRequest<IReadOnlyList<RouteDto>>;
+public record GetRoutesQuery(TransitType? Type = null) : IRequest<IReadOnlyList<RouteDto>>;
 
 public class GetRoutesHandler : IRequestHandler<GetRoutesQuery, IReadOnlyList<RouteDto>>
 {
@@ -13,7 +14,10 @@ public class GetRoutesHandler : IRequestHandler<GetRoutesQuery, IReadOnlyList<Ro
 
     public async Task<IReadOnlyList<RouteDto>> Handle(GetRoutesQuery request, CancellationToken ct)
     {
-        var routes = await _repo.GetAllAsync();
+        var routes = request.Type.HasValue
+            ? await _repo.GetByTypeAsync(request.Type.Value)
+            : await _repo.GetAllAsync();
+
         return routes.Select(r => new RouteDto(r.RouteId, r.ShortName, r.LongName, r.Type)).ToList();
     }
 }

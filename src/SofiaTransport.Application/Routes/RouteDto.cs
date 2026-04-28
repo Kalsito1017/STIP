@@ -29,3 +29,11 @@ public record DelayPatternDto(
     int HourOfDay,
     double AvgDelaySeconds
 );
+
+public record ReliabilityHistoryDto(
+    DateTime Date,
+    double OnTimePct,
+    double AvgDelaySeconds,
+    double Score,
+    double PeakScore
+);

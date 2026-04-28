@@ -14,7 +14,7 @@ public class GetPeakHoursHandler : IRequestHandler<GetPeakHoursQuery, IReadOnlyL
     public async Task<IReadOnlyList<PeakHourDto>> Handle(GetPeakHoursQuery request, CancellationToken ct)
     {
         var date = request.Date ?? DateTime.UtcNow.Date;
-        var logs = await _repo.GetForHeatmapAsync(date, date.AddDays(1));
+        var logs = await _repo.GetByDateAsync(date);
 
         return logs
             .GroupBy(l => l.ScheduledArrival.Hour)

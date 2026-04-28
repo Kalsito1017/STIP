@@ -1,0 +1,57 @@
+using System.Net.Http;
+using Google.Protobuf;
+using SofiaTransport.Application.Common.Interfaces;
+using SofiaTransport.Domain.Entities;
+
+namespace SofiaTransport.Infrastructure.GTFS;
+
+public class TripUpdateFeedClient : ITripUpdateFeedClient
+{
+    private readonly HttpClient _httpClient;
+
+    public TripUpdateFeedClient(HttpClient httpClient) => _httpClient = httpClient;
+
+    public async Task<IReadOnlyList<TripUpdate>> FetchTripUpdatesAsync(CancellationToken ct)
+    {
+        var response = await _httpClient.GetAsync("", ct);
+        response.EnsureSuccessStatusCode();
+
+        var data = await response.Content.ReadAsByteArrayAsync(ct);
+        var feed = TransitRealtime.FeedMessage.ParseFrom(data);
+
+        return feed.Entity
+            .Where(e => e.TripUpdate is not null)
+            .Select(e => ParseTripUpdate(e.TripUpdate!, e.Id))
+            .ToList();
+    }
+
+    private static TripUpdate ParseTripUpdate(TransitRealtime.TripUpdate tu, string feedEntityId)
+    {
+        var tripUpdate = new TripUpdate
+        {
+            TripId = tu.Trip?.TripId ?? string.Empty,
+            RouteId = tu.Trip?.RouteId,
+            StartTime = tu.Trip?.StartTime,
+            StartDate = tu.Trip?.StartDate,
+            ScheduleRelationship = tu.Trip?.ScheduleRelationship ?? 0,
+            VehicleId = !string.IsNullOrEmpty(tu.Vehicle?.Id) ? tu.Vehicle.Id : null,
+            RecordedAt = DateTime.UtcNow
+        };
+
+        foreach (var stu in tu.StopTimeUpdates)
+        {
+            tripUpdate.StopTimeUpdates.Add(new StopTimeUpdate
+            {
+                StopSequence = stu.StopSequence,
+                StopId = stu.StopId,
+                ArrivalDelay = stu.Arrival?.Delay,
+                ArrivalTime = stu.Arrival?.Time,
+                DepartureDelay = stu.Departure?.Delay,
+                DepartureTime = stu.Departure?.Time,
+                ScheduleRelationship = stu.ScheduleRelationship
+            });
+        }
+
+        return tripUpdate;
+    }
+}

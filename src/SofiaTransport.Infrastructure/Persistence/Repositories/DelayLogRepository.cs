@@ -26,6 +26,10 @@ public class DelayLogRepository : IDelayLogRepository
         await _db.DelayLogs.Where(d => d.RecordedAt >= from && d.RecordedAt < to)
             .AsNoTracking().ToListAsync();
 
+    public async Task<IReadOnlyList<DelayLog>> GetByDateAsync(DateTime date) =>
+        await _db.DelayLogs.Where(d => d.RecordedAt >= date && d.RecordedAt < date.AddDays(1))
+            .AsNoTracking().ToListAsync();
+
     public async Task<DelayLog> AddAsync(DelayLog entity) { _db.DelayLogs.Add(entity); await _db.SaveChangesAsync(); return entity; }
 
     public Task UpdateAsync(DelayLog entity) { _db.DelayLogs.Update(entity); return _db.SaveChangesAsync(); }

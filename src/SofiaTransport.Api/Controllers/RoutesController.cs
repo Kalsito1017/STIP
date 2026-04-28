@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SofiaTransport.Application.Routes;
+using SofiaTransport.Domain.Enums;
 
 namespace SofiaTransport.Api.Controllers;
 
@@ -13,28 +14,42 @@ public class RoutesController : ControllerBase
     public RoutesController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    [ProducesResponseType(typeof(IReadOnlyList<RouteDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IReadOnlyList<RouteDto>>> GetAll([FromQuery] TransitType? type)
     {
-        var routes = await _mediator.Send(new GetRoutesQuery());
+        var routes = await _mediator.Send(new GetRoutesQuery(type));
         return Ok(routes);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(string id)
+    [ProducesResponseType(typeof(RouteDetailDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<RouteDetailDto>> GetById(string id)
     {
         var route = await _mediator.Send(new GetRouteDetailQuery(id));
         return route is not null ? Ok(route) : NotFound();
     }
 
     [HttpGet("{id}/reliability")]
-    public async Task<IActionResult> GetReliability(string id)
+    [ProducesResponseType(typeof(ReliabilityDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ReliabilityDto>> GetReliability(string id)
     {
         var route = await _mediator.Send(new GetRouteDetailQuery(id));
         return route is not null ? Ok(route.LatestReliability) : NotFound();
     }
 
+    [HttpGet("{id}/reliability-history")]
+    [ProducesResponseType(typeof(IReadOnlyList<ReliabilityHistoryDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IReadOnlyList<ReliabilityHistoryDto>>> GetReliabilityHistory(string id, [FromQuery] DateTime? from, [FromQuery] DateTime? to)
+    {
+        var history = await _mediator.Send(new GetRouteReliabilityHistoryQuery(id, from, to));
+        return Ok(history);
+    }
+
     [HttpGet("{id}/delay-pattern")]
-    public async Task<IActionResult> GetDelayPattern(string id, [FromQuery] DateTime? date)
+    [ProducesResponseType(typeof(IReadOnlyList<DelayPatternDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IReadOnlyList<DelayPatternDto>>> GetDelayPattern(string id, [FromQuery] DateTime? date)
     {
         var pattern = await _mediator.Send(new GetRouteDelayPatternQuery(id, date));
         return Ok(pattern);

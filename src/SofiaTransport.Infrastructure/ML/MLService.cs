@@ -30,4 +30,10 @@ public class MLService : IMLService
         var result = JsonSerializer.Deserialize<PredictDelayResponse>(resultJson, JsonOptions);
         return result ?? new PredictDelayResponse(0, new List<double> { 0, 0 }, "unknown");
     }
+
+    public Task<TravelTimePredictionResponse> PredictTravelTimeAsync(
+        string fromStopId, string toStopId, string routeId, DateTime departureTime, CancellationToken ct)
+    {
+        throw new NotImplementedException("Travel time prediction is computed via heuristic handler.");
+    }
 }

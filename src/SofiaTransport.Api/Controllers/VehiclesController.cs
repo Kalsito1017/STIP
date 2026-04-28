@@ -13,7 +13,8 @@ public class VehiclesController : ControllerBase
     public VehiclesController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet("live")]
-    public async Task<IActionResult> GetLive([FromQuery] string? routeId)
+    [ProducesResponseType(typeof(IReadOnlyList<VehicleDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IReadOnlyList<VehicleDto>>> GetLive([FromQuery] string? routeId)
     {
         var vehicles = await _mediator.Send(new GetLiveVehiclesQuery(routeId));
         return Ok(vehicles);
