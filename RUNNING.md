@@ -21,6 +21,7 @@ Edit `.env` — fill in `DB_PASSWORD`, `GTFS_RT_FEED_URL`, `GTFS_STATIC_URL`.
 | Frontend | http://localhost:5173 |
 | API + Swagger | http://localhost:5000/swagger |
 | ML Service | http://localhost:8000/docs |
+| pgAdmin | http://localhost:5050 |
 
 ---
 
