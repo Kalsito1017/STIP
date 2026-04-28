@@ -1,18 +1,11 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
-
-COPY src/SofiaTransport.Domain/SofiaTransport.Domain.csproj SofiaTransport.Domain/
-COPY src/SofiaTransport.Application/SofiaTransport.Application.csproj SofiaTransport.Application/
-COPY src/SofiaTransport.Infrastructure/SofiaTransport.Infrastructure.csproj SofiaTransport.Infrastructure/
-COPY src/SofiaTransport.Worker/SofiaTransport.Worker.csproj SofiaTransport.Worker/
-RUN dotnet restore SofiaTransport.Worker/SofiaTransport.Worker.csproj
-
 COPY src/ .
-RUN dotnet publish SofiaTransport.Worker/SofiaTransport.Worker.csproj -c Release -o /app --no-restore
+RUN dotnet publish SofiaTransport.Worker/SofiaTransport.Worker.csproj -c Release -o /app
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
 COPY --from=build /app .
-RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+RUN useradd -m -u 1500 appuser && chown -R appuser:appuser /app
 USER appuser
 ENTRYPOINT ["dotnet", "SofiaTransport.Worker.dll"]

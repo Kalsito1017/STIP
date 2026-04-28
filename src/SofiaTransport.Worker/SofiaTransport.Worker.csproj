@@ -4,6 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
     <UserSecretsId>dotnet-SofiaTransport.Worker-7b0a7251-5fe9-4217-bbf8-61439de8a4b4</UserSecretsId>
   </PropertyGroup>
 

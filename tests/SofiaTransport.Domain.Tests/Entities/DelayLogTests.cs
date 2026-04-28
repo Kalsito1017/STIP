@@ -16,7 +16,7 @@ public class DelayLogTests
         Assert.Null(log.RouteId);
         Assert.Equal(default(DateTime), log.ScheduledArrival);
         Assert.Equal(default(DateTime), log.ActualArrival);
-        Assert.Equal(0, log.DelaySeconds);
+        Assert.Null(log.DelaySeconds);
         Assert.Equal(default(DateTime), log.RecordedAt);
     }
 
