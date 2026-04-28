@@ -26,7 +26,14 @@ function FitBoundsOnShapes() {
 
     const allCoords = shapes.features.flatMap((f) => f.geometry.coordinates);
     if (allCoords.length > 0) {
-      map.fitBounds(allCoords as [number, number][], { padding: 50, maxZoom: 14, duration: 0 });
+      const bounds = allCoords.reduce(
+        (acc: [number, number, number, number], c: number[]) => [
+          Math.min(acc[0], c[0]), Math.min(acc[1], c[1]),
+          Math.max(acc[2], c[0]), Math.max(acc[3], c[1]),
+        ],
+        [Infinity, Infinity, -Infinity, -Infinity]
+      );
+      map.fitBounds(bounds, { padding: 50, maxZoom: 14, duration: 0 });
       fittedRef.current = true;
     }
   }, [map, shapes]);
