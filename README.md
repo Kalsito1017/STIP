@@ -10,8 +10,6 @@ A full-stack, real-time public transport analytics platform for **Sofia, Bulgari
 - [Getting Started](#getting-started)
 - [Project Structure](#project-structure)
 - [API Overview](#api-overview)
-- [Real-time Feeds](#real-time-feeds)
-- [Development Roadmap](#development-roadmap)
 
 ---
 
@@ -209,30 +207,3 @@ STIP/
 | `WS /hubs/vehicles` | SignalR live push (VehicleUpdated, TripUpdated, AlertUpdated) |
 
 Full interactive docs available at http://localhost:5000/swagger when running.
-
----
-
-## Real-time Feeds
-
-The platform ingests three optional GTFS-RT protobuf feeds from Sofia's urban mobility center:
-
-| Feed | URL | Data | Redis TTL |
-|------|-----|------|-----------|
-| **Vehicle Positions** | `GTFS_RT_FEED_URL` | Live vehicle locations, speed, bearing | 120s |
-| **Trip Updates** | `GTFS_RT_TRIP_UPDATES_URL` | Per-stop arrival/departure delays, schedule relationships | 120s |
-| **Service Alerts** | `GTFS_RT_ALERTS_URL` | Disruptions, reroutes, station closures, cause/effect | 300s |
-
-All three feeds are polled by the Worker service at the configured `POLL_INTERVAL_SECONDS`. Trip updates and alerts are **optional** — the application starts normally without them.
-
----
-
-## Development Roadmap
-
-| Phase | Focus | Timeline |
-|-------|-------|----------|
-| **Phase 1** | Docker Compose, PostGIS schema, GTFS static load, Clean Architecture scaffold, React + Leaflet | Weeks 1–2 |
-| **Phase 2** | GTFS-RT polling, Redis cache, SignalR hub, live vehicle map, DelayLog pipeline | Week 3 |
-| **Phase 3** | Quartz aggregation, ReliabilityScore computation, analytics endpoints, Dashboard + Recharts | Week 4 |
-| **Phase 4** | FastAPI ML service, XGBoost training, `/predict` endpoint, React prediction UI | Week 5 |
-| **Phase 5** | Swagger, error handling, unit tests, DB indexes, documentation | Week 6 |
-| **Phase 6** | GTFS-RT Trip Updates & Alerts feeds, real-time SignalR push, AlertBanner UI, TripUpdatesList | Week 7 |

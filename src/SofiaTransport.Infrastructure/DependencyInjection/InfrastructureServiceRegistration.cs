@@ -71,6 +71,7 @@ public static class InfrastructureServiceRegistration
 
         services.AddScoped<IRouteRepository, RouteRepository>();
         services.AddScoped<IStopRepository, StopRepository>();
+        services.AddScoped<IStopTimeRepository, StopTimeRepository>();
         services.AddScoped<IVehicleRepository, VehicleRepository>();
         services.AddScoped<IDelayLogRepository, DelayLogRepository>();
         services.AddScoped<IReliabilityScoreRepository, ReliabilityScoreRepository>();
