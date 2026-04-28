@@ -15,6 +15,7 @@ public class TransportDbContext : DbContext
     public DbSet<Vehicle> Vehicles => Set<Vehicle>();
     public DbSet<DelayLog> DelayLogs => Set<DelayLog>();
     public DbSet<ReliabilityScore> ReliabilityScores => Set<ReliabilityScore>();
+    public DbSet<Shape> Shapes => Set<Shape>();
     public DbSet<User> Users => Set<User>();
 
     public TransportDbContext(DbContextOptions<TransportDbContext> options) : base(options) { }
@@ -155,6 +156,19 @@ public class TransportDbContext : DbContext
             e.Property(r => r.Score).HasColumnName("reliability_score");
             e.Property(r => r.PeakScore).HasColumnName("peak_score");
             e.Property(r => r.SampleCount).HasColumnName("sample_count");
+        });
+
+        modelBuilder.Entity<Shape>(e =>
+        {
+            e.ToTable("shapes");
+            e.HasKey(s => s.Id);
+            e.Property(s => s.Id).HasColumnName("id").ValueGeneratedOnAdd();
+            e.Property(s => s.RouteId).HasColumnName("route_id").IsRequired();
+            e.Property(s => s.Sequence).HasColumnName("sequence");
+            e.Property(s => s.Lat).HasColumnName("lat");
+            e.Property(s => s.Lon).HasColumnName("lon");
+            e.HasOne(s => s.Route).WithMany(r => r.Shapes).HasForeignKey(s => s.RouteId);
+            e.HasIndex(s => new { s.RouteId, s.Sequence }).HasDatabaseName("idx_shapes_route_sequence");
         });
 
         modelBuilder.Entity<User>(e =>

@@ -76,6 +76,7 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IVehicleRepository, VehicleRepository>();
         services.AddScoped<IDelayLogRepository, DelayLogRepository>();
         services.AddScoped<IReliabilityScoreRepository, ReliabilityScoreRepository>();
+        services.AddScoped<IShapeRepository, ShapeRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
 
         services.AddSingleton<ITokenService, TokenService>();

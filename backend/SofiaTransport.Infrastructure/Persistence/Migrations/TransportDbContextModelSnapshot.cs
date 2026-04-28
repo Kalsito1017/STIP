@@ -258,6 +258,40 @@ namespace SofiaTransport.Infrastructure.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("SofiaTransport.Domain.Entities.Shape", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<double>("Lat")
+                        .HasColumnType("double precision")
+                        .HasColumnName("lat");
+
+                    b.Property<double>("Lon")
+                        .HasColumnType("double precision")
+                        .HasColumnName("lon");
+
+                    b.Property<string>("RouteId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("route_id");
+
+                    b.Property<int>("Sequence")
+                        .HasColumnType("integer")
+                        .HasColumnName("sequence");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RouteId", "Sequence")
+                        .HasDatabaseName("idx_shapes_route_sequence");
+
+                    b.ToTable("shapes", (string)null);
+                });
+
             modelBuilder.Entity("SofiaTransport.Domain.Entities.Stop", b =>
                 {
                     b.Property<string>("StopId")
@@ -522,6 +556,17 @@ namespace SofiaTransport.Infrastructure.Persistence.Migrations
                     b.ToTable("vehicles", (string)null);
                 });
 
+            modelBuilder.Entity("SofiaTransport.Domain.Entities.Shape", b =>
+                {
+                    b.HasOne("SofiaTransport.Domain.Entities.Route", "Route")
+                        .WithMany("Shapes")
+                        .HasForeignKey("RouteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Route");
+                });
+
             modelBuilder.Entity("SofiaTransport.Domain.Entities.StopTime", b =>
                 {
                     b.HasOne("SofiaTransport.Domain.Entities.Stop", "Stop")
@@ -554,6 +599,8 @@ namespace SofiaTransport.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SofiaTransport.Domain.Entities.Route", b =>
                 {
+                    b.Navigation("Shapes");
+
                     b.Navigation("Trips");
                 });
 

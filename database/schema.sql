@@ -83,6 +83,26 @@ CREATE TABLE IF NOT EXISTS reliability_scores (
     PRIMARY KEY (route_id, score_date)
 );
 
+-- Users (authentication)
+CREATE TABLE IF NOT EXISTS users (
+    id            UUID PRIMARY KEY,
+    email         TEXT NOT NULL,
+    password_hash TEXT NOT NULL,
+    full_name     TEXT NOT NULL,
+    created_at    TIMESTAMPTZ NOT NULL
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email ON users(email);
+
+-- Shapes (route geometry)
+CREATE TABLE IF NOT EXISTS shapes (
+    id       BIGSERIAL PRIMARY KEY,
+    route_id TEXT NOT NULL REFERENCES routes(route_id) ON DELETE CASCADE,
+    sequence INT NOT NULL,
+    lat      DOUBLE PRECISION NOT NULL,
+    lon      DOUBLE PRECISION NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_shapes_route_sequence ON shapes(route_id, sequence);
+
 -- Materialized view: pre-aggregated delay stats per route per hour
 CREATE MATERIALIZED VIEW IF NOT EXISTS mv_hourly_delays AS
 SELECT

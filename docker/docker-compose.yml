@@ -55,6 +55,7 @@ services:
       ML_SERVICE_URL: http://ml:8000
       ML_INTERNAL_SECRET: ${ML_INTERNAL_SECRET:-}
       POLL_INTERVAL_SECONDS: 15
+      Jwt__Secret: ${Jwt__Secret:-STIP-SuperSecret-JWT-Key-2026-MinLength32}
     ports:
       - "5000:5000"
     depends_on:
@@ -100,12 +101,13 @@ services:
       postgres:
         condition: service_healthy
 
-  frontend:
+   frontend:
     build:
       context: ..
       dockerfile: docker/Dockerfile.frontend
     environment:
       API_TARGET: http://api:5000
+      MAPBOX_TOKEN: ${MAPBOX_TOKEN}
     ports:
       - "5173:5173"
     depends_on:

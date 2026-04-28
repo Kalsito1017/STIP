@@ -9,4 +9,5 @@ public class Route
     public string? LongName { get; set; }
     public TransitType Type { get; set; }
     public ICollection<Trip> Trips { get; set; } = new List<Trip>();
+    public ICollection<Shape> Shapes { get; set; } = new List<Shape>();
 }

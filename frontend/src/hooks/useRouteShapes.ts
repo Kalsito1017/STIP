@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { routesApi } from '../services/api';
 import type { RouteShapeCollection } from '../types/map';
 
-export function useRouteShapes(routeId: string) {
+export function useRouteShape(routeId: string) {
   return useQuery<RouteShapeCollection>({
     queryKey: ['routeShape', routeId],
     queryFn: () => routesApi.getShape(routeId),
@@ -11,16 +11,11 @@ export function useRouteShapes(routeId: string) {
   });
 }
 
-export function useAllRouteShapes(routeIds: string[]) {
-  return useQuery<RouteShapeCollection[]>({
-    queryKey: ['allRouteShapes', ...routeIds],
-    queryFn: async () => {
-      const results = await Promise.all(
-        routeIds.map((id) => routesApi.getShape(id))
-      );
-      return results;
-    },
-    enabled: routeIds.length > 0,
+export function useAllRouteShapes() {
+  return useQuery<RouteShapeCollection>({
+    queryKey: ['allRouteShapes'],
+    queryFn: () => routesApi.getAllShapes(),
     staleTime: 1_800_000,
   });
 }
+
