@@ -28,7 +28,7 @@ renders a React dashboard. Three layers talk to each other:
 ```
 sofia-transport/
 │
-├── src/
+├── backend/
 │   ├── SofiaTransport.Api/            # ASP.NET Core Web API (entry point)
 │   ├── SofiaTransport.Application/    # Use-cases, CQRS handlers, DTOs
 │   ├── SofiaTransport.Domain/         # Entities, value objects, domain events

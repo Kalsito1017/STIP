@@ -37,4 +37,7 @@ Thumbs.db
 # Docker
 docker/data/
 
+# OpenCode
+.opencode/
+
 

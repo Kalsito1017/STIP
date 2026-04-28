@@ -13,7 +13,7 @@ Edit `.env` — fill in `DB_PASSWORD`, `GTFS_RT_FEED_URL`, `GTFS_STATIC_URL`.
 ## Start Everything
 
 ```bash
-docker compose --env-file .env -f docker/docker-compose.yml up -d --build && cd frontend && bun install && bun run dev
+  docker compose --env-file .env -f docker/docker-compose.yml up -d --build
 ```
 
 | Service | URL |

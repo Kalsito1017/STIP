@@ -69,7 +69,7 @@
 
 ```bash
 # .NET User Secrets (API project)
-cd src/SofiaTransport.Api
+cd backend/SofiaTransport.Api
 dotnet user-secrets init
 dotnet user-secrets set "GTFS_RT_FEED_URL" "https://..."
 dotnet user-secrets set "GTFS_STATIC_URL" "https://..."

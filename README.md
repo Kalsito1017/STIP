@@ -150,7 +150,7 @@ See `.env.example` for the full list. Key variables:
 
 ```
 STIP/
-├── src/
+├── backend/
 │   ├── SofiaTransport.Api/            # ASP.NET Core Web API + Swagger
 │   ├── SofiaTransport.Application/    # CQRS handlers, DTOs, validation
 │   ├── SofiaTransport.Domain/         # Entities, value objects (zero deps)

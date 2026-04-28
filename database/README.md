@@ -52,11 +52,11 @@ All inserts use `ON CONFLICT DO NOTHING` for safe re-runs.
 
 ## EF Core Migrations
 
-Migrations live in `src/SofiaTransport.Infrastructure/Persistence/Migrations/`.
+Migrations live in `backend/SofiaTransport.Infrastructure/Persistence/Migrations/`.
 
 ### Create a new migration
 ```bash
-cd src
+cd backend
 dotnet ef migrations add <MigrationName> \
   --project SofiaTransport.Infrastructure/SofiaTransport.Infrastructure.csproj \
   --startup-project SofiaTransport.Api/SofiaTransport.Api.csproj \
@@ -65,7 +65,7 @@ dotnet ef migrations add <MigrationName> \
 
 ### Apply migrations
 ```bash
-cd src
+cd backend
 dotnet ef database update \
   --project SofiaTransport.Infrastructure/SofiaTransport.Infrastructure.csproj \
   --startup-project SofiaTransport.Api/SofiaTransport.Api.csproj \
