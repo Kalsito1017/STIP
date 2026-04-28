@@ -13,7 +13,7 @@ import {
 export function DashboardPage() {
   const { data: vehicles } = useLiveVehicles();
   const { data: ranking } = useReliabilityRanking(10, true);
-  const { data: worstRanking } = useReliabilityRanking(5, false);
+  useReliabilityRanking(5, false);
   const { data: peakHours } = usePeakHours();
   const alerts = useAppStore((s) => s.alerts);
   const avgDelay = useMemo(() => {

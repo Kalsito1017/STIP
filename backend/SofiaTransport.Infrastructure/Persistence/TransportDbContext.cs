@@ -15,6 +15,7 @@ public class TransportDbContext : DbContext
     public DbSet<Vehicle> Vehicles => Set<Vehicle>();
     public DbSet<DelayLog> DelayLogs => Set<DelayLog>();
     public DbSet<ReliabilityScore> ReliabilityScores => Set<ReliabilityScore>();
+    public DbSet<User> Users => Set<User>();
 
     public TransportDbContext(DbContextOptions<TransportDbContext> options) : base(options) { }
 
@@ -154,6 +155,18 @@ public class TransportDbContext : DbContext
             e.Property(r => r.Score).HasColumnName("reliability_score");
             e.Property(r => r.PeakScore).HasColumnName("peak_score");
             e.Property(r => r.SampleCount).HasColumnName("sample_count");
+        });
+
+        modelBuilder.Entity<User>(e =>
+        {
+            e.ToTable("users");
+            e.HasKey(u => u.Id);
+            e.Property(u => u.Id).HasColumnName("id");
+            e.Property(u => u.Email).HasColumnName("email").IsRequired();
+            e.HasIndex(u => u.Email).IsUnique().HasDatabaseName("idx_users_email");
+            e.Property(u => u.PasswordHash).HasColumnName("password_hash").IsRequired();
+            e.Property(u => u.FullName).HasColumnName("full_name").IsRequired();
+            e.Property(u => u.CreatedAt).HasColumnName("created_at");
         });
     }
 }

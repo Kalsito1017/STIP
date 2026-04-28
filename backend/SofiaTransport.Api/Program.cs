@@ -16,7 +16,7 @@ try
         .ReadFrom.Configuration(ctx.Configuration)
         .WriteTo.Console());
 
-    builder.Services.AddApiServices();
+    builder.Services.AddApiServices(builder.Configuration);
     builder.Services.AddInfrastructure(builder.Configuration);
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -36,6 +36,8 @@ try
     app.UseResponseCompression();
     app.UseCors();
     app.UseSerilogRequestLogging();
+    app.UseAuthentication();
+    app.UseAuthorization();
     app.MapControllers();
     app.MapHub<VehicleHub>(VehicleHub.HubPath);
 

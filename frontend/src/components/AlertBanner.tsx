@@ -12,17 +12,6 @@ const severityLabels: Record<number, string> = {
   3: 'SEVERE',
 };
 
-const effectLabels: Record<number, string> = {
-  1: 'No Service',
-  2: 'Significant Delays',
-  3: 'Detour',
-  4: 'Additional Service',
-  5: 'Modified Service',
-  6: 'Stop Moved',
-  7: 'Other',
-  8: 'Unknown Effect',
-  9: 'No Effect',
-};
 
 export function AlertBanner() {
   const alerts = useAppStore((s) => s.alerts);

@@ -1,5 +1,11 @@
 import { create } from 'zustand';
 
+export interface User {
+  userId: string;
+  email: string;
+  fullName: string;
+}
+
 export interface Vehicle {
   vehicleId: string;
   routeId: string | null;
@@ -64,6 +70,9 @@ interface AppState {
   alerts: ServiceAlert[];
   selectedRoute: string | null;
   darkMode: boolean;
+  token: string | null;
+  user: User | null;
+  isAuthenticated: boolean;
   setVehicles: (vehicles: Vehicle[]) => void;
   updateVehicle: (vehicle: Vehicle) => void;
   setTripUpdates: (updates: TripUpdate[]) => void;
@@ -72,7 +81,21 @@ interface AppState {
   addAlert: (alert: ServiceAlert) => void;
   setSelectedRoute: (routeId: string | null) => void;
   toggleDarkMode: () => void;
+  setAuth: (token: string, user: User) => void;
+  clearAuth: () => void;
 }
+
+function loadUser(): User | null {
+  try {
+    const raw = localStorage.getItem('user');
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+const initialToken = localStorage.getItem('token');
+const initialUser = loadUser();
 
 export const useAppStore = create<AppState>((set) => ({
   vehicles: [],
@@ -80,6 +103,9 @@ export const useAppStore = create<AppState>((set) => ({
   alerts: [],
   selectedRoute: null,
   darkMode: false,
+  token: initialToken,
+  user: initialUser,
+  isAuthenticated: !!initialToken && !!initialUser,
   setVehicles: (vehicles) => set({ vehicles }),
   updateVehicle: (vehicle) =>
     set((state) => ({
@@ -106,4 +132,14 @@ export const useAppStore = create<AppState>((set) => ({
     })),
   setSelectedRoute: (routeId) => set({ selectedRoute: routeId }),
   toggleDarkMode: () => set((state) => ({ darkMode: !state.darkMode })),
+  setAuth: (token, user) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+    set({ token, user, isAuthenticated: true });
+  },
+  clearAuth: () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    set({ token: null, user: null, isAuthenticated: false });
+  },
 }));

@@ -5,11 +5,60 @@ const api = axios.create({
   timeout: 10000,
 });
 
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
+export interface RegisterRequest {
+  email: string;
+  password: string;
+  fullName: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  userId: string;
+  email: string;
+  fullName: string;
+  token: string;
+}
+
+export const authApi = {
+  register: (data: RegisterRequest) =>
+    api.post<AuthResponse>('/auth/register', data).then(r => r.data),
+  login: (data: LoginRequest) =>
+    api.post<AuthResponse>('/auth/login', data).then(r => r.data),
+};
+
 export const routesApi = {
   getAll: () => api.get('/routes').then(r => r.data),
   getById: (id: string) => api.get(`/routes/${id}`).then(r => r.data),
   getDelayPattern: (id: string, date?: string) =>
     api.get(`/routes/${id}/delay-pattern`, { params: { date } }).then(r => r.data),
+  getShape: (id: string) =>
+    api.get(`/routes/${id}/shape`).then(r => r.data),
+  getAllShapes: () =>
+    api.get('/routes/shapes').then(r => r.data),
 };
 
 export const stopsApi = {

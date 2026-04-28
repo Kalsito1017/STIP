@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Extensions.Http;
 using SofiaTransport.Application.Common.Interfaces;
+using SofiaTransport.Infrastructure.Auth;
 using SofiaTransport.Infrastructure.Cache;
 using SofiaTransport.Infrastructure.GTFS;
 using SofiaTransport.Infrastructure.ML;
@@ -75,6 +76,9 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IVehicleRepository, VehicleRepository>();
         services.AddScoped<IDelayLogRepository, DelayLogRepository>();
         services.AddScoped<IReliabilityScoreRepository, ReliabilityScoreRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+
+        services.AddSingleton<ITokenService, TokenService>();
 
         return services;
     }
