@@ -13,31 +13,33 @@ export function useRealtime() {
   const connectionRef = useRef<signalR.HubConnection | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
     const connection = new signalR.HubConnectionBuilder()
       .withUrl('/hubs/vehicles')
       .withAutomaticReconnect()
       .build();
 
     connection.on('VehicleUpdated', (vehicle) => {
-      updateVehicle(vehicle);
+      if (!cancelled) updateVehicle(vehicle);
     });
 
     connection.on('VehicleBatch', (vehicles: any[]) => {
-      setVehicles(vehicles);
+      if (!cancelled) setVehicles(vehicles);
     });
 
     connection.on('TripUpdated', (tripUpdate: TripUpdate) => {
-      updateTripUpdate(tripUpdate);
+      if (!cancelled) updateTripUpdate(tripUpdate);
     });
 
     connection.on('AlertUpdated', (alert: ServiceAlert) => {
-      addAlert(alert);
+      if (!cancelled) addAlert(alert);
     });
 
     connection.start().catch(console.error);
     connectionRef.current = connection;
 
     return () => {
+      cancelled = true;
       connection.stop();
     };
   }, [setVehicles, updateVehicle, setTripUpdates, updateTripUpdate, setAlerts, addAlert]);

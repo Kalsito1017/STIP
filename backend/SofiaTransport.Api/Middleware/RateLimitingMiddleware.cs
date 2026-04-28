@@ -32,6 +32,7 @@ public class RateLimitingMiddleware
             }
 
             entry.Count++;
+            entry.LastAccess = now;
 
             if (entry.Count > MaxRequests)
             {
@@ -43,12 +44,24 @@ public class RateLimitingMiddleware
             }
         }
 
+        if (entry.Count % 200 == 0)
+            PruneExpiredEntries(now);
+
         await _next(context);
+    }
+
+    private static void PruneExpiredEntries(DateTime now)
+    {
+        var expired = _store.Where(kvp => now > kvp.Value.LastAccess.AddMinutes(5))
+            .Select(kvp => kvp.Key).ToList();
+        foreach (var key in expired)
+            _store.TryRemove(key, out _);
     }
 
     private class RateLimitEntry
     {
         public DateTime ResetTime { get; set; }
+        public DateTime LastAccess { get; set; }
         public int Count { get; set; }
     }
 }

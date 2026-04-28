@@ -16,6 +16,6 @@ public class GetStopByIdHandler : IRequestHandler<GetStopByIdQuery, StopDto?>
         var stop = await _repo.GetByIdAsync(request.StopId);
         if (stop is null) return null;
 
-        return new StopDto(stop.StopId, stop.StopName, stop.Location.Lat, stop.Location.Lon);
+        return new StopDto(stop.StopId, stop.StopName, stop.Lat, stop.Lon);
     }
 }

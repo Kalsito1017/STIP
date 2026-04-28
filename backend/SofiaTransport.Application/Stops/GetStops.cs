@@ -14,6 +14,6 @@ public class GetStopsHandler : IRequestHandler<GetStopsQuery, IReadOnlyList<Stop
     public async Task<IReadOnlyList<StopDto>> Handle(GetStopsQuery request, CancellationToken ct)
     {
         var stops = await _repo.GetAllAsync();
-        return stops.Select(s => new StopDto(s.StopId, s.StopName, s.Location.Lat, s.Location.Lon)).ToList();
+        return stops.Select(s => new StopDto(s.StopId, s.StopName, s.Lat, s.Lon)).ToList();
     }
 }

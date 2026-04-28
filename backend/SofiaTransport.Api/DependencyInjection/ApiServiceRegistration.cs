@@ -37,7 +37,8 @@ public static class ApiServiceRegistration
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(configuration["Jwt:Secret"] ?? "STIP-SuperSecret-JWT-Key-2026-MinLength32")),
+                        Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]
+                            ?? throw new InvalidOperationException("Jwt:Secret configuration is required"))),
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ClockSkew = TimeSpan.Zero
@@ -56,7 +57,7 @@ public static class ApiServiceRegistration
         });
 
         services.AddResponseCompression(options =>
-            options.EnableForHttps = true);
+            options.EnableForHttps = false);
 
         return services;
     }

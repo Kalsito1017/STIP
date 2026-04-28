@@ -16,10 +16,13 @@ public class RedisTripUpdateCache : ITripUpdateCache
     public async Task<IReadOnlyList<TripUpdate>> GetAllAsync()
     {
         var server = _db.Multiplexer.GetServer(_db.Multiplexer.GetEndPoints()[0]);
-        var keys = server.Keys(pattern: $"{KeyPrefix}*").ToArray();
-        if (keys.Length == 0) return Array.Empty<TripUpdate>();
+        var keys = new List<RedisKey>();
+        await foreach (var key in server.KeysAsync(pattern: $"{KeyPrefix}*"))
+            keys.Add(key);
 
-        var values = await _db.StringGetAsync(keys);
+        if (keys.Count == 0) return Array.Empty<TripUpdate>();
+
+        var values = await _db.StringGetAsync(keys.ToArray());
         return values.Select(v => Deserialize(v!)).Where(v => v is not null).Select(v => v!).ToList();
     }
 

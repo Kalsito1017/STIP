@@ -13,13 +13,12 @@ public class GetLiveVehiclesHandler : IRequestHandler<GetLiveVehiclesQuery, IRea
 
     public async Task<IReadOnlyList<VehicleDto>> Handle(GetLiveVehiclesQuery request, CancellationToken ct)
     {
-        var vehicles = await _cache.GetAllAsync();
-
-        if (!string.IsNullOrEmpty(request.RouteId))
-            vehicles = vehicles.Where(v => v.RouteId == request.RouteId).ToList();
+        var vehicles = !string.IsNullOrEmpty(request.RouteId)
+            ? await _cache.GetByRouteAsync(request.RouteId)
+            : await _cache.GetAllAsync();
 
         return vehicles
-            .Select(v => new VehicleDto(v.VehicleId, v.RouteId, v.TripId, v.Location.Lat, v.Location.Lon, v.Bearing, v.Speed, v.RecordedAt))
+            .Select(v => new VehicleDto(v.VehicleId, v.RouteId, v.TripId, v.Lat, v.Lon, v.Bearing, v.Speed, v.RecordedAt))
             .ToList();
     }
 }

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import Map, { Source, Layer, Marker, Popup, NavigationControl, ScaleControl, useMap } from 'react-map-gl';
+import Map, { Source, Layer, Marker, Popup, NavigationControl, ScaleControl, useMap } from 'react-map-gl/mapbox';
 import { useAppStore } from '../store/useAppStore';
 import { useRealtime } from '../hooks/useRealtime';
 import { useRoutes } from '../hooks/useRoutes';
@@ -138,12 +138,12 @@ export function LiveMapPage() {
             />
           </Source>
 
-          {displayVehicles.map((v) => (
+          {displayVehicles.map((v: Vehicle) => (
             <Marker
               key={v.vehicleId}
               longitude={v.lon}
               latitude={v.lat}
-              onClick={(e) => {
+              onClick={(e: any) => {
                 e.originalEvent.stopPropagation();
                 setPopupInfo(v);
               }}

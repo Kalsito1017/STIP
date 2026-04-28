@@ -16,18 +16,21 @@ public class StopRepository : IStopRepository
 
     public async Task<IReadOnlyList<Stop>> GetAllAsync() => await _db.Stops.AsNoTracking().ToListAsync();
 
+    public async Task<int> GetCountAsync() => await _db.Stops.CountAsync();
+
     public async Task<IReadOnlyList<Stop>> GetNearbyAsync(double lat, double lon, double radiusKm)
     {
-        var point = new Point(lon, lat) { SRID = 4326 };
         return await _db.Stops
-            .Where(s => EF.Property<Point>(s, "Geometry").Distance(point) <= radiusKm * 1000)
+            .FromSqlRaw(
+                @"SELECT * FROM stops WHERE ST_DWithin(location, ST_SetSRID(ST_MakePoint({0}, {1}), 4326)::geography, {2})",
+                lon, lat, radiusKm * 1000)
             .AsNoTracking()
             .ToListAsync();
     }
 
-    public async Task<Stop> AddAsync(Stop entity) { _db.Stops.Add(entity); await _db.SaveChangesAsync(); return entity; }
+    public async Task<Stop> AddAsync(Stop entity, CancellationToken ct = default) { _db.Stops.Add(entity); await _db.SaveChangesAsync(ct); return entity; }
 
-    public Task UpdateAsync(Stop entity) { _db.Stops.Update(entity); return _db.SaveChangesAsync(); }
+    public async Task UpdateAsync(Stop entity, CancellationToken ct = default) { _db.Stops.Update(entity); await _db.SaveChangesAsync(ct); }
 
-    public Task DeleteAsync(Stop entity) { _db.Stops.Remove(entity); return _db.SaveChangesAsync(); }
+    public async Task DeleteAsync(Stop entity, CancellationToken ct = default) { _db.Stops.Remove(entity); await _db.SaveChangesAsync(ct); }
 }

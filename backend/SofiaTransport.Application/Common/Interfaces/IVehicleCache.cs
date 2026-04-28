@@ -5,6 +5,7 @@ namespace SofiaTransport.Application.Common.Interfaces;
 public interface IVehicleCache
 {
     Task<IReadOnlyList<Vehicle>> GetAllAsync();
+    Task<IReadOnlyList<Vehicle>> GetByRouteAsync(string routeId);
     Task<Vehicle?> GetAsync(string vehicleId);
     Task SetAsync(Vehicle vehicle);
     Task RemoveAsync(string vehicleId);

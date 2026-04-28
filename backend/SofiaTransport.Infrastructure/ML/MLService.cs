@@ -34,6 +34,6 @@ public class MLService : IMLService
     public Task<TravelTimePredictionResponse> PredictTravelTimeAsync(
         string fromStopId, string toStopId, string routeId, DateTime departureTime, CancellationToken ct)
     {
-        throw new NotImplementedException("Travel time prediction is computed via heuristic handler.");
+        return Task.FromResult(new TravelTimePredictionResponse(0, new List<double>(), "not-implemented"));
     }
 }

@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SofiaTransport.Application.Predictions;
 
@@ -21,6 +22,7 @@ public record PredictTravelTimeRequest(
 
 [ApiController]
 [Route("api/predictions")]
+[Authorize]
 public class PredictionsController : ControllerBase
 {
     private readonly IMediator _mediator;

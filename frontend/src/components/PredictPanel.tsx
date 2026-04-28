@@ -7,15 +7,16 @@ const HOURS = Array.from({ length: 24 }, (_, i) => i);
 
 interface PredictPanelProps {
   routeId: string;
+  stopId: string;
 }
 
-export function PredictPanel({ routeId }: PredictPanelProps) {
+export function PredictPanel({ routeId, stopId }: PredictPanelProps) {
   const [dayOfWeek, setDayOfWeek] = useState(new Date().getDay() === 0 ? 6 : new Date().getDay() - 1);
   const [hour, setHour] = useState(new Date().getHours());
   const prediction = useDelayPrediction();
 
   const handlePredict = () => {
-    prediction.mutate({ routeId, stopId: '', hour, dayOfWeek });
+    prediction.mutate({ routeId, stopId, hour, dayOfWeek });
   };
 
   const isPeak = (hour >= 7 && hour <= 9) || (hour >= 17 && hour <= 19);
@@ -122,14 +123,14 @@ export function PredictPanel({ routeId }: PredictPanelProps) {
               {Math.round(prediction.data.predictedDelaySeconds)}s
             </span>
             <span className="text-xs text-slate-500">
-              ±{Math.round(prediction.data.confidenceUpper - prediction.data.predictedDelaySeconds)}s
+              ±{Math.round(prediction.data.confidenceInterval[1] - prediction.data.predictedDelaySeconds)}s
             </span>
           </div>
           <div className="mt-2 space-y-1 text-xs text-slate-500">
             <div className="flex items-center justify-between">
               <span>Confidence range</span>
               <span>
-                {Math.round(prediction.data.confidenceLower)}s – {Math.round(prediction.data.confidenceUpper)}s
+                {Math.round(prediction.data.confidenceInterval[0])}s – {Math.round(prediction.data.confidenceInterval[1])}s
               </span>
             </div>
             <div className="flex items-center justify-between">

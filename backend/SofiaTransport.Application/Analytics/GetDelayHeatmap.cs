@@ -32,7 +32,7 @@ public class GetDelayHeatmapHandler : IRequestHandler<GetDelayHeatmapQuery, IRea
             {
                 var stop = stopDict[g.Key];
                 return new HeatmapPointDto(
-                    stop.Location.Lat, stop.Location.Lon,
+                    stop.Lat, stop.Lon,
                     g.Average(l => l.DelaySeconds) ?? 0, g.Count()
                 );
             })

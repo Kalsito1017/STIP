@@ -27,8 +27,8 @@ public class GetSystemOverviewHandler : IRequestHandler<GetSystemOverviewQuery, 
     public async Task<SystemOverviewDto> Handle(GetSystemOverviewQuery request, CancellationToken ct)
     {
         var vehicles = await _vehicleCache.GetAllAsync();
-        var totalRoutes = (await _routeRepo.GetAllAsync()).Count;
-        var totalStops = (await _stopRepo.GetAllAsync()).Count;
+        var totalRoutes = await _routeRepo.GetCountAsync();
+        var totalStops = await _stopRepo.GetCountAsync();
 
         var from = DateTime.UtcNow.AddHours(-1);
         var logs = await _delayRepo.GetForHeatmapAsync(from, DateTime.UtcNow);

@@ -14,6 +14,8 @@ public class VehicleRepository : IVehicleRepository
 
     public async Task<IReadOnlyList<Vehicle>> GetAllAsync() => await _db.Vehicles.AsNoTracking().ToListAsync();
 
+    public async Task<int> GetCountAsync() => await _db.Vehicles.CountAsync();
+
     public async Task<IReadOnlyList<Vehicle>> GetLiveAsync() =>
         await _db.Vehicles.Where(v => v.RecordedAt >= DateTime.UtcNow.AddMinutes(-2)).AsNoTracking().ToListAsync();
 
@@ -21,9 +23,9 @@ public class VehicleRepository : IVehicleRepository
         await _db.Vehicles.Where(v => v.RouteId == routeId && v.RecordedAt >= DateTime.UtcNow.AddMinutes(-2))
             .AsNoTracking().ToListAsync();
 
-    public async Task<Vehicle> AddAsync(Vehicle entity) { _db.Vehicles.Add(entity); await _db.SaveChangesAsync(); return entity; }
+    public async Task<Vehicle> AddAsync(Vehicle entity, CancellationToken ct = default) { _db.Vehicles.Add(entity); await _db.SaveChangesAsync(ct); return entity; }
 
-    public Task UpdateAsync(Vehicle entity) { _db.Vehicles.Update(entity); return _db.SaveChangesAsync(); }
+    public async Task UpdateAsync(Vehicle entity, CancellationToken ct = default) { _db.Vehicles.Update(entity); await _db.SaveChangesAsync(ct); }
 
-    public Task DeleteAsync(Vehicle entity) { _db.Vehicles.Remove(entity); return _db.SaveChangesAsync(); }
+    public async Task DeleteAsync(Vehicle entity, CancellationToken ct = default) { _db.Vehicles.Remove(entity); await _db.SaveChangesAsync(ct); }
 }

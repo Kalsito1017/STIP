@@ -60,7 +60,7 @@ export function RouteDetailPage() {
           )}
         </div>
 
-        <PredictPanel routeId={id!} />
+        <PredictPanel routeId={id!} stopId="" />
       </div>
 
       <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm">

@@ -30,7 +30,7 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, AuthResp
             throw new ValidationException("A user with this email already exists.");
         }
 
-        var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
+        var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password, workFactor: 12);
 
         var user = new User
         {

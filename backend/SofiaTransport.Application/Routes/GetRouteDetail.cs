@@ -21,8 +21,7 @@ public class GetRouteDetailHandler : IRequestHandler<GetRouteDetailQuery, RouteD
         var route = await _routeRepo.GetByIdAsync(request.RouteId);
         if (route is null) return null;
 
-        var scores = await _scoreRepo.GetByRouteAsync(request.RouteId);
-        var latest = scores.OrderByDescending(s => s.ScoreDate).FirstOrDefault();
+        var latest = await _scoreRepo.GetLatestByRouteAsync(request.RouteId);
 
         return new RouteDetailDto(
             route.RouteId, route.ShortName, route.LongName, route.Type,

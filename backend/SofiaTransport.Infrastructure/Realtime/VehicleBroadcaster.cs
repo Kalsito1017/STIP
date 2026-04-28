@@ -22,16 +22,17 @@ public class VehicleBroadcaster : IVehicleBroadcaster
             vehicleId = vehicle.VehicleId,
             routeId = vehicle.RouteId,
             tripId = vehicle.TripId,
-            lat = vehicle.Location.Lat,
-            lon = vehicle.Location.Lon,
+            lat = vehicle.Lat,
+            lon = vehicle.Lon,
             vehicle.Bearing,
             vehicle.Speed,
             vehicle.RecordedAt
         };
 
-        await _hub.Clients.All.SendAsync("VehicleUpdated", payload);
-
         if (!string.IsNullOrEmpty(vehicle.RouteId))
+        {
             await _hub.Clients.Group($"route:{vehicle.RouteId}").SendAsync("VehicleUpdated", payload);
+            await _hub.Clients.Group("all").SendAsync("VehicleUpdated", payload);
+        }
     }
 }

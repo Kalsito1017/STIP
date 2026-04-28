@@ -23,8 +23,13 @@ public static class InfrastructureServiceRegistration
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection") ?? configuration["DB_CONNECTION_STRING"],
                 npgsql => npgsql.UseNetTopologySuite()));
 
+        var redisConn = configuration["REDIS_CONNECTION"] ?? "localhost:6379";
+        var redisConfig = ConfigurationOptions.Parse(redisConn);
+        redisConfig.AbortOnConnectFail = false;
+        redisConfig.ConnectRetry = 5;
+        redisConfig.ConnectTimeout = 5000;
         services.AddSingleton<IConnectionMultiplexer>(sp =>
-            ConnectionMultiplexer.Connect(configuration["REDIS_CONNECTION"] ?? "localhost:6379"));
+            ConnectionMultiplexer.Connect(redisConfig));
 
         services.AddSingleton<IVehicleCache, RedisVehicleCache>();
         services.AddSingleton<ITripUpdateCache, RedisTripUpdateCache>();

@@ -100,8 +100,7 @@ export interface DelayPredictionRequest {
 
 export interface DelayPredictionResponse {
   predictedDelaySeconds: number;
-  confidenceLower: number;
-  confidenceUpper: number;
+  confidenceInterval: [number, number];
   modelVersion: string;
 }
 

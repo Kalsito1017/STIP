@@ -18,6 +18,6 @@ public class GetNearbyStopsHandler : IRequestHandler<GetNearbyStopsQuery, IReadO
     public async Task<IReadOnlyList<StopDto>> Handle(GetNearbyStopsQuery request, CancellationToken ct)
     {
         var stops = await _repo.GetNearbyAsync(request.Lat, request.Lon, request.RadiusKm);
-        return stops.Select(s => new StopDto(s.StopId, s.StopName, s.Location.Lat, s.Location.Lon)).ToList();
+        return stops.Select(s => new StopDto(s.StopId, s.StopName, s.Lat, s.Lon)).ToList();
     }
 }

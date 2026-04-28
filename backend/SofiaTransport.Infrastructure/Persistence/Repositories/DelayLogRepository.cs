@@ -14,6 +14,8 @@ public class DelayLogRepository : IDelayLogRepository
 
     public async Task<IReadOnlyList<DelayLog>> GetAllAsync() => await _db.DelayLogs.AsNoTracking().ToListAsync();
 
+    public async Task<int> GetCountAsync() => await _db.DelayLogs.CountAsync();
+
     public async Task<IReadOnlyList<DelayLog>> GetByRouteAsync(string routeId, DateTime from, DateTime to) =>
         await _db.DelayLogs.Where(d => d.RouteId == routeId && d.RecordedAt >= from && d.RecordedAt < to)
             .AsNoTracking().ToListAsync();
@@ -30,9 +32,9 @@ public class DelayLogRepository : IDelayLogRepository
         await _db.DelayLogs.Where(d => d.RecordedAt >= date && d.RecordedAt < date.AddDays(1))
             .AsNoTracking().ToListAsync();
 
-    public async Task<DelayLog> AddAsync(DelayLog entity) { _db.DelayLogs.Add(entity); await _db.SaveChangesAsync(); return entity; }
+    public async Task<DelayLog> AddAsync(DelayLog entity, CancellationToken ct = default) { _db.DelayLogs.Add(entity); await _db.SaveChangesAsync(ct); return entity; }
 
-    public Task UpdateAsync(DelayLog entity) { _db.DelayLogs.Update(entity); return _db.SaveChangesAsync(); }
+    public async Task UpdateAsync(DelayLog entity, CancellationToken ct = default) { _db.DelayLogs.Update(entity); await _db.SaveChangesAsync(ct); }
 
-    public Task DeleteAsync(DelayLog entity) { _db.DelayLogs.Remove(entity); return _db.SaveChangesAsync(); }
+    public async Task DeleteAsync(DelayLog entity, CancellationToken ct = default) { _db.DelayLogs.Remove(entity); await _db.SaveChangesAsync(ct); }
 }

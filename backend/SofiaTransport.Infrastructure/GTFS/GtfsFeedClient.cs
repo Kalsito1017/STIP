@@ -1,9 +1,11 @@
 using System.Net.Http;
 using Google.Protobuf;
+using NetTopologySuite.Geometries;
 using Polly;
 using SofiaTransport.Application.Common.Interfaces;
 using SofiaTransport.Domain.Entities;
 using SofiaTransport.Domain.ValueObjects;
+using Coordinates = SofiaTransport.Domain.ValueObjects.Coordinates;
 
 namespace SofiaTransport.Infrastructure.GTFS;
 
@@ -33,12 +35,16 @@ public class GtfsFeedClient : IGtfsFeedClient
             ? vp.Vehicle.Id
             : $"unknown-{feedEntityId}";
 
+        var lat = vp.Position.Latitude;
+        var lon = vp.Position.Longitude;
+
         return new Vehicle
         {
             VehicleId = vehicleId,
             TripId = vp.Trip?.TripId,
             RouteId = vp.Trip?.RouteId,
-            Location = new Coordinates(vp.Position.Latitude, vp.Position.Longitude),
+            Location = new Coordinates(lat, lon),
+            Geometry = new Point(lon, lat) { SRID = 4326 },
             Bearing = vp.Position?.Bearing ?? 0,
             Speed = vp.Position?.Speed ?? 0,
             RecordedAt = DateTime.UtcNow

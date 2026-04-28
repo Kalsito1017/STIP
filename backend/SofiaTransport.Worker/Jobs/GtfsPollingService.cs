@@ -96,8 +96,15 @@ public class GtfsPollingService : BackgroundService
             await cache.SetAsync(vehicle);
             await broadcaster.BroadcastAsync(vehicle);
 
-            db.Vehicles.Attach(vehicle);
-            db.Entry(vehicle).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            var existing = await db.Vehicles.FindAsync(new object[] { vehicle.VehicleId }, ct);
+            if (existing is not null)
+            {
+                db.Entry(existing).CurrentValues.SetValues(vehicle);
+            }
+            else
+            {
+                db.Vehicles.Add(vehicle);
+            }
 
             await WriteDelayLogAsync(db, vehicle, ct);
         }

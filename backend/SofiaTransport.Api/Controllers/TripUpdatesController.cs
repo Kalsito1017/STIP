@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SofiaTransport.Application.TripUpdates;
 
@@ -6,6 +7,7 @@ namespace SofiaTransport.Api.Controllers;
 
 [ApiController]
 [Route("api/tripupdates")]
+[Authorize]
 public class TripUpdatesController : ControllerBase
 {
     private readonly IMediator _mediator;

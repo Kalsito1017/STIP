@@ -16,10 +16,10 @@ public class UserRepository : IUserRepository
     public async Task<User?> GetByEmailAsync(string email) =>
         await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
 
-    public async Task<User> AddAsync(User user)
+    public async Task<User> AddAsync(User user, CancellationToken ct = default)
     {
         _db.Users.Add(user);
-        await _db.SaveChangesAsync();
+        await _db.SaveChangesAsync(ct);
         return user;
     }
 }

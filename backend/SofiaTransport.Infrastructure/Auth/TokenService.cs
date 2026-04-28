@@ -19,7 +19,8 @@ public class TokenService : ITokenService
 
     public string GenerateToken(User user)
     {
-        var secret = _configuration["Jwt:Secret"] ?? "STIP-SuperSecret-JWT-Key-2026-MinLength32";
+        var secret = _configuration["Jwt:Secret"]
+            ?? throw new InvalidOperationException("Jwt:Secret configuration is required");
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

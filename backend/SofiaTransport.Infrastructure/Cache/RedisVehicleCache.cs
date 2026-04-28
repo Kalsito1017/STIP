@@ -1,7 +1,9 @@
 using System.Text.Json;
+using NetTopologySuite.Geometries;
 using SofiaTransport.Application.Common.Interfaces;
 using SofiaTransport.Domain.Entities;
 using SofiaTransport.Domain.ValueObjects;
+using Coordinates = SofiaTransport.Domain.ValueObjects.Coordinates;
 using StackExchange.Redis;
 
 namespace SofiaTransport.Infrastructure.Cache;
@@ -17,11 +19,20 @@ public class RedisVehicleCache : IVehicleCache
     public async Task<IReadOnlyList<Vehicle>> GetAllAsync()
     {
         var server = _db.Multiplexer.GetServer(_db.Multiplexer.GetEndPoints()[0]);
-        var keys = server.Keys(pattern: $"{KeyPrefix}*").ToArray();
-        if (keys.Length == 0) return Array.Empty<Vehicle>();
+        var keys = new List<RedisKey>();
+        await foreach (var key in server.KeysAsync(pattern: $"{KeyPrefix}*"))
+            keys.Add(key);
 
-        var values = await _db.StringGetAsync(keys);
+        if (keys.Count == 0) return Array.Empty<Vehicle>();
+
+        var values = await _db.StringGetAsync(keys.ToArray());
         return values.Select(v => Deserialize(v!)).Where(v => v is not null).Select(v => v!).ToList();
+    }
+
+    public async Task<IReadOnlyList<Vehicle>> GetByRouteAsync(string routeId)
+    {
+        var all = await GetAllAsync();
+        return all.Where(v => v.RouteId == routeId).ToList();
     }
 
     public async Task<Vehicle?> GetAsync(string vehicleId)
@@ -55,14 +66,15 @@ public class RedisVehicleCache : IVehicleCache
         {
             using var doc = JsonDocument.Parse(value.ToString());
             var root = doc.RootElement;
+            var lat = root.GetProperty("lat").GetDouble();
+            var lon = root.GetProperty("lon").GetDouble();
             return new Vehicle
             {
                 VehicleId = root.GetProperty("vehicleId").GetString()!,
                 RouteId = root.TryGetProperty("routeId", out var r) && r.ValueKind != JsonValueKind.Null ? r.GetString() : null,
                 TripId = root.TryGetProperty("tripId", out var t) && t.ValueKind != JsonValueKind.Null ? t.GetString() : null,
-                Location = new Coordinates(
-                    root.GetProperty("lat").GetDouble(),
-                    root.GetProperty("lon").GetDouble()),
+                Location = new Coordinates(lat, lon),
+                Geometry = new Point(lon, lat) { SRID = 4326 },
                 Bearing = root.TryGetProperty("bearing", out var b) ? b.GetSingle() : 0,
                 Speed = root.TryGetProperty("speed", out var s) ? s.GetSingle() : 0,
                 RecordedAt = root.GetProperty("recordedAt").GetDateTime()

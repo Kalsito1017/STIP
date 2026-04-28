@@ -159,7 +159,8 @@ def _get_db_pool():
         return None
     try:
         from psycopg2 import pool as pg_pool
-        _db_pool = pg_pool.ThreadedConnectionPool(1, 5, **params)
+        max_conn = int(os.environ.get("DB_POOL_MAX", "20"))
+        _db_pool = pg_pool.ThreadedConnectionPool(5, max_conn, **params)
         return _db_pool
     except Exception as e:
         logger.debug("Could not create DB pool: %s", e)

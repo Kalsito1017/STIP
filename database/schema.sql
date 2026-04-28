@@ -102,6 +102,7 @@ CREATE TABLE IF NOT EXISTS shapes (
     lon      DOUBLE PRECISION NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_shapes_route_sequence ON shapes(route_id, sequence);
+CREATE INDEX IF NOT EXISTS idx_shapes_location ON shapes USING GIST(ST_SetSRID(ST_MakePoint(lon, lat), 4326));
 
 -- Materialized view: pre-aggregated delay stats per route per hour
 CREATE MATERIALIZED VIEW IF NOT EXISTS mv_hourly_delays AS

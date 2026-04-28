@@ -58,7 +58,7 @@ public class TransportDbContext : DbContext
             e.Property(s => s.StopId).HasColumnName("stop_id");
             e.Property(s => s.StopName).HasColumnName("stop_name").IsRequired();
             e.Ignore(s => s.Location);
-            e.Property<Point>("Geometry")
+            e.Property(s => s.Geometry)
                 .HasColumnName("location")
                 .HasColumnType("geography(POINT, 4326)");
             e.HasIndex(s => s.StopName).HasDatabaseName("idx_stops_name");
@@ -120,7 +120,7 @@ public class TransportDbContext : DbContext
             e.Property(v => v.Speed).HasColumnName("speed");
             e.Property(v => v.RecordedAt).HasColumnName("recorded_at");
             e.Ignore(v => v.Location);
-            e.Property<Point>("Geometry")
+            e.Property(v => v.Geometry)
                 .HasColumnName("location")
                 .HasColumnType("geography(POINT, 4326)");
             e.HasIndex(v => v.RecordedAt).HasDatabaseName("idx_vehicles_recorded_at").IsDescending();

@@ -16,15 +16,17 @@ public class RouteRepository : IRouteRepository
 
     public async Task<IReadOnlyList<Route>> GetAllAsync() => await _db.Routes.AsNoTracking().ToListAsync();
 
+    public async Task<int> GetCountAsync() => await _db.Routes.CountAsync();
+
     public async Task<IReadOnlyList<Route>> GetByTypeAsync(TransitType type) =>
         await _db.Routes.Where(r => r.Type == type).AsNoTracking().ToListAsync();
 
     public async Task<Route?> GetByShortNameAsync(string shortName) =>
         await _db.Routes.FirstOrDefaultAsync(r => r.ShortName == shortName);
 
-    public async Task<Route> AddAsync(Route entity) { _db.Routes.Add(entity); await _db.SaveChangesAsync(); return entity; }
+    public async Task<Route> AddAsync(Route entity, CancellationToken ct = default) { _db.Routes.Add(entity); await _db.SaveChangesAsync(ct); return entity; }
 
-    public Task UpdateAsync(Route entity) { _db.Routes.Update(entity); return _db.SaveChangesAsync(); }
+    public async Task UpdateAsync(Route entity, CancellationToken ct = default) { _db.Routes.Update(entity); await _db.SaveChangesAsync(ct); }
 
-    public Task DeleteAsync(Route entity) { _db.Routes.Remove(entity); return _db.SaveChangesAsync(); }
+    public async Task DeleteAsync(Route entity, CancellationToken ct = default) { _db.Routes.Remove(entity); await _db.SaveChangesAsync(ct); }
 }
