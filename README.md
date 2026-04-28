@@ -2,6 +2,17 @@
 
 A full-stack, real-time public transport analytics platform for **Sofia, Bulgaria** — tracking vehicles live, computing reliability scores, predicting delays with machine learning, and surfacing trip updates and service alerts.
 
+## Contents
+
+- [Architecture](#architecture)
+- [Key Features](#key-features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [API Overview](#api-overview)
+- [Real-time Feeds](#real-time-feeds)
+- [Development Roadmap](#development-roadmap)
+
 ---
 
 ## Architecture
@@ -212,16 +223,6 @@ The platform ingests three optional GTFS-RT protobuf feeds from Sofia's urban mo
 | **Service Alerts** | `GTFS_RT_ALERTS_URL` | Disruptions, reroutes, station closures, cause/effect | 300s |
 
 All three feeds are polled by the Worker service at the configured `POLL_INTERVAL_SECONDS`. Trip updates and alerts are **optional** — the application starts normally without them.
-
----
-
-## Documentation Index
-
-- [Master Technical Plan](SOFIA_TRANSPORT_MASTER_PLAN.md) — complete 448-line specification
-- [Idea & Vision](Idea.md) — concept and feature overview
-- [High-Level Architecture](HighLevelVision.md) — ASCII diagram
-- [Package Manifest](docs/Packages.md) — every dependency across all ecosystems
-- [API Key Procurement](docs/APIKeys.md) — checklist for GTFS/weather/Mapbox keys
 
 ---
 

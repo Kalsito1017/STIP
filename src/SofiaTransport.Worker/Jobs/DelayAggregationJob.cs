@@ -34,12 +34,14 @@ public class DelayAggregationJob : IJob
             .Where(g => g.Key is not null)
             .Select(g =>
             {
-                var entries = g.ToList();
-                var onTime = (double)entries.Count(e => Math.Abs(e.DelaySeconds) <= 60) / entries.Count;
-                var avgDelay = entries.Average(e => e.DelaySeconds);
+                var entries = g.Where(e => e.DelaySeconds.HasValue).ToList();
+                var onTime = entries.Count > 0
+                    ? (double)entries.Count(e => Math.Abs(e.DelaySeconds!.Value) <= 60) / entries.Count
+                    : 0;
+                var avgDelay = entries.Average(e => e.DelaySeconds) ?? 0;
                 var peakEntries = entries.Where(e => e.ScheduledArrival.Hour is >= 7 and <= 9 or >= 17 and <= 19).ToList();
                 var peakOnTime = peakEntries.Count > 0
-                    ? (double)peakEntries.Count(e => Math.Abs(e.DelaySeconds) <= 60) / peakEntries.Count
+                    ? (double)peakEntries.Count(e => Math.Abs(e.DelaySeconds!.Value) <= 60) / peakEntries.Count
                     : onTime;
 
                 return new ReliabilityScore

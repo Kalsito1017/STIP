@@ -18,7 +18,7 @@ public class GetRouteDelayPatternHandler : IRequestHandler<GetRouteDelayPatternQ
 
         return logs
             .GroupBy(l => l.ScheduledArrival.Hour)
-            .Select(g => new DelayPatternDto(g.Key, g.Average(l => l.DelaySeconds)))
+            .Select(g => new DelayPatternDto(g.Key, g.Average(l => l.DelaySeconds) ?? 0))
             .OrderBy(d => d.HourOfDay)
             .ToList();
     }

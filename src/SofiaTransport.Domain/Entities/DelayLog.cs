@@ -9,6 +9,6 @@ public class DelayLog
     public string? RouteId { get; set; }
     public DateTime ScheduledArrival { get; set; }
     public DateTime ActualArrival { get; set; }
-    public int DelaySeconds { get; set; }
+    public int? DelaySeconds { get; set; }
     public DateTime RecordedAt { get; set; }
 }

@@ -43,7 +43,7 @@ public class PredictTravelTimeHandler : IRequestHandler<PredictTravelTimeCommand
 
         var now = DateTime.UtcNow;
         var delayLogs = await _delayLogRepo.GetByRouteAsync(request.RouteId, now.AddDays(-30), now);
-        var avgDelay = delayLogs.Any() ? delayLogs.Average(d => d.DelaySeconds) : 0;
+        var avgDelay = delayLogs.Any() ? delayLogs.Average(d => d.DelaySeconds) ?? 0 : 0;
 
         var predictedTravelTimeSeconds = avgScheduledTravelTime + avgDelay;
         var lower = predictedTravelTimeSeconds > 0 ? predictedTravelTimeSeconds * 0.9 : 0;

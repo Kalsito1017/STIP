@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using SofiaTransport.Domain.Entities;
+using SofiaTransport.Domain.Enums;
 using SofiaTransport.Domain.ValueObjects;
 
 namespace SofiaTransport.Infrastructure.Persistence;
@@ -27,6 +28,25 @@ public class TransportDbContext : DbContext
             e.Property(r => r.ShortName).HasColumnName("short_name").IsRequired();
             e.Property(r => r.LongName).HasColumnName("long_name");
             e.Property(r => r.Type).HasColumnName("route_type");
+
+            e.HasData(
+                new Route { RouteId = "r-204", ShortName = "204", LongName = "Gotse Delchev – Orlov Most", Type = TransitType.Bus },
+                new Route { RouteId = "r-94", ShortName = "94", LongName = "Studentski Grad – Sofia University", Type = TransitType.Bus },
+                new Route { RouteId = "r-285", ShortName = "285", LongName = "Mladost 1 – Lyulin", Type = TransitType.Bus },
+                new Route { RouteId = "r-260", ShortName = "260", LongName = "Druzhba – Central Station", Type = TransitType.Bus },
+                new Route { RouteId = "r-72", ShortName = "72", LongName = "Zaharna Fabrika – Poduene", Type = TransitType.Bus },
+                new Route { RouteId = "r-tram-1", ShortName = "1", LongName = "Ivan Vazov – Nadezhda", Type = TransitType.Tram },
+                new Route { RouteId = "r-tram-7", ShortName = "7", LongName = "Borovo – Lyulin", Type = TransitType.Tram },
+                new Route { RouteId = "r-tram-10", ShortName = "10", LongName = "Vitosha – Zapaden Park", Type = TransitType.Tram },
+                new Route { RouteId = "r-trol-1", ShortName = "1", LongName = "Stochna Gara – Ivan Vazov", Type = TransitType.Trolley },
+                new Route { RouteId = "r-trol-2", ShortName = "2", LongName = "Hadzhi Dimitar – Buxton", Type = TransitType.Trolley },
+                new Route { RouteId = "r-trol-5", ShortName = "5", LongName = "Mladost 2 – NDK", Type = TransitType.Trolley },
+                new Route { RouteId = "r-trol-9", ShortName = "9", LongName = "Iztok – Gotse Delchev", Type = TransitType.Trolley },
+                new Route { RouteId = "r-m1", ShortName = "M1", LongName = "Slivnitsa – Business Park", Type = TransitType.Metro },
+                new Route { RouteId = "r-m2", ShortName = "M2", LongName = "Obelya – Vitosha", Type = TransitType.Metro },
+                new Route { RouteId = "r-m3", ShortName = "M3", LongName = "Hadzhi Dimitar – Krasno Selo", Type = TransitType.Metro },
+                new Route { RouteId = "r-m4", ShortName = "M4", LongName = "Obelya – Sofia Airport", Type = TransitType.Metro }
+            );
         });
 
         modelBuilder.Entity<Stop>(e =>
@@ -39,6 +59,28 @@ public class TransportDbContext : DbContext
             e.Property<Point>("Geometry")
                 .HasColumnName("location")
                 .HasColumnType("geography(POINT, 4326)");
+            e.HasIndex(s => s.StopName).HasDatabaseName("idx_stops_name");
+
+            e.HasData(
+                new { StopId = "s-001", StopName = "Orlov Most", Geometry = new Point(23.3342, 42.6897) { SRID = 4326 } },
+                new { StopId = "s-002", StopName = "Sofia University", Geometry = new Point(23.3451, 42.6939) { SRID = 4326 } },
+                new { StopId = "s-003", StopName = "NDK", Geometry = new Point(23.3186, 42.6871) { SRID = 4326 } },
+                new { StopId = "s-004", StopName = "Serdika", Geometry = new Point(23.3219, 42.6977) { SRID = 4326 } },
+                new { StopId = "s-005", StopName = "Central Station", Geometry = new Point(23.3216, 42.7104) { SRID = 4326 } },
+                new { StopId = "s-006", StopName = "Mladost 1", Geometry = new Point(23.3782, 42.6564) { SRID = 4326 } },
+                new { StopId = "s-007", StopName = "Vitosha", Geometry = new Point(23.3140, 42.6630) { SRID = 4326 } },
+                new { StopId = "s-008", StopName = "Obelya", Geometry = new Point(23.2600, 42.7460) { SRID = 4326 } },
+                new { StopId = "s-009", StopName = "Lyulin", Geometry = new Point(23.2640, 42.7190) { SRID = 4326 } },
+                new { StopId = "s-010", StopName = "Druzhba", Geometry = new Point(23.3950, 42.6620) { SRID = 4326 } },
+                new { StopId = "s-011", StopName = "Iztok", Geometry = new Point(23.3520, 42.6870) { SRID = 4326 } },
+                new { StopId = "s-012", StopName = "Lozenets", Geometry = new Point(23.3230, 42.6780) { SRID = 4326 } },
+                new { StopId = "s-013", StopName = "Poduene", Geometry = new Point(23.3460, 42.7060) { SRID = 4326 } },
+                new { StopId = "s-014", StopName = "Krasno Selo", Geometry = new Point(23.3000, 42.6800) { SRID = 4326 } },
+                new { StopId = "s-015", StopName = "Borovo", Geometry = new Point(23.2920, 42.6680) { SRID = 4326 } },
+                new { StopId = "s-016", StopName = "Studentski Grad", Geometry = new Point(23.3450, 42.6530) { SRID = 4326 } },
+                new { StopId = "s-017", StopName = "Gotse Delchev", Geometry = new Point(23.2880, 42.6650) { SRID = 4326 } },
+                new { StopId = "s-018", StopName = "Zaharna Fabrika", Geometry = new Point(23.2950, 42.7200) { SRID = 4326 } }
+            );
         });
 
         modelBuilder.Entity<Trip>(e =>
@@ -62,6 +104,7 @@ public class TransportDbContext : DbContext
             e.Property(st => st.ArrivalTime).HasColumnName("arrival_time");
             e.HasOne(st => st.Trip).WithMany(t => t.StopTimes).HasForeignKey(st => st.TripId);
             e.HasOne(st => st.Stop).WithMany().HasForeignKey(st => st.StopId);
+            e.HasIndex(st => new { st.StopId, st.ArrivalTime }).HasDatabaseName("idx_stop_times_stop_arrival");
         });
 
         modelBuilder.Entity<Vehicle>(e =>
@@ -78,6 +121,8 @@ public class TransportDbContext : DbContext
             e.Property<Point>("Geometry")
                 .HasColumnName("location")
                 .HasColumnType("geography(POINT, 4326)");
+            e.HasIndex(v => v.RecordedAt).HasDatabaseName("idx_vehicles_recorded_at").IsDescending();
+            e.HasIndex(v => v.RouteId).HasDatabaseName("idx_vehicles_route_id");
         });
 
         modelBuilder.Entity<DelayLog>(e =>
@@ -92,8 +137,10 @@ public class TransportDbContext : DbContext
             e.Property(d => d.ActualArrival).HasColumnName("actual_arrival");
             e.Property(d => d.DelaySeconds).HasColumnName("delay_seconds");
             e.Property(d => d.RecordedAt).HasColumnName("recorded_at");
-            e.HasIndex(d => new { d.RouteId, d.RecordedAt });
-            e.HasIndex(d => new { d.StopId, d.RecordedAt });
+            e.HasIndex(d => new { d.RouteId, d.RecordedAt }).HasDatabaseName("idx_delay_logs_route").IsDescending(false, true);
+            e.HasIndex(d => new { d.StopId, d.RecordedAt }).HasDatabaseName("idx_delay_logs_stop").IsDescending(false, true);
+            e.HasIndex(d => d.RecordedAt).HasDatabaseName("idx_delay_logs_recorded_at").IsDescending();
+            e.HasIndex(d => new { d.VehicleId, d.RecordedAt }).HasDatabaseName("idx_delay_logs_vehicle").IsDescending(false, true);
         });
 
         modelBuilder.Entity<ReliabilityScore>(e =>

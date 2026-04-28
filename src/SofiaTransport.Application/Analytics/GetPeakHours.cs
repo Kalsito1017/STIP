@@ -18,7 +18,7 @@ public class GetPeakHoursHandler : IRequestHandler<GetPeakHoursQuery, IReadOnlyL
 
         return logs
             .GroupBy(l => l.ScheduledArrival.Hour)
-            .Select(g => new PeakHourDto(g.Key, g.Average(l => l.DelaySeconds), g.Count()))
+            .Select(g => new PeakHourDto(g.Key, g.Average(l => l.DelaySeconds) ?? 0, g.Count()))
             .OrderBy(p => p.HourOfDay)
             .ToList();
     }
