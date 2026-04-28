@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="SofiaTransport.Api/SofiaTransport.Api.csproj" />
+  <Project Path="SofiaTransport.Application/SofiaTransport.Application.csproj" />
+  <Project Path="SofiaTransport.Domain/SofiaTransport.Domain.csproj" />
+  <Project Path="SofiaTransport.Infrastructure/SofiaTransport.Infrastructure.csproj" />
+  <Project Path="SofiaTransport.Worker/SofiaTransport.Worker.csproj" />
+</Solution>

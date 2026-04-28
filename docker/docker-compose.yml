@@ -1,0 +1,83 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_DB: sofia_transport
+      POSTGRES_USER: stip_app
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ../database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ../database/seed/init.sql:/docker-entrypoint-initdb.d/02-seed.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stip_app -d sofia_transport"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5000
+      DB_CONNECTION_STRING: Host=postgres;Database=sofia_transport;Username=stip_app;Password=${DB_PASSWORD:-changeme}
+      REDIS_CONNECTION: redis:6379
+      GTFS_RT_FEED_URL: ${GTFS_RT_FEED_URL}
+      GTFS_STATIC_URL: ${GTFS_STATIC_URL}
+      ML_SERVICE_URL: http://ml:8000
+      POLL_INTERVAL_SECONDS: 15
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.worker
+    environment:
+      DB_CONNECTION_STRING: Host=postgres;Database=sofia_transport;Username=stip_app;Password=${DB_PASSWORD:-changeme}
+      REDIS_CONNECTION: redis:6379
+      GTFS_RT_FEED_URL: ${GTFS_RT_FEED_URL}
+      GTFS_STATIC_URL: ${GTFS_STATIC_URL}
+      ML_SERVICE_URL: http://ml:8000
+      POLL_INTERVAL_SECONDS: 15
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  ml:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.ml
+    environment:
+      DB_CONNECTION_STRING: Host=postgres;Database=sofia_transport;Username=stip_app;Password=${DB_PASSWORD:-changeme}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:
