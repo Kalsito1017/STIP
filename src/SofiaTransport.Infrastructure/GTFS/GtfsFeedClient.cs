@@ -19,15 +19,15 @@ public class GtfsFeedClient : IGtfsFeedClient
         response.EnsureSuccessStatusCode();
 
         var data = await response.Content.ReadAsByteArrayAsync(ct);
-        var feed = TransitRealtime.FeedMessage.Parser.ParseFrom(data);
+        var feed = TransitRealtime.FeedMessage.ParseFrom(data);
 
         return feed.Entity
             .Where(e => e.Vehicle is not null)
-            .Select(e => ParseVehicle(e.Vehicle!, (uint)e.Id.GetHashCode()))
+            .Select(e => ParseVehicle(e.Vehicle!, e.Id))
             .ToList();
     }
 
-    private static Vehicle ParseVehicle(TransitRealtime.VehiclePosition vp, uint feedEntityId)
+    private static Vehicle ParseVehicle(TransitRealtime.VehiclePosition vp, string feedEntityId)
     {
         var vehicleId = !string.IsNullOrEmpty(vp.Vehicle?.Id)
             ? vp.Vehicle.Id

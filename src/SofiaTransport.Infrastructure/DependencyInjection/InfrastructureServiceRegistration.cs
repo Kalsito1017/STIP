@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SofiaTransport.Application.Common.Interfaces;
 using SofiaTransport.Infrastructure.Cache;
 using SofiaTransport.Infrastructure.GTFS;
+using SofiaTransport.Infrastructure.ML;
 using SofiaTransport.Infrastructure.Persistence;
 using SofiaTransport.Infrastructure.Persistence.Repositories;
 using SofiaTransport.Infrastructure.Realtime;
@@ -29,6 +30,12 @@ public static class InfrastructureServiceRegistration
         {
             client.BaseAddress = new Uri(configuration["GTFS_RT_FEED_URL"] ?? "https://localhost");
             client.Timeout = TimeSpan.FromSeconds(30);
+        });
+
+        services.AddHttpClient<IMLService, ML.MLService>(client =>
+        {
+            client.BaseAddress = new Uri(configuration["ML_SERVICE_URL"] ?? "http://localhost:8000");
+            client.Timeout = TimeSpan.FromSeconds(10);
         });
 
         services.AddScoped<IRouteRepository, RouteRepository>();

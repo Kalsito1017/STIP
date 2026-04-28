@@ -45,8 +45,9 @@ public class MlRetrainTriggerJob : IJob
 
         var mlUrl = _config["ML_SERVICE_URL"] ?? "http://ml:8000";
         var client = _httpClientFactory.CreateClient();
-        var response = await client.PostAsJsonAsync($"{mlUrl}/internal/retrain",
-            new { delay_logs = logs }, context.CancellationToken);
+        var json = System.Text.Json.JsonSerializer.Serialize(new { delay_logs = logs });
+        var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+        var response = await client.PostAsync($"{mlUrl}/internal/retrain", content, context.CancellationToken);
 
         if (response.IsSuccessStatusCode)
             _logger.LogInformation("ML retrain triggered successfully ({Count} records)", logs.Count);

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-interface Vehicle {
+export interface Vehicle {
   vehicleId: string;
   routeId: string | null;
   tripId: string | null;

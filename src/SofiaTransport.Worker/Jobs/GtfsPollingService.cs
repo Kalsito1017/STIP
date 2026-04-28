@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using SofiaTransport.Application.Common.Interfaces;
 using SofiaTransport.Domain.Entities;
 using SofiaTransport.Infrastructure.Cache;
@@ -92,6 +93,14 @@ public class GtfsPollingService : BackgroundService
 
     private static async Task<Domain.Entities.StopTime?> FindNearestStopTimeAsync(TransportDbContext db, Vehicle vehicle, CancellationToken ct)
     {
-        return await Task.FromResult<Domain.Entities.StopTime?>(null);
+        if (string.IsNullOrEmpty(vehicle.TripId))
+            return null;
+
+        var now = DateTime.UtcNow.TimeOfDay;
+
+        return await db.StopTimes
+            .Where(st => st.TripId == vehicle.TripId)
+            .OrderBy(st => st.StopSequence)
+            .FirstOrDefaultAsync(st => st.ArrivalTime >= now, ct);
     }
 }

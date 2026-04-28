@@ -1,0 +1,81 @@
+import { useDelayHeatmap, useReliabilityRanking, usePeakHours } from '../hooks/useDelays';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+} from 'recharts';
+
+export function AnalyticsPage() {
+  const { data: heatmap } = useDelayHeatmap();
+  const { data: bestRanking } = useReliabilityRanking(5, true);
+  const { data: worstRanking } = useReliabilityRanking(5, false);
+  const { data: peakHours } = usePeakHours();
+
+  return (
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold text-slate-900">Analytics</h1>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm">
+          <h3 className="text-sm font-semibold text-slate-700 mb-4">System-Wide Peak Hours</h3>
+          {peakHours?.length ? (
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={peakHours}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="hourOfDay" tickFormatter={(h) => `${h}:00`} />
+                <YAxis unit="s" />
+                <Tooltip />
+                <Bar dataKey="avgDelaySeconds" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <p className="text-slate-400 text-sm">No data</p>
+          )}
+        </div>
+
+        <div className="space-y-4">
+          <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm">
+            <h3 className="text-sm font-semibold text-green-700 mb-3">Best Routes</h3>
+            {bestRanking?.length ? (
+              <div className="space-y-2">
+                {bestRanking.map((r: { routeId: string; shortName: string; score: number }, i: number) => (
+                  <div key={r.routeId} className="flex items-center gap-2 text-sm">
+                    <span className="w-5 text-slate-400">{i + 1}.</span>
+                    <span className="font-medium text-slate-800">{r.shortName}</span>
+                    <span className="ml-auto text-slate-500">{Math.round(r.score)}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-slate-400 text-sm">No data</p>
+            )}
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm">
+            <h3 className="text-sm font-semibold text-red-700 mb-3">Worst Routes</h3>
+            {worstRanking?.length ? (
+              <div className="space-y-2">
+                {worstRanking.map((r: { routeId: string; shortName: string; score: number }, i: number) => (
+                  <div key={r.routeId} className="flex items-center gap-2 text-sm">
+                    <span className="w-5 text-slate-400">{i + 1}.</span>
+                    <span className="font-medium text-slate-800">{r.shortName}</span>
+                    <span className="ml-auto text-slate-500">{Math.round(r.score)}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-slate-400 text-sm">No data</p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm">
+        <h3 className="text-sm font-semibold text-slate-700 mb-4">Delay Heatmap Data</h3>
+        <p className="text-sm text-slate-400">
+          {heatmap?.length
+            ? `${heatmap.length} data points with avg delay ${Math.round(heatmap.reduce((s: number, p: { avgDelaySeconds: number }) => s + p.avgDelaySeconds, 0) / heatmap.length)}s`
+            : 'No heatmap data available'}
+        </p>
+      </div>
+    </div>
+  );
+}

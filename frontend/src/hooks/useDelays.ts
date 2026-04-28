@@ -17,6 +17,14 @@ export function useReliabilityRanking(top = 10, best = true) {
   });
 }
 
+export function usePeakHours(date?: string) {
+  return useQuery({
+    queryKey: ['peakHours', date],
+    queryFn: () => analyticsApi.getPeakHours(date),
+    staleTime: 300_000,
+  });
+}
+
 export function useRouteDelayPattern(routeId: string, date?: string) {
   return useQuery({
     queryKey: ['delayPattern', routeId, date],

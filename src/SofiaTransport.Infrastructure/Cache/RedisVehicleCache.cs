@@ -53,7 +53,7 @@ public class RedisVehicleCache : IVehicleCache
     {
         try
         {
-            using var doc = JsonDocument.Parse(value!);
+            using var doc = JsonDocument.Parse(value.ToString());
             var root = doc.RootElement;
             return new Vehicle
             {
