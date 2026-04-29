@@ -1,7 +1,7 @@
 # Graph Report - STIP  (2026-04-29)
 
 ## Corpus Check
-- 214 files · ~51,477 words
+- 214 files · ~51,487 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -122,14 +122,14 @@
 10. `AnalyticsControllerTests` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `_get_db_pool()` --calls--> `get_connection_params()`  [INFERRED]
-  ml/predict.py → ml/db.py
+- `get_connection_params()` --calls--> `_get_db_pool()`  [INFERRED]
+  ml/db.py → ml/predict.py
 - `PredictPanel()` --calls--> `useDelayPrediction()`  [INFERRED]
   frontend/src/components/PredictPanel.tsx → frontend/src/hooks/usePrediction.ts
-- `FitBoundsOnShapes()` --calls--> `useAllRouteShapes()`  [INFERRED]
-  frontend/src/pages/LiveMapPage.tsx → frontend/src/hooks/useRouteShapes.ts
-- `_get_connection()` --calls--> `get_connection_params()`  [INFERRED]
-  ml/train.py → ml/db.py
+- `useAllRouteShapes()` --calls--> `FitBoundsOnShapes()`  [INFERRED]
+  frontend/src/hooks/useRouteShapes.ts → frontend/src/pages/LiveMapPage.tsx
+- `get_connection_params()` --calls--> `_get_connection()`  [INFERRED]
+  ml/db.py → ml/train.py
 
 ## Communities
 

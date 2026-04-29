@@ -4,12 +4,19 @@ A full-stack, real-time public transport analytics platform for **Sofia, Bulgari
 
 ## Contents
 
-- [Architecture](#architecture)
-- [Key Features](#key-features)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-- [Project Structure](#project-structure)
-- [API Overview](#api-overview)
+- [Sofia Transport Intelligence Platform (STIP)](#sofia-transport-intelligence-platform-stip)
+  - [Contents](#contents)
+  - [Architecture](#architecture)
+    - [Docker Services](#docker-services)
+  - [Key Features](#key-features)
+  - [Tech Stack](#tech-stack)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Quick Start](#quick-start)
+    - [Access Points](#access-points)
+    - [Local Development](#local-development)
+    - [Environment Variables](#environment-variables)
+  - [Project Structure](#project-structure)
 
 ---
 
@@ -183,27 +190,10 @@ STIP/
 ├── docs/
 │   ├── Packages.md                    # Complete dependency manifest
 │   └── APIKeys.md                     # API key procurement checklist
+├── graphify-out/                      # Knowledge graph (code structure & cross-module relationships)
 ├── SOFIA_TRANSPORT_MASTER_PLAN.md     # Full technical specification
 ├── Idea.md                            # Project concept & feature vision
 └── HighLevelVision.md                 # Architecture diagram
 ```
 
 ---
-
-## API Overview
-
-| Endpoint | Description |
-|----------|-------------|
-| `GET /api/vehicles/live` | All live vehicle positions (optional `?routeId=` filter) |
-| `GET /api/tripupdates/live` | Live trip updates with per-stop delays (optional `?routeId=` filter) |
-| `GET /api/alerts` | Active service alerts (optional `?routeId=` filter) |
-| `GET /api/routes` | All routes |
-| `GET /api/routes/{id}/reliability` | Reliability score history |
-| `GET /api/routes/{id}/delay-pattern` | Average delay by hour of day |
-| `GET /api/stops/{id}/predicted-arrivals` | ML-predicted arrival times |
-| `GET /api/analytics/heatmap/delays` | GeoJSON delay heatmap |
-| `GET /api/analytics/reliability/ranking` | Best/worst routes by reliability |
-| `POST /api/predictions/delay` | Predict delay for route/stop/time |
-| `WS /hubs/vehicles` | SignalR live push (VehicleUpdated, TripUpdated, AlertUpdated) |
-
-Full interactive docs available at http://localhost:5000/swagger when running.

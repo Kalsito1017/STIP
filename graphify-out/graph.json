@@ -5345,36 +5345,36 @@
       "file_type": "rationale",
       "source_file": "ml/db.py",
       "source_location": "L1",
-      "id": "ml_db_rationale_1",
       "community": 5,
-      "norm_label": "shared database utilities for the stip ml service."
+      "norm_label": "shared database utilities for the stip ml service.",
+      "id": "ml_db_rationale_1"
     },
     {
       "label": "Convert .NET-style connection string to psycopg2 kwargs.      Input:  'Host=post",
       "file_type": "rationale",
       "source_file": "ml/db.py",
       "source_location": "L10",
-      "id": "ml_db_rationale_10",
       "community": 5,
-      "norm_label": "convert .net-style connection string to psycopg2 kwargs.      input:  'host=post"
+      "norm_label": "convert .net-style connection string to psycopg2 kwargs.      input:  'host=post",
+      "id": "ml_db_rationale_10"
     },
     {
       "label": "Parse DB_CONNECTION_STRING env var into psycopg2 kwargs.",
       "file_type": "rationale",
       "source_file": "ml/db.py",
       "source_location": "L33",
-      "id": "ml_db_rationale_33",
       "community": 5,
-      "norm_label": "parse db_connection_string env var into psycopg2 kwargs."
+      "norm_label": "parse db_connection_string env var into psycopg2 kwargs.",
+      "id": "ml_db_rationale_33"
     },
     {
       "label": "Create a psycopg2 connection from DB_CONNECTION_STRING env var.",
       "file_type": "rationale",
       "source_file": "ml/db.py",
       "source_location": "L41",
-      "id": "ml_db_rationale_41",
       "community": 5,
-      "norm_label": "create a psycopg2 connection from db_connection_string env var."
+      "norm_label": "create a psycopg2 connection from db_connection_string env var.",
+      "id": "ml_db_rationale_41"
     },
     {
       "label": "predict.py",
@@ -5507,54 +5507,54 @@
       "file_type": "rationale",
       "source_file": "ml/predict.py",
       "source_location": "L1",
-      "id": "ml_predict_rationale_1",
       "community": 7,
-      "norm_label": "stip ml prediction service fastapi inference server for bus delay prediction."
+      "norm_label": "stip ml prediction service fastapi inference server for bus delay prediction.",
+      "id": "ml_predict_rationale_1"
     },
     {
       "label": "Validate that a model file path is within MODEL_DIR (prevent path traversal).",
       "file_type": "rationale",
       "source_file": "ml/predict.py",
       "source_location": "L59",
-      "id": "ml_predict_rationale_59",
       "community": 7,
-      "norm_label": "validate that a model file path is within model_dir (prevent path traversal)."
+      "norm_label": "validate that a model file path is within model_dir (prevent path traversal).",
+      "id": "ml_predict_rationale_59"
     },
     {
       "label": "Find the latest versioned model file in MODEL_DIR.      Strategy:     1. Read mo",
       "file_type": "rationale",
       "source_file": "ml/predict.py",
       "source_location": "L68",
-      "id": "ml_predict_rationale_68",
       "community": 7,
-      "norm_label": "find the latest versioned model file in model_dir.      strategy:     1. read mo"
+      "norm_label": "find the latest versioned model file in model_dir.      strategy:     1. read mo",
+      "id": "ml_predict_rationale_68"
     },
     {
       "label": "Load the latest model and metadata into module-level globals.",
       "file_type": "rationale",
       "source_file": "ml/predict.py",
       "source_location": "L115",
-      "id": "ml_predict_rationale_115",
       "community": 7,
-      "norm_label": "load the latest model and metadata into module-level globals."
+      "norm_label": "load the latest model and metadata into module-level globals.",
+      "id": "ml_predict_rationale_115"
     },
     {
       "label": "Get or create a threaded connection pool.",
       "file_type": "rationale",
       "source_file": "ml/predict.py",
       "source_location": "L153",
-      "id": "ml_predict_rationale_153",
       "community": 7,
-      "norm_label": "get or create a threaded connection pool."
+      "norm_label": "get or create a threaded connection pool.",
+      "id": "ml_predict_rationale_153"
     },
     {
       "label": "Query PostgreSQL for the 7-day rolling average delay for a route+hour.      Retu",
       "file_type": "rationale",
       "source_file": "ml/predict.py",
       "source_location": "L171",
-      "id": "ml_predict_rationale_171",
       "community": 7,
-      "norm_label": "query postgresql for the 7-day rolling average delay for a route+hour.      retu"
+      "norm_label": "query postgresql for the 7-day rolling average delay for a route+hour.      retu",
+      "id": "ml_predict_rationale_171"
     },
     {
       "label": "train.py",
@@ -5633,72 +5633,72 @@
       "file_type": "rationale",
       "source_file": "ml/train.py",
       "source_location": "L1",
-      "id": "ml_train_rationale_1",
       "community": 5,
-      "norm_label": "stip ml training pipeline trains xgboostregressor on delay_logs from postgresql."
+      "norm_label": "stip ml training pipeline trains xgboostregressor on delay_logs from postgresql.",
+      "id": "ml_train_rationale_1"
     },
     {
       "label": "Create a psycopg2 connection from DB_CONNECTION_STRING env var.",
       "file_type": "rationale",
       "source_file": "ml/train.py",
       "source_location": "L44",
-      "id": "ml_train_rationale_44",
       "community": 5,
-      "norm_label": "create a psycopg2 connection from db_connection_string env var."
+      "norm_label": "create a psycopg2 connection from db_connection_string env var.",
+      "id": "ml_train_rationale_44"
     },
     {
       "label": "Fetch delay_logs from the last N days, joining stop_times for stop_sequence.",
       "file_type": "rationale",
       "source_file": "ml/train.py",
       "source_location": "L60",
-      "id": "ml_train_rationale_60",
       "community": 5,
-      "norm_label": "fetch delay_logs from the last n days, joining stop_times for stop_sequence."
+      "norm_label": "fetch delay_logs from the last n days, joining stop_times for stop_sequence.",
+      "id": "ml_train_rationale_60"
     },
     {
       "label": "Build a deterministic mapping from route_id to integer encoding.",
       "file_type": "rationale",
       "source_file": "ml/train.py",
       "source_location": "L93",
-      "id": "ml_train_rationale_93",
       "community": 5,
-      "norm_label": "build a deterministic mapping from route_id to integer encoding."
+      "norm_label": "build a deterministic mapping from route_id to integer encoding.",
+      "id": "ml_train_rationale_93"
     },
     {
       "label": "Compute the mean delay grouped by (route_id, hour_of_day).      Returns a DataFr",
       "file_type": "rationale",
       "source_file": "ml/train.py",
       "source_location": "L101",
-      "id": "ml_train_rationale_101",
       "community": 5,
-      "norm_label": "compute the mean delay grouped by (route_id, hour_of_day).      returns a datafr"
+      "norm_label": "compute the mean delay grouped by (route_id, hour_of_day).      returns a datafr",
+      "id": "ml_train_rationale_101"
     },
     {
       "label": "Add all model features to the DataFrame (in-place).",
       "file_type": "rationale",
       "source_file": "ml/train.py",
       "source_location": "L120",
-      "id": "ml_train_rationale_120",
       "community": 5,
-      "norm_label": "add all model features to the dataframe (in-place)."
+      "norm_label": "add all model features to the dataframe (in-place).",
+      "id": "ml_train_rationale_120"
     },
     {
       "label": "Main training entry point.      If *delay_logs* is provided (from /internal/retr",
       "file_type": "rationale",
       "source_file": "ml/train.py",
       "source_location": "L150",
-      "id": "ml_train_rationale_150",
       "community": 5,
-      "norm_label": "main training entry point.      if *delay_logs* is provided (from /internal/retr"
+      "norm_label": "main training entry point.      if *delay_logs* is provided (from /internal/retr",
+      "id": "ml_train_rationale_150"
     },
     {
       "label": "Remove old .joblib model files, keeping the *keep* most recent.",
       "file_type": "rationale",
       "source_file": "ml/train.py",
       "source_location": "L272",
-      "id": "ml_train_rationale_272",
       "community": 5,
-      "norm_label": "remove old .joblib model files, keeping the *keep* most recent."
+      "norm_label": "remove old .joblib model files, keeping the *keep* most recent.",
+      "id": "ml_train_rationale_272"
     },
     {
       "label": "AnalyticsControllerTests.cs",
@@ -13671,8 +13671,8 @@
       "source_file": "frontend/src/pages/LiveMapPage.tsx",
       "source_location": "L21",
       "weight": 1.0,
-      "_src": "pages_livemappage_fitboundsonshapes",
-      "_tgt": "hooks_userouteshapes_useallrouteshapes",
+      "_src": "hooks_userouteshapes_useallrouteshapes",
+      "_tgt": "pages_livemappage_fitboundsonshapes",
       "source": "hooks_userouteshapes_useallrouteshapes",
       "target": "pages_livemappage_fitboundsonshapes"
     },
@@ -13875,8 +13875,8 @@
       "source_file": "ml/predict.py",
       "source_location": "L157",
       "weight": 1.0,
-      "_src": "ml_predict_get_db_pool",
-      "_tgt": "ml_db_get_connection_params",
+      "_src": "ml_db_get_connection_params",
+      "_tgt": "ml_predict_get_db_pool",
       "source": "ml_db_get_connection_params",
       "target": "ml_predict_get_db_pool"
     },
@@ -13887,8 +13887,8 @@
       "source_file": "ml/train.py",
       "source_location": "L47",
       "weight": 1.0,
-      "_src": "ml_train_get_connection",
-      "_tgt": "ml_db_get_connection_params",
+      "_src": "ml_db_get_connection_params",
+      "_tgt": "ml_train_get_connection",
       "source": "ml_db_get_connection_params",
       "target": "ml_train_get_connection"
     },
