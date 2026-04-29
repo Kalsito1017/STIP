@@ -1,7 +1,9 @@
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using SofiaTransport.Api.DependencyInjection;
 using SofiaTransport.Api.Middleware;
 using SofiaTransport.Infrastructure.DependencyInjection;
+using SofiaTransport.Infrastructure.Persistence;
 using SofiaTransport.Infrastructure.Realtime;
 
 Log.Logger = new LoggerConfiguration()
@@ -22,6 +24,25 @@ try
     builder.Services.AddSwaggerGen();
 
     var app = builder.Build();
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<TransportDbContext>();
+        for (var i = 0; i < 10; i++)
+        {
+            try
+            {
+                db.Database.EnsureCreated();
+                break;
+            }
+            catch (Exception ex) when (i < 9)
+            {
+                var delay = TimeSpan.FromSeconds(Math.Pow(2, i));
+                Log.Warning(ex, "Migration attempt {Attempt} failed, retrying in {Delay}s", i + 1, delay.TotalSeconds);
+                Thread.Sleep(delay);
+            }
+        }
+    }
 
     app.UseExceptionHandling();
     app.UseSecurityHeaders();
