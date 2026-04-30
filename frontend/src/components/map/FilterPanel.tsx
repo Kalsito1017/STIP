@@ -1,3 +1,5 @@
+import { Sun, Moon } from 'lucide-react';
+
 interface RouteOption {
   routeId: string;
   shortName: string;
@@ -29,6 +31,7 @@ export function FilterPanel({
         value={routeFilter}
         onChange={(e) => onRouteFilterChange(e.target.value)}
         className="text-sm border border-slate-300 rounded-md px-2 sm:px-3 py-1.5 bg-white flex-1 sm:flex-none"
+        aria-label="Filter vehicles by route"
       >
         <option value="">All routes</option>
         {routes?.map((r) => (
@@ -40,9 +43,10 @@ export function FilterPanel({
       <button
         onClick={onToggleDarkMode}
         className="text-sm border border-slate-300 rounded-md px-3 py-1.5 bg-white hover:bg-slate-50 flex-shrink-0"
+        aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
         title="Toggle dark mode"
       >
-        {darkMode ? '\u2600\uFE0F' : '\uD83C\uDF19'}
+        {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
       </button>
     </div>
   );

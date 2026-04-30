@@ -32,9 +32,9 @@ function pointRadius(sampleCount: number): number {
 export function DelayHeatmapLayer({ points }: Props) {
   return (
     <>
-      {points.map((p, i) => (
+      {points.map((p) => (
         <CircleMarker
-          key={i}
+          key={`${p.lat.toFixed(6)}-${p.lon.toFixed(6)}`}
           center={[p.lat, p.lon]}
           radius={pointRadius(p.sampleCount)}
           pathOptions={{

@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 import { Sidebar } from './Sidebar';
+import { ErrorBoundary } from './ErrorBoundary';
 import { useAppStore } from '../store/useAppStore';
 
 const pageTitles: Record<string, string> = {
@@ -71,7 +72,9 @@ export function Layout() {
           )}
         </header>
         <main className="p-4 sm:p-6">
-          <Outlet />
+          <ErrorBoundary>
+            <Outlet />
+          </ErrorBoundary>
         </main>
       </div>
     </div>

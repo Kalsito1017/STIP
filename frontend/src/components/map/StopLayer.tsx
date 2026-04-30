@@ -19,7 +19,7 @@ export function StopLayer({ data }: Props) {
     <GeoJSON
       data={data}
       pointToLayer={(_feature, latlng) => L.circleMarker(latlng, circleOptions)}
-      key={JSON.stringify(data.features.length)}
+      key={data.features.length}
     />
   );
 }

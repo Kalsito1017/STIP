@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { Marker, Popup } from 'react-leaflet';
 import * as L from 'leaflet';
 import type { Vehicle } from '../../store/useAppStore';
@@ -6,16 +7,28 @@ interface Props {
   vehicles: Vehicle[];
 }
 
+function buildIcon(bearing: number): L.DivIcon {
+  return L.divIcon({
+    className: 'vehicle-marker',
+    html: `<div style="transform:rotate(${bearing}deg);background:#2563eb;color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;border:2px solid white;box-shadow:0 2px 4px rgba(0,0,0,.3);cursor:pointer">\u{1F68C}</div>`,
+    iconSize: [28, 28],
+    iconAnchor: [14, 14],
+  });
+}
+
 export function VehicleLayer({ vehicles }: Props) {
+  const iconCache = useRef<Map<string, L.DivIcon>>(new Map());
+  const prevBearings = useRef<Map<string, number>>(new Map());
+
   return (
     <>
       {vehicles.map((v) => {
-        const icon = L.divIcon({
-          className: 'vehicle-marker',
-          html: `<div style="transform:rotate(${v.bearing}deg);background:#2563eb;color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;border:2px solid white;box-shadow:0 2px 4px rgba(0,0,0,.3);cursor:pointer">\u{1F68C}</div>`,
-          iconSize: [28, 28],
-          iconAnchor: [14, 14],
-        });
+        const prevBearing = prevBearings.current.get(v.vehicleId);
+        if (prevBearing !== v.bearing || !iconCache.current.has(v.vehicleId)) {
+          prevBearings.current.set(v.vehicleId, v.bearing);
+          iconCache.current.set(v.vehicleId, buildIcon(v.bearing));
+        }
+        const icon = iconCache.current.get(v.vehicleId)!;
 
         return (
           <Marker key={v.vehicleId} position={[v.lat, v.lon]} icon={icon}>

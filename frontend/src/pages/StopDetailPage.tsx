@@ -1,6 +1,8 @@
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { ArrowLeft, MapPin } from 'lucide-react';
 import { useStops, useStopCongestion } from '../hooks/useStops';
+import { ErrorAlert } from '../components/ErrorAlert';
+import { SkeletonChart } from '../components/Skeleton';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
@@ -9,10 +11,23 @@ export function StopDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   if (!id) return <Navigate to="/stops" replace />;
-  const { data: stops } = useStops();
+  const { data: stops, isLoading, isError: stopsError, error: stopsErr, refetch: refetchStops } = useStops();
   const stop = stops?.find((s: { stopId: string }) => s.stopId === id);
-  const { data: congestion } = useStopCongestion(id);
+  const { data: congestion, isError: congError, error: congErr, refetch: refetchCong } = useStopCongestion(id);
 
+  if (isLoading) return (
+    <div className="space-y-4 sm:space-y-6">
+      <div className="h-4 w-16 bg-slate-200 rounded animate-pulse" />
+      <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-6 shadow-sm space-y-3">
+        <div className="h-6 w-48 bg-slate-200 rounded animate-pulse" />
+        <div className="h-4 w-32 bg-slate-200 rounded animate-pulse" />
+        <div className="h-4 w-40 bg-slate-200 rounded animate-pulse" />
+      </div>
+      <SkeletonChart height={250} />
+    </div>
+  );
+
+  if (stopsError) return <ErrorAlert message={stopsErr.message} onRetry={() => refetchStops()} />;
   if (!stop) return <p className="text-slate-500">Stop not found</p>;
 
   return (
@@ -36,7 +51,9 @@ export function StopDetailPage() {
 
       <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-5 shadow-sm">
         <h3 className="text-sm font-semibold text-slate-700 mb-4">Hourly Congestion</h3>
-        {congestion?.length ? (
+        {congError ? (
+          <ErrorAlert message={congErr.message} onRetry={() => refetchCong()} />
+        ) : congestion?.length ? (
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={congestion}>
               <CartesianGrid strokeDasharray="3 3" />

@@ -70,6 +70,8 @@ interface AppState {
   alerts: ServiceAlert[];
   selectedRoute: string | null;
   darkMode: boolean;
+  connectionState: 'connected' | 'reconnecting' | 'disconnected';
+  lastUpdatedAt: string | null;
   token: string | null;
   user: User | null;
   isAuthenticated: boolean;
@@ -81,6 +83,8 @@ interface AppState {
   addAlert: (alert: ServiceAlert) => void;
   setSelectedRoute: (routeId: string | null) => void;
   toggleDarkMode: () => void;
+  setConnectionState: (state: 'connected' | 'reconnecting' | 'disconnected') => void;
+  setVehicleTimestamp: () => void;
   setAuth: (token: string, user: User) => void;
   clearAuth: () => void;
 }
@@ -96,13 +100,16 @@ function loadUser(): User | null {
 
 const initialToken = localStorage.getItem('token');
 const initialUser = loadUser();
+const initialDarkMode = localStorage.getItem('darkMode') === 'true';
 
 export const useAppStore = create<AppState>((set) => ({
   vehicles: [],
   tripUpdates: [],
   alerts: [],
   selectedRoute: null,
-  darkMode: false,
+  darkMode: initialDarkMode,
+  connectionState: 'disconnected',
+  lastUpdatedAt: null,
   token: initialToken,
   user: initialUser,
   isAuthenticated: !!initialToken && !!initialUser,
@@ -131,7 +138,14 @@ export const useAppStore = create<AppState>((set) => ({
       ],
     })),
   setSelectedRoute: (routeId) => set({ selectedRoute: routeId }),
-  toggleDarkMode: () => set((state) => ({ darkMode: !state.darkMode })),
+  toggleDarkMode: () =>
+    set((state) => {
+      const next = !state.darkMode;
+      localStorage.setItem('darkMode', String(next));
+      return { darkMode: next };
+    }),
+  setConnectionState: (connectionState) => set({ connectionState }),
+  setVehicleTimestamp: () => set({ lastUpdatedAt: new Date().toISOString() }),
   setAuth: (token, user) => {
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));

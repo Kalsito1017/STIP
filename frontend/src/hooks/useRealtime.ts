@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as signalR from '@microsoft/signalr';
 import { useAppStore } from '../store/useAppStore';
 import type { Vehicle, TripUpdate, ServiceAlert } from '../store/useAppStore';
@@ -12,6 +12,7 @@ export function useRealtime() {
   const addAlert = useAppStore((s) => s.addAlert);
   const token = useAppStore((s) => s.token);
   const connectionRef = useRef<signalR.HubConnection | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -38,7 +39,17 @@ export function useRealtime() {
       if (!cancelled) addAlert(alert);
     });
 
-    connection.start().catch((err) => {
+    connection.onreconnected(() => {
+      if (!cancelled) setIsConnected(true);
+    });
+
+    connection.onclose(() => {
+      if (!cancelled) setIsConnected(false);
+    });
+
+    connection.start().then(() => {
+      if (!cancelled) setIsConnected(true);
+    }).catch((err) => {
       console.error('SignalR connection failed:', err);
     });
     connectionRef.current = connection;
@@ -49,5 +60,5 @@ export function useRealtime() {
     };
   }, [token, setVehicles, updateVehicle, setTripUpdates, updateTripUpdate, setAlerts, addAlert]);
 
-  return connectionRef;
+  return { connectionRef, isConnected };
 }

@@ -3,6 +3,8 @@ import { ArrowLeft, Clock } from 'lucide-react';
 import { useRouteDetail } from '../hooks/useRoutes';
 import { useRouteDelayPattern } from '../hooks/useDelays';
 import { PredictPanel } from '../components/PredictPanel';
+import { ErrorAlert } from '../components/ErrorAlert';
+import { Skeleton, SkeletonCard, SkeletonChart } from '../components/Skeleton';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
@@ -13,10 +15,29 @@ export function RouteDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   if (!id) return <Navigate to="/routes" replace />;
-  const { data: route, isLoading } = useRouteDetail(id);
-  const { data: delayPattern } = useRouteDelayPattern(id);
 
-  if (isLoading) return <p className="text-slate-500">Loading...</p>;
+  const { data: route, isLoading, isError, error, refetch } = useRouteDetail(id);
+  const { data: delayPattern, isError: dpError, error: dpErr, refetch: refetchDp } = useRouteDelayPattern(id);
+
+  if (isLoading) return (
+    <div className="space-y-4 sm:space-y-6">
+      <Skeleton className="h-4 w-16" />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-lg p-4 sm:p-6 shadow-sm space-y-4">
+          <Skeleton className="h-7 w-32" />
+          <Skeleton className="h-4 w-48" />
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+            <Skeleton className="h-16" />
+            <Skeleton className="h-16" />
+            <Skeleton className="h-16" />
+          </div>
+        </div>
+        <SkeletonCard />
+      </div>
+      <SkeletonChart height={250} />
+    </div>
+  );
+  if (isError) return <ErrorAlert message={error.message} onRetry={() => refetch()} />;
   if (!route) return <p className="text-slate-500">Route not found</p>;
 
   const score = route.latestReliability?.score ?? null;
@@ -68,7 +89,9 @@ export function RouteDetailPage() {
         <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-4">
           <Clock className="w-4 h-4" /> Delay by Hour
         </h3>
-        {delayPattern?.length ? (
+        {dpError ? (
+          <ErrorAlert message={dpErr.message} onRetry={() => refetchDp()} />
+        ) : delayPattern?.length ? (
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={delayPattern}>
               <CartesianGrid strokeDasharray="3 3" />

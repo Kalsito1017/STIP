@@ -11,6 +11,7 @@ import { RouteDetailPage } from './pages/RouteDetailPage';
 import { StopsPage } from './pages/StopsPage';
 import { StopDetailPage } from './pages/StopDetailPage';
 import { AnalyticsPage } from './pages/AnalyticsPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,6 +39,7 @@ function App() {
               <Route path="/stops" element={<StopsPage />} />
               <Route path="/stops/:id" element={<StopDetailPage />} />
               <Route path="/analytics" element={<AnalyticsPage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Route>
         </Routes>

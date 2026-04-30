@@ -1,21 +1,104 @@
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStops } from '../hooks/useStops';
-import { MapPin } from 'lucide-react';
+import { SkeletonCard, SkeletonTable } from '../components/Skeleton';
+import { MapPin, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+
+interface Stop {
+  stopId: string;
+  stopName: string;
+  lat: number;
+  lon: number;
+}
+
+type SortKey = 'name' | 'id';
+type SortDir = 'asc' | 'desc';
+
+function SortIcon({ active, dir }: { active: boolean; dir: SortDir }) {
+  if (!active) return <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />;
+  return dir === 'asc'
+    ? <ArrowUp className="w-3.5 h-3.5 text-blue-600" />
+    : <ArrowDown className="w-3.5 h-3.5 text-blue-600" />;
+}
 
 export function StopsPage() {
   const { data: stops, isLoading } = useStops();
   const navigate = useNavigate();
+  const [search, setSearch] = useState('');
+  const [sortKey, setSortKey] = useState<SortKey>('name');
+  const [sortDir, setSortDir] = useState<SortDir>('asc');
+
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortKey(key);
+      setSortDir('asc');
+    }
+  };
+
+  const filtered = useMemo(() => {
+    if (!stops) return [];
+    let result = stops as Stop[];
+
+    const q = search.toLowerCase().trim();
+    if (q) {
+      result = result.filter((s) => s.stopName.toLowerCase().includes(q));
+    }
+
+    return result.sort((a, b) => {
+      const aVal = sortKey === 'name' ? a.stopName : a.stopId;
+      const bVal = sortKey === 'name' ? b.stopName : b.stopId;
+      const cmp = aVal.localeCompare(bVal);
+      return sortDir === 'asc' ? cmp : -cmp;
+    });
+  }, [stops, search, sortKey, sortDir]);
+
+  if (isLoading) return (
+    <div className="space-y-4">
+      <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Stops</h1>
+      <div className="sm:hidden space-y-2">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <SkeletonCard key={i} />
+        ))}
+      </div>
+      <div className="hidden sm:block">
+        <SkeletonTable rows={5} cols={3} />
+      </div>
+    </div>
+  );
+
+  const handleRowKeyDown = (e: React.KeyboardEvent, stopId: string) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      navigate(`/stops/${stopId}`);
+    }
+  };
 
   return (
     <div className="space-y-4">
       <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Stops</h1>
-      {isLoading ? (
-        <p className="text-slate-500">Loading stops...</p>
+
+      <div className="flex items-center gap-3">
+        <input
+          type="text"
+          placeholder="Search stops\u2026"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="flex-1 text-sm border border-slate-300 rounded-md px-3 py-1.5 bg-white"
+          aria-label="Search stops by name"
+        />
+      </div>
+
+      <p className="text-xs text-slate-500">{filtered.length} stops found</p>
+
+      {filtered.length === 0 ? (
+        <p className="text-slate-500">No stops match your search</p>
       ) : (
         <>
           {/* Mobile: card layout */}
           <div className="sm:hidden space-y-2">
-            {stops?.map((s: { stopId: string; stopName: string; lat: number; lon: number }) => (
+            {filtered.map((s) => (
               <button
                 key={s.stopId}
                 onClick={() => navigate(`/stops/${s.stopId}`)}
@@ -27,7 +110,7 @@ export function StopsPage() {
                 </div>
                 <div className="flex items-center justify-between text-xs text-slate-500">
                   <span className="font-mono">{s.stopId}</span>
-                  <span className="font-mono">{s.lat.toFixed(4)}, {s.lon.toFixed(4)}</span>
+                  <span className="font-mono">{s.lat?.toFixed(4) ?? '\u2014'}, {s.lon?.toFixed(4) ?? '\u2014'}</span>
                 </div>
               </button>
             ))}
@@ -39,17 +122,39 @@ export function StopsPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-slate-200 bg-slate-50">
-                    <th className="text-left p-3 font-medium text-slate-600">Name</th>
-                    <th className="text-left p-3 font-medium text-slate-600">ID</th>
+                    <th
+                      className="text-left p-3 font-medium text-slate-600 cursor-pointer hover:text-slate-900 select-none"
+                      onClick={() => handleSort('name')}
+                      aria-sort={sortKey === 'name' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
+                    >
+                      <div className="flex items-center gap-1">
+                        Name
+                        <SortIcon active={sortKey === 'name'} dir={sortDir} />
+                      </div>
+                    </th>
+                    <th
+                      className="text-left p-3 font-medium text-slate-600 cursor-pointer hover:text-slate-900 select-none"
+                      onClick={() => handleSort('id')}
+                      aria-sort={sortKey === 'id' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
+                    >
+                      <div className="flex items-center gap-1">
+                        ID
+                        <SortIcon active={sortKey === 'id'} dir={sortDir} />
+                      </div>
+                    </th>
                     <th className="text-right p-3 font-medium text-slate-600">Coordinates</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {stops?.map((s: { stopId: string; stopName: string; lat: number; lon: number }) => (
+                  {filtered.map((s) => (
                     <tr
                       key={s.stopId}
+                      tabIndex={0}
+                      role="button"
+                      aria-label={`View details for stop ${s.stopName}`}
                       onClick={() => navigate(`/stops/${s.stopId}`)}
-                      className="border-b border-slate-100 hover:bg-blue-50 cursor-pointer transition-colors"
+                      onKeyDown={(e) => handleRowKeyDown(e, s.stopId)}
+                      className="border-b border-slate-100 hover:bg-blue-50 cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-400"
                     >
                       <td className="p-3">
                         <div className="flex items-center gap-2">
@@ -59,7 +164,7 @@ export function StopsPage() {
                       </td>
                       <td className="p-3 text-slate-500 font-mono text-xs">{s.stopId}</td>
                       <td className="p-3 text-right text-slate-500 font-mono text-xs">
-                        {s.lat.toFixed(4)}, {s.lon.toFixed(4)}
+                        {s.lat?.toFixed(4) ?? '\u2014'}, {s.lon?.toFixed(4) ?? '\u2014'}
                       </td>
                     </tr>
                   ))}

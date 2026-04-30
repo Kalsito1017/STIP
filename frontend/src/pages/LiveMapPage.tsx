@@ -9,6 +9,7 @@ import { useStops } from '../hooks/useStops';
 import { useAllRouteShapes } from '../hooks/useRouteShapes';
 import { useDelayHeatmap } from '../hooks/useHeatmap';
 import { AlertBanner } from '../components/AlertBanner';
+import { ErrorAlert } from '../components/ErrorAlert';
 import { RouteShapeLayer } from '../components/map/RouteShapeLayer';
 import { StopLayer } from '../components/map/StopLayer';
 import { VehicleLayer } from '../components/map/VehicleLayer';
@@ -51,32 +52,32 @@ function stopsToGeoJSON(stops: { stopId: string; stopName: string; lat: number; 
 }
 
 export function LiveMapPage() {
-  useRealtime();
+  const { isConnected: isRealtimeConnected } = useRealtime();
   const vehicles = useAppStore((s) => s.vehicles);
   const darkMode = useAppStore((s) => s.darkMode);
   const toggleDarkMode = useAppStore((s) => s.toggleDarkMode);
   const [routeFilter, setRouteFilter] = useState('');
-  const { data: routes } = useRoutes();
+  const { data: routes, isError: routesError, error: routesErr, refetch: refetchRoutes } = useRoutes();
   const { data: stops } = useStops();
   const { data: liveVehicles } = useLiveVehicles();
   const { data: shapes } = useAllRouteShapes();
   const { data: heatmap } = useDelayHeatmap();
 
   const displayVehicles = useMemo(() => {
-    const source = vehicles.length > 0 ? vehicles : (liveVehicles ?? []);
-    return routeFilter ? source.filter((v) => v.routeId === routeFilter) : source;
-  }, [vehicles, liveVehicles, routeFilter]);
+    const source = isRealtimeConnected ? vehicles : (liveVehicles ?? []);
+    return routeFilter ? source.filter((v: { routeId: string | null }) => v.routeId === routeFilter) : source;
+  }, [vehicles, liveVehicles, routeFilter, isRealtimeConnected]);
 
   const stopGeojson = useMemo(() => stopsToGeoJSON(stops), [stops]);
 
-  const routeLines = useMemo(() => {
-    if (!shapes) return { type: 'FeatureCollection' as const, features: [] };
-    return shapes;
-  }, [shapes]);
+  const routeLines = shapes ?? { type: 'FeatureCollection' as const, features: [] };
 
   return (
     <div className="space-y-3 sm:space-y-4">
       <AlertBanner />
+      {routesError && (
+        <ErrorAlert message={routesErr.message} onRetry={() => refetchRoutes()} />
+      )}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Live Map</h1>
         <FilterPanel
@@ -98,17 +99,15 @@ export function LiveMapPage() {
           <ZoomControl position="topright" />
           <FitBoundsOnShapes />
 
-          {darkMode ? (
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            opacity={darkMode ? 0 : 1}
+          />
+          {darkMode && (
             <TileLayer
-              key="dark"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>, &copy; <a href="https://carto.com/">CARTO</a>'
               url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-            />
-          ) : (
-            <TileLayer
-              key="light"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
           )}
 
