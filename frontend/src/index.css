@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "mapbox-gl/dist/mapbox-gl.css";
+@import "leaflet/dist/leaflet.css";
 
 :root {
   font-family: system-ui, -apple-system, sans-serif;
@@ -12,6 +12,11 @@ body {
   min-height: 100vh;
 }
 
-.mapboxgl-map {
+.leaflet-container {
   border-radius: 0.5rem;
+}
+
+.vehicle-marker {
+  background: transparent !important;
+  border: none !important;
 }

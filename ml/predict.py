@@ -43,12 +43,14 @@ FEATURE_NAMES = [
     "weather_score",
 ]
 
-# Module-level state loaded at startup
-_model = None
-_model_meta: dict = {}
-_route_encoding: dict[str, int] = {}
-_residual_std: float = 30.0  # fallback
-_residual_mean: float = 0.0
+# Module-level state loaded at startup — atomic swap pattern
+_model_state: dict = {
+    "model": None,
+    "meta": {},
+    "route_encoding": {},
+    "residual_std": 30.0,
+    "residual_mean": 0.0,
+}
 
 
 # ---------------------------------------------------------------------------
@@ -94,6 +96,11 @@ def _find_latest_model_path() -> str | None:
     symlink = os.path.join(MODEL_DIR, "xgb_delay_latest.joblib")
     if os.path.exists(symlink):
         resolved = os.path.realpath(symlink)
+        try:
+            resolved = _safe_model_path(resolved)
+        except ValueError:
+            logger.warning("Symlink target outside MODEL_DIR: %s", resolved)
+            return None
         if os.path.exists(resolved):
             return resolved
 
@@ -112,34 +119,37 @@ def _find_latest_model_path() -> str | None:
 
 
 def load_model() -> None:
-    """Load the latest model and metadata into module-level globals."""
-    global _model, _model_meta, _route_encoding, _residual_std, _residual_mean
-
+    """Load the latest model and metadata — atomic state swap."""
     model_path = _find_latest_model_path()
+    model = None
     if model_path and os.path.exists(model_path):
         try:
             safe_path = _safe_model_path(model_path)
-            _model = joblib.load(safe_path)
+            model = joblib.load(safe_path)
             logger.info("Loaded model: %s", safe_path)
         except ValueError as e:
             logger.error("Model path validation failed: %s", e)
-            _model = None
     else:
-        _model = None
+        model = None
         logger.warning("No model found in %s", MODEL_DIR)
 
+    meta: dict = {}
     if os.path.exists(META_PATH):
         try:
             with open(META_PATH) as f:
-                _model_meta = json.load(f)
+                meta = json.load(f)
         except (json.JSONDecodeError, OSError):
-            _model_meta = {}
-    else:
-        _model_meta = {}
+            pass
 
-    _route_encoding = _model_meta.get("route_encoding", {})
-    _residual_std = _model_meta.get("residual_std", 30.0)
-    _residual_mean = _model_meta.get("residual_mean", 0.0)
+    # Atomic swap of all state at once — no partial-read window
+    global _model_state
+    _model_state = {
+        "model": model,
+        "meta": meta,
+        "route_encoding": meta.get("route_encoding", {}),
+        "residual_std": meta.get("residual_std", 30.0),
+        "residual_mean": meta.get("residual_mean", 0.0),
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -150,7 +160,7 @@ _db_pool = None
 
 
 def _get_db_pool():
-    """Get or create a threaded connection pool."""
+    """Get or create a threaded connection pool with retry on transient failures."""
     global _db_pool
     if _db_pool is not None:
         return _db_pool
@@ -158,10 +168,19 @@ def _get_db_pool():
     if not params:
         return None
     try:
-        from psycopg2 import pool as pg_pool
+        from psycopg2 import OperationalError, pool as pg_pool
+        from time import sleep as time_sleep
+
         max_conn = int(os.environ.get("DB_POOL_MAX", "20"))
-        _db_pool = pg_pool.ThreadedConnectionPool(5, max_conn, **params)
-        return _db_pool
+        for attempt in range(3):
+            try:
+                _db_pool = pg_pool.ThreadedConnectionPool(5, max_conn, **params)
+                return _db_pool
+            except OperationalError as e:
+                if attempt == 2:
+                    raise
+                logger.warning("DB pool attempt %d failed, retrying: %s", attempt + 1, e)
+                time_sleep(2 ** attempt)
     except Exception as e:
         logger.debug("Could not create DB pool: %s", e)
         return None
@@ -246,19 +265,20 @@ class RetrainRequest(BaseModel):
 def health():
     return {
         "status": "ok",
-        "model_loaded": _model is not None,
-        "model_version": _model_meta.get("version", "none"),
+        "model_loaded": _model_state["model"] is not None,
+        "model_version": _model_state["meta"].get("version", "none"),
     }
 
 
 @app.post("/predict", response_model=PredictionResponse)
 @limiter.limit("100/minute")
 def predict(request: Request, body: PredictionRequest):
-    if _model is None:
+    state = _model_state
+    if state["model"] is None:
         raise HTTPException(status_code=503, detail="Model not loaded")
 
     # Encode route_id using the training-time mapping
-    route_encoded = _route_encoding.get(body.route_id, 0)
+    route_encoded = state["route_encoding"].get(body.route_id, 0)
 
     # Look up historical average delay from DB (best-effort)
     hist_avg = _lookup_historical_avg_delay(body.route_id, body.hour)
@@ -274,18 +294,18 @@ def predict(request: Request, body: PredictionRequest):
         0,  # weather_score — future
     ]], columns=FEATURE_NAMES)
 
-    pred = float(_model.predict(features)[0])
+    pred = float(state["model"].predict(features)[0])
     pred = max(0.0, pred)
 
     # Confidence interval: ±1.96 * residual_std (≈95% CI)
-    ci_half = 1.96 * abs(_residual_std)
+    ci_half = 1.96 * abs(state["residual_std"])
     lower = max(0.0, pred - ci_half)
     upper = pred + ci_half
 
     return PredictionResponse(
         predicted_delay_seconds=pred,
         confidence_interval=[round(lower, 2), round(upper, 2)],
-        model_version=_model_meta.get("version", "unknown"),
+        model_version=state["meta"].get("version", "unknown"),
     )
 
 

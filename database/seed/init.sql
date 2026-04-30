@@ -695,7 +695,7 @@ INSERT INTO shapes (route_id, sequence, lat, lon) VALUES
     ('r-trol-9', 3, 42.6871, 23.3186),
     ('r-trol-9', 4, 42.6800, 23.3000),
     ('r-trol-9', 5, 42.6650, 23.2880)
-ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (route_id, sequence) DO NOTHING;
 
 -- Reset the shapes sequence
 SELECT setval('shapes_id_seq', COALESCE((SELECT MAX(id) FROM shapes), 0));

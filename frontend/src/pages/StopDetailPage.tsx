@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { ArrowLeft, MapPin } from 'lucide-react';
 import { useStops, useStopCongestion } from '../hooks/useStops';
 import {
@@ -8,9 +8,10 @@ import {
 export function StopDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  if (!id) return <Navigate to="/stops" replace />;
   const { data: stops } = useStops();
   const stop = stops?.find((s: { stopId: string }) => s.stopId === id);
-  const { data: congestion } = useStopCongestion(id!);
+  const { data: congestion } = useStopCongestion(id);
 
   if (!stop) return <p className="text-slate-500">Stop not found</p>;
 

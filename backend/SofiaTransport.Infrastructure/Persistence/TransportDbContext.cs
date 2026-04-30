@@ -37,7 +37,7 @@ public class TransportDbContext : DbContext
                 new Route { RouteId = "r-285", ShortName = "285", LongName = "Mladost 1 – Lyulin", Type = TransitType.Bus },
                 new Route { RouteId = "r-260", ShortName = "260", LongName = "Druzhba – Central Station", Type = TransitType.Bus },
                 new Route { RouteId = "r-72", ShortName = "72", LongName = "Zaharna Fabrika – Poduene", Type = TransitType.Bus },
-                new Route { RouteId = "r-tram-1", ShortName = "1", LongName = "Ivan Vazov – Nadezhda", Type = TransitType.Tram },
+                new Route { RouteId = "r-tram-1", ShortName = "1", LongName = "Sofia University – Mladost 1", Type = TransitType.Tram },
                 new Route { RouteId = "r-tram-7", ShortName = "7", LongName = "Borovo – Lyulin", Type = TransitType.Tram },
                 new Route { RouteId = "r-tram-10", ShortName = "10", LongName = "Vitosha – Zapaden Park", Type = TransitType.Tram },
                 new Route { RouteId = "r-trol-1", ShortName = "1", LongName = "Stochna Gara – Ivan Vazov", Type = TransitType.Trolley },
@@ -62,6 +62,7 @@ public class TransportDbContext : DbContext
                 .HasColumnName("location")
                 .HasColumnType("geography(POINT, 4326)");
             e.HasIndex(s => s.StopName).HasDatabaseName("idx_stops_name");
+            e.HasIndex(s => s.Geometry).HasMethod("GIST").HasDatabaseName("idx_stops_location");
 
             e.HasData(
                 new { StopId = "s-001", StopName = "Orlov Most", Geometry = new Point(23.3342, 42.6897) { SRID = 4326 } },
@@ -104,9 +105,11 @@ public class TransportDbContext : DbContext
             e.Property(st => st.StopId).HasColumnName("stop_id");
             e.Property(st => st.StopSequence).HasColumnName("stop_sequence");
             e.Property(st => st.ArrivalTime).HasColumnName("arrival_time");
+            e.Property(st => st.DepartureTime).HasColumnName("departure_time");
             e.HasOne(st => st.Trip).WithMany(t => t.StopTimes).HasForeignKey(st => st.TripId);
             e.HasOne(st => st.Stop).WithMany().HasForeignKey(st => st.StopId);
             e.HasIndex(st => new { st.StopId, st.ArrivalTime }).HasDatabaseName("idx_stop_times_stop_arrival");
+            e.HasIndex(st => new { st.TripId, st.StopId }).HasDatabaseName("idx_stop_times_trip_stop");
         });
 
         modelBuilder.Entity<Vehicle>(e =>
@@ -118,13 +121,15 @@ public class TransportDbContext : DbContext
             e.Property(v => v.TripId).HasColumnName("trip_id");
             e.Property(v => v.Bearing).HasColumnName("bearing");
             e.Property(v => v.Speed).HasColumnName("speed");
-            e.Property(v => v.RecordedAt).HasColumnName("recorded_at");
+            e.Property(v => v.RecordedAt).HasColumnName("recorded_at").HasDefaultValueSql("now()");
             e.Ignore(v => v.Location);
             e.Property(v => v.Geometry)
                 .HasColumnName("location")
                 .HasColumnType("geography(POINT, 4326)");
             e.HasIndex(v => v.RecordedAt).HasDatabaseName("idx_vehicles_recorded_at").IsDescending();
-            e.HasIndex(v => v.RouteId).HasDatabaseName("idx_vehicles_route_id");
+            e.HasIndex(v => new { v.RouteId, v.RecordedAt }).HasDatabaseName("idx_vehicles_route_id").IsDescending(false, true);
+            e.HasIndex(v => v.TripId).HasDatabaseName("idx_vehicles_trip_id");
+            e.HasIndex(v => v.Geometry).HasMethod("GIST").HasDatabaseName("idx_vehicles_location");
         });
 
         modelBuilder.Entity<DelayLog>(e =>
@@ -138,7 +143,7 @@ public class TransportDbContext : DbContext
             e.Property(d => d.ScheduledArrival).HasColumnName("scheduled_arrival");
             e.Property(d => d.ActualArrival).HasColumnName("actual_arrival");
             e.Property(d => d.DelaySeconds).HasColumnName("delay_seconds");
-            e.Property(d => d.RecordedAt).HasColumnName("recorded_at");
+            e.Property(d => d.RecordedAt).HasColumnName("recorded_at").HasDefaultValueSql("now()");
             e.HasIndex(d => new { d.RouteId, d.RecordedAt }).HasDatabaseName("idx_delay_logs_route").IsDescending(false, true);
             e.HasIndex(d => new { d.StopId, d.RecordedAt }).HasDatabaseName("idx_delay_logs_stop").IsDescending(false, true);
             e.HasIndex(d => d.RecordedAt).HasDatabaseName("idx_delay_logs_recorded_at").IsDescending();
@@ -155,7 +160,7 @@ public class TransportDbContext : DbContext
             e.Property(r => r.AvgDelaySeconds).HasColumnName("avg_delay_seconds");
             e.Property(r => r.Score).HasColumnName("reliability_score");
             e.Property(r => r.PeakScore).HasColumnName("peak_score");
-            e.Property(r => r.SampleCount).HasColumnName("sample_count");
+            e.Property(r => r.SampleCount).HasColumnName("sample_count").HasDefaultValue(0);
         });
 
         modelBuilder.Entity<Shape>(e =>
@@ -168,7 +173,7 @@ public class TransportDbContext : DbContext
             e.Property(s => s.Lat).HasColumnName("lat");
             e.Property(s => s.Lon).HasColumnName("lon");
             e.HasOne(s => s.Route).WithMany(r => r.Shapes).HasForeignKey(s => s.RouteId);
-            e.HasIndex(s => new { s.RouteId, s.Sequence }).HasDatabaseName("idx_shapes_route_sequence");
+            e.HasIndex(s => new { s.RouteId, s.Sequence }).HasDatabaseName("idx_shapes_route_sequence").IsUnique();
         });
 
         modelBuilder.Entity<User>(e =>

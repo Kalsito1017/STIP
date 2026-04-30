@@ -7,16 +7,20 @@ const HOURS = Array.from({ length: 24 }, (_, i) => i);
 
 interface PredictPanelProps {
   routeId: string;
-  stopId: string;
+  stopId?: string;
+  stopSequence?: number;
 }
 
-export function PredictPanel({ routeId, stopId }: PredictPanelProps) {
+export function PredictPanel({ routeId, stopId, stopSequence = 1 }: PredictPanelProps) {
   const [dayOfWeek, setDayOfWeek] = useState(new Date().getDay() === 0 ? 6 : new Date().getDay() - 1);
   const [hour, setHour] = useState(new Date().getHours());
   const prediction = useDelayPrediction();
 
+  const canPredict = !!stopId && !!routeId;
+
   const handlePredict = () => {
-    prediction.mutate({ routeId, stopId, hour, dayOfWeek });
+    if (!canPredict) return;
+    prediction.mutate({ routeId, stopId: stopId!, stopSequence, hour, dayOfWeek });
   };
 
   const isPeak = (hour >= 7 && hour <= 9) || (hour >= 17 && hour <= 19);
@@ -90,8 +94,9 @@ export function PredictPanel({ routeId, stopId }: PredictPanelProps) {
 
       <button
         onClick={handlePredict}
-        disabled={prediction.isPending}
+        disabled={prediction.isPending || !canPredict}
         className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white text-sm font-medium rounded-md px-4 py-2 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        title={!canPredict ? 'Select a stop on this route to predict delay' : undefined}
       >
         {prediction.isPending ? (
           <>

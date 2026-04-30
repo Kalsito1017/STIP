@@ -31,9 +31,18 @@ public class MLService : IMLService
         return result ?? new PredictDelayResponse(0, new List<double> { 0, 0 }, "unknown");
     }
 
-    public Task<TravelTimePredictionResponse> PredictTravelTimeAsync(
+    public async Task<TravelTimePredictionResponse> PredictTravelTimeAsync(
         string fromStopId, string toStopId, string routeId, DateTime departureTime, CancellationToken ct)
     {
-        return Task.FromResult(new TravelTimePredictionResponse(0, new List<double>(), "not-implemented"));
+        var request = new { routeId, fromStopId, toStopId, departureTime };
+        var json = JsonSerializer.Serialize(request, JsonOptions);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PostAsync("/predict/travel-time", content, ct);
+        response.EnsureSuccessStatusCode();
+
+        var resultJson = await response.Content.ReadAsStringAsync(ct);
+        var result = JsonSerializer.Deserialize<TravelTimePredictionResponse>(resultJson, JsonOptions);
+        return result ?? new TravelTimePredictionResponse(0, new List<double>(), "unknown");
     }
 }

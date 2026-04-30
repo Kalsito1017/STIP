@@ -18,17 +18,17 @@ public static class ApiServiceRegistration
         {
             cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(
                 typeof(SofiaTransport.Application.Routes.GetRoutesQuery))!);
-            cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(
-                typeof(SofiaTransport.Application.Users.RegisterUserCommand))!);
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         });
 
         services.AddValidatorsFromAssemblyContaining<SofiaTransport.Application.Routes.GetRoutesQuery>();
-        services.AddValidatorsFromAssemblyContaining<SofiaTransport.Application.Users.RegisterUserCommand>();
         services.AddFluentValidationAutoValidation();
 
         services.AddControllers();
-        services.AddSignalR();
+        services.AddSignalR().AddStackExchangeRedis(configuration["REDIS_CONNECTION"] ?? "localhost:6379", options =>
+        {
+            options.Configuration.ChannelPrefix = "STIP-SignalR";
+        });
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -39,9 +39,11 @@ public static class ApiServiceRegistration
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]
                             ?? throw new InvalidOperationException("Jwt:Secret configuration is required"))),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ClockSkew = TimeSpan.Zero
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration["Jwt:Issuer"] ?? "STIP",
+                    ValidateAudience = true,
+                    ValidAudience = configuration["Jwt:Audience"] ?? "STIP",
+                    ClockSkew = TimeSpan.FromMinutes(1)
                 };
             });
 

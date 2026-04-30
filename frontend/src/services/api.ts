@@ -17,8 +17,9 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      import('../store/useAppStore').then(({ useAppStore }) => {
+        useAppStore.getState().clearAuth();
+      });
       window.location.href = '/login';
     }
     return Promise.reject(error);
@@ -94,6 +95,7 @@ export const analyticsApi = {
 export interface DelayPredictionRequest {
   routeId: string;
   stopId: string;
+  stopSequence: number;
   hour: number;
   dayOfWeek: number;
 }
@@ -104,11 +106,17 @@ export interface DelayPredictionResponse {
   modelVersion: string;
 }
 
+export interface TravelTimePredictionResponse {
+  predictedTimeSeconds: number;
+  confidenceInterval: number[];
+  modelVersion: string;
+}
+
 export const predictionsApi = {
   predictDelay: (body: DelayPredictionRequest) =>
     api.post<DelayPredictionResponse>('/predictions/delay', body).then(r => r.data),
-  predictTravelTime: (fromStop: string, toStop: string, departureTime: string) =>
-    api.post('/predictions/travel-time', { fromStop, toStop, departureTime }).then(r => r.data),
+  predictTravelTime: (routeId: string, fromStopId: string, toStopId: string, departureTime: string) =>
+    api.post<TravelTimePredictionResponse>('/predictions/travel-time', { routeId, fromStopId, toStopId, departureTime }).then(r => r.data),
 };
 
 export default api;

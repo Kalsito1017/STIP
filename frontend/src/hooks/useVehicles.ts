@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { vehiclesApi } from '../services/api';
 
-export function useLiveVehicles(routeId?: string) {
+export function useLiveVehicles() {
   return useQuery({
-    queryKey: ['liveVehicles', routeId],
-    queryFn: () => vehiclesApi.getLive(routeId),
-    refetchInterval: 15_000,
+    queryKey: ['liveVehicles'],
+    queryFn: () => vehiclesApi.getLive(),
   });
 }

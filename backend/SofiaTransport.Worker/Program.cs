@@ -6,7 +6,10 @@ var builder = Host.CreateApplicationBuilder(args);
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
-builder.Services.AddSignalR();
+builder.Services.AddSignalR().AddStackExchangeRedis(builder.Configuration["REDIS_CONNECTION"] ?? "localhost:6379", options =>
+{
+    options.Configuration.ChannelPrefix = "STIP-SignalR";
+});
 builder.Services.AddHttpClient();
 
 builder.Services.AddQuartz(q =>

@@ -14,7 +14,7 @@ import joblib
 import numpy as np
 import pandas as pd
 
-from db import get_connection_params, parse_db_connection_string
+from db import get_connection_params
 
 logging.basicConfig(
     level=logging.INFO,
@@ -171,12 +171,11 @@ def train(delay_logs: list[dict] | None = None) -> str:
 
     logger.info("Training with %d records", len(df))
 
-    # ── Build encoding & stats ───────────────────────────────────────────
+    # ── Build encoding ───────────────────────────────────────────────────
     route_encoding = build_route_encoding(df)
-    historical_stats = compute_historical_avg_delay(df)
 
-    # ── Feature engineering ──────────────────────────────────────────────
-    df = engineer_features(df, route_encoding, historical_stats)
+    # ── Feature engineering (before split for encoding, but stats on train only) ─
+    df = engineer_features(df, route_encoding, historical_stats=None)
 
     X = df[FEATURE_NAMES].copy()
     y = df["delay_seconds"].copy()
@@ -186,6 +185,16 @@ def train(delay_logs: list[dict] | None = None) -> str:
     X_train, X_val = X.iloc[:split_idx], X.iloc[split_idx:]
     y_train, y_val = y.iloc[:split_idx], y.iloc[split_idx:]
     logger.debug("Split: %d train / %d validation (time-based)", len(X_train), len(X_val))
+
+    # ── Compute historical stats on training data only (prevent leakage) ─
+    train_hist_df = df.iloc[:split_idx][["route_id", "hour_of_day", "delay_seconds"]].copy()
+    historical_stats = compute_historical_avg_delay(train_hist_df)
+
+    # Merge historical stats into train and val (using train-only stats for both)
+    X_train = X_train.merge(historical_stats, on=["route_id", "hour_of_day"], how="left")
+    X_train["historical_avg_delay"] = X_train["historical_avg_delay"].fillna(0)
+    X_val = X_val.merge(historical_stats, on=["route_id", "hour_of_day"], how="left")
+    X_val["historical_avg_delay"] = X_val["historical_avg_delay"].fillna(0)
 
     # ── Train XGBoost ────────────────────────────────────────────────────
     from xgboost import XGBRegressor

@@ -1,39 +1,37 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import Map, { Source, Layer, Marker, Popup, NavigationControl, ScaleControl, useMap } from 'react-map-gl/mapbox';
+import { useMemo, useRef, useEffect, useState } from 'react';
+import { MapContainer, TileLayer, useMap, ZoomControl } from 'react-leaflet';
+import * as L from 'leaflet';
 import { useAppStore } from '../store/useAppStore';
 import { useRealtime } from '../hooks/useRealtime';
 import { useRoutes } from '../hooks/useRoutes';
 import { useLiveVehicles } from '../hooks/useVehicles';
 import { useStops } from '../hooks/useStops';
 import { useAllRouteShapes } from '../hooks/useRouteShapes';
+import { useDelayHeatmap } from '../hooks/useHeatmap';
 import { AlertBanner } from '../components/AlertBanner';
-import type { Vehicle } from '../store/useAppStore';
+import { RouteShapeLayer } from '../components/map/RouteShapeLayer';
+import { StopLayer } from '../components/map/StopLayer';
+import { VehicleLayer } from '../components/map/VehicleLayer';
+import { DelayHeatmapLayer } from '../components/map/DelayHeatmapLayer';
+import { FilterPanel } from '../components/map/FilterPanel';
 import type { StopFeatureCollection } from '../types/map';
 
-const MAPBOX_TOKEN = import.meta.env.MAPBOX_TOKEN;
-
-const SOFIA_CENTER: [number, number] = [23.3219, 42.6977];
-const LIGHT_STYLE = 'mapbox://styles/mapbox/streets-v12';
-const DARK_STYLE = 'mapbox://styles/mapbox/dark-v11';
+const SOFIA_CENTER: L.LatLngTuple = [42.6977, 23.3219];
 
 function FitBoundsOnShapes() {
-  const { current: map } = useMap();
+  const map = useMap();
   const { data: shapes } = useAllRouteShapes();
   const fittedRef = useRef(false);
 
   useEffect(() => {
-    if (!map || !shapes?.features?.length || fittedRef.current) return;
+    if (!shapes?.features?.length || fittedRef.current) return;
 
     const allCoords = shapes.features.flatMap((f) => f.geometry.coordinates);
     if (allCoords.length > 0) {
-      const bounds = allCoords.reduce(
-        (acc: [number, number, number, number], c: number[]) => [
-          Math.min(acc[0], c[0]), Math.min(acc[1], c[1]),
-          Math.max(acc[2], c[0]), Math.max(acc[3], c[1]),
-        ],
-        [Infinity, Infinity, -Infinity, -Infinity]
+      const bounds = L.latLngBounds(
+        allCoords.map((c: number[]) => L.latLng(c[1], c[0]))
       );
-      map.fitBounds(bounds, { padding: 50, maxZoom: 14, duration: 0 });
+      map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 });
       fittedRef.current = true;
     }
   }, [map, shapes]);
@@ -58,16 +56,15 @@ export function LiveMapPage() {
   const darkMode = useAppStore((s) => s.darkMode);
   const toggleDarkMode = useAppStore((s) => s.toggleDarkMode);
   const [routeFilter, setRouteFilter] = useState('');
-  const [popupInfo, setPopupInfo] = useState<Vehicle | null>(null);
   const { data: routes } = useRoutes();
   const { data: stops } = useStops();
-  const { data: liveVehicles } = useLiveVehicles(routeFilter || undefined);
+  const { data: liveVehicles } = useLiveVehicles();
   const { data: shapes } = useAllRouteShapes();
+  const { data: heatmap } = useDelayHeatmap();
 
   const displayVehicles = useMemo(() => {
-    if (routeFilter && liveVehicles) return liveVehicles;
-    if (vehicles.length > 0) return vehicles;
-    return liveVehicles ?? [];
+    const source = vehicles.length > 0 ? vehicles : (liveVehicles ?? []);
+    return routeFilter ? source.filter((v) => v.routeId === routeFilter) : source;
   }, [vehicles, liveVehicles, routeFilter]);
 
   const stopGeojson = useMemo(() => stopsToGeoJSON(stops), [stops]);
@@ -82,119 +79,44 @@ export function LiveMapPage() {
       <AlertBanner />
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Live Map</h1>
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-          <span className="text-xs sm:text-sm text-slate-500 order-1 sm:order-none w-full sm:w-auto">
-            {displayVehicles.length} vehicles tracking
-          </span>
-          <select
-            value={routeFilter}
-            onChange={(e) => setRouteFilter(e.target.value)}
-            className="text-sm border border-slate-300 rounded-md px-2 sm:px-3 py-1.5 bg-white flex-1 sm:flex-none"
-          >
-            <option value="">All routes</option>
-            {routes?.map((r: { routeId: string; shortName: string }) => (
-              <option key={r.routeId} value={r.routeId}>
-                {r.shortName}
-              </option>
-            ))}
-          </select>
-          <button
-            onClick={toggleDarkMode}
-            className="text-sm border border-slate-300 rounded-md px-3 py-1.5 bg-white hover:bg-slate-50 flex-shrink-0"
-            title="Toggle dark mode"
-          >
-            {darkMode ? '\u2600\uFE0F' : '\uD83C\uDF19'}
-          </button>
-        </div>
+        <FilterPanel
+          routes={routes}
+          routeFilter={routeFilter}
+          onRouteFilterChange={setRouteFilter}
+          darkMode={darkMode}
+          onToggleDarkMode={toggleDarkMode}
+          vehicleCount={displayVehicles.length}
+        />
       </div>
       <div className="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-sm" style={{ height: 'calc(100vh - 200px)' }}>
-        <Map
-          mapboxAccessToken={MAPBOX_TOKEN}
-          mapStyle={darkMode ? DARK_STYLE : LIGHT_STYLE}
-          initialViewState={{ longitude: SOFIA_CENTER[0], latitude: SOFIA_CENTER[1], zoom: 12 }}
+        <MapContainer
+          center={SOFIA_CENTER}
+          zoom={12}
           style={{ width: '100%', height: '100%' }}
-          reuseMaps
+          zoomControl={false}
         >
-          <NavigationControl position="top-right" />
-          <ScaleControl position="bottom-left" />
+          <ZoomControl position="topright" />
           <FitBoundsOnShapes />
 
-          <Source id="route-shapes" type="geojson" data={routeLines}>
-            <Layer
-              id="route-lines"
-              type="line"
-              paint={{
-                'line-color': ['get', 'color'],
-                'line-width': 3,
-                'line-opacity': 0.7,
-              }}
-              layout={{ 'line-cap': 'round', 'line-join': 'round' }}
+          {darkMode ? (
+            <TileLayer
+              key="dark"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>, &copy; <a href="https://carto.com/">CARTO</a>'
+              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
             />
-          </Source>
-
-          <Source id="stops" type="geojson" data={stopGeojson}>
-            <Layer
-              id="stop-circles"
-              type="circle"
-              paint={{
-                'circle-radius': 5,
-                'circle-color': '#ef4444',
-                'circle-stroke-color': '#ffffff',
-                'circle-stroke-width': 2,
-              }}
+          ) : (
+            <TileLayer
+              key="light"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-          </Source>
-
-          {displayVehicles.map((v: Vehicle) => (
-            <Marker
-              key={v.vehicleId}
-              longitude={v.lon}
-              latitude={v.lat}
-              onClick={(e: any) => {
-                e.originalEvent.stopPropagation();
-                setPopupInfo(v);
-              }}
-            >
-              <div
-                style={{
-                  transform: `rotate(${v.bearing}deg)`,
-                  background: '#2563eb',
-                  color: 'white',
-                  borderRadius: '50%',
-                  width: '28px',
-                  height: '28px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '14px',
-                  fontWeight: 'bold',
-                  border: '2px solid white',
-                  boxShadow: '0 2px 4px rgba(0,0,0,.3)',
-                  cursor: 'pointer',
-                }}
-              >
-                {'\uD83D\uDE8C'}
-              </div>
-            </Marker>
-          ))}
-
-          {popupInfo && (
-            <Popup
-              longitude={popupInfo.lon}
-              latitude={popupInfo.lat}
-              onClose={() => setPopupInfo(null)}
-              closeButton
-              closeOnClick={false}
-              offset={16}
-            >
-              <div className="text-sm">
-                <p><strong>Route:</strong> {popupInfo.routeId ?? 'N/A'}</p>
-                <p><strong>Speed:</strong> {popupInfo.speed} km/h</p>
-                <p><strong>Bearing:</strong> {popupInfo.bearing}\u00B0</p>
-              </div>
-            </Popup>
           )}
-        </Map>
+
+          <RouteShapeLayer data={routeLines} />
+          <StopLayer data={stopGeojson} />
+          {heatmap && heatmap.length > 0 && <DelayHeatmapLayer points={heatmap} />}
+          <VehicleLayer vehicles={displayVehicles} />
+        </MapContainer>
       </div>
     </div>
   );

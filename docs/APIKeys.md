@@ -46,16 +46,7 @@
 | **Env var** | `WEATHER_API_KEY` |
 | **Used by** | ML service (feature engineering) |
 
-### 5. Mapbox Token
-| Field | Detail |
-|-------|--------|
-| **Description** | Map tile styling / custom maps |
-| **Where to get it** | [mapbox.com](https://www.mapbox.com/) (free tier: 50,000 map loads/month) |
-| **Env var** | `MAPBOX_TOKEN` |
-| **Used by** | Frontend (only if switching from free Leaflet OSM tiles) |
-| **Status** | Optional — default setup uses free OpenStreetMap tiles via Leaflet |
-
-### 6. JWT Signing Key
+### 5. JWT Signing Key
 | Field | Detail |
 |-------|--------|
 | **Description** | Secret key for signing JWT access/refresh tokens (if admin auth is implemented) |

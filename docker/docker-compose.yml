@@ -1,6 +1,7 @@
 services:
   postgres:
     image: postgis/postgis:16-3.4
+    restart: unless-stopped
     environment:
       POSTGRES_DB: sofia_transport
       POSTGRES_USER: stip_app
@@ -19,13 +20,15 @@ services:
 
   redis:
     image: redis:7-alpine
+    restart: unless-stopped
     ports:
       - "127.0.0.1:6379:6379"
     volumes:
+      - redis_data:/data
       - ../docker/redis.conf:/usr/local/etc/redis/redis.conf
     command: redis-server /usr/local/etc/redis/redis.conf
     healthcheck:
-      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 3s
       retries: 5
@@ -34,6 +37,7 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile.api
+    restart: unless-stopped
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:5000
@@ -45,6 +49,8 @@ services:
       ML_INTERNAL_SECRET: ${ML_INTERNAL_SECRET:-}
       POLL_INTERVAL_SECONDS: 15
       Jwt__Secret: ${Jwt__Secret:-STIP-SuperSecret-JWT-Key-2026-MinLength32}
+      Jwt__Issuer: STIP
+      Jwt__Audience: STIP
     ports:
       - "5000:5000"
     depends_on:
@@ -57,16 +63,19 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 15s
+      start_period: 60s
 
   worker:
     build:
       context: ..
       dockerfile: docker/Dockerfile.worker
+    restart: unless-stopped
     environment:
       DB_CONNECTION_STRING: Host=postgres;Database=sofia_transport;Username=stip_app;Password=${DB_PASSWORD}
       REDIS_CONNECTION: redis:6379
       GTFS_RT_FEED_URL: ${GTFS_RT_FEED_URL}
+      GTFS_RT_TRIP_UPDATES_URL: ${GTFS_RT_TRIP_UPDATES_URL}
+      GTFS_RT_ALERTS_URL: ${GTFS_RT_ALERTS_URL}
       GTFS_STATIC_URL: ${GTFS_STATIC_URL}
       ML_SERVICE_URL: http://ml:8000
       ML_INTERNAL_SECRET: ${ML_INTERNAL_SECRET:-}
@@ -81,6 +90,7 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile.ml
+    restart: unless-stopped
     environment:
       DB_CONNECTION_STRING: Host=postgres;Database=sofia_transport;Username=stip_app;Password=${DB_PASSWORD}
       ML_INTERNAL_SECRET: ${ML_INTERNAL_SECRET:-}
@@ -100,14 +110,14 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile.frontend
-    environment:
-      API_TARGET: http://api:5000
-      MAPBOX_TOKEN: ${MAPBOX_TOKEN}
+      args:
+        MAPBOX_TOKEN: ${MAPBOX_TOKEN}
+    restart: unless-stopped
     ports:
       - "3000:80"
     depends_on:
       api:
-        condition: service_started
+        condition: service_healthy
 
   pgadmin:
     profiles:
@@ -127,3 +137,4 @@ services:
 volumes:
   pgdata:
   pgadmin_data:
+  redis_data:

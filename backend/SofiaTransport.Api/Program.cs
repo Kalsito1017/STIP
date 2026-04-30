@@ -32,14 +32,14 @@ try
         {
             try
             {
-                db.Database.EnsureCreated();
+                db.Database.Migrate();
                 break;
             }
             catch (Exception ex) when (i < 9)
             {
                 var delay = TimeSpan.FromSeconds(Math.Pow(2, i));
                 Log.Warning(ex, "Migration attempt {Attempt} failed, retrying in {Delay}s", i + 1, delay.TotalSeconds);
-                Thread.Sleep(delay);
+                await Task.Delay(delay);
             }
         }
     }
@@ -61,7 +61,7 @@ try
     app.UseAuthorization();
     app.MapControllers();
     app.MapGet("/health", () => Results.Ok(new { status = "ok", timestamp = DateTime.UtcNow }));
-    app.MapHub<VehicleHub>(VehicleHub.HubPath);
+    app.MapHub<VehicleHub>(VehicleHub.HubPath).RequireAuthorization();
 
     app.Run();
 }

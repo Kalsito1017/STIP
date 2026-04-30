@@ -9,8 +9,10 @@ CREATE TABLE IF NOT EXISTS routes (
     route_id   TEXT PRIMARY KEY,
     short_name TEXT NOT NULL,
     long_name  TEXT,
-    route_type SMALLINT NOT NULL
+    route_type SMALLINT NOT NULL,
+    CONSTRAINT chk_routes_type CHECK (route_type IN (0,1,2,3,4,5,6,7,11,12))
 );
+CREATE INDEX IF NOT EXISTS idx_routes_type ON routes(route_type);
 
 -- Stops
 CREATE TABLE IF NOT EXISTS stops (
@@ -31,49 +33,54 @@ CREATE TABLE IF NOT EXISTS trips (
 
 -- Stop Times
 CREATE TABLE IF NOT EXISTS stop_times (
-    trip_id       TEXT REFERENCES trips(trip_id),
-    stop_id       TEXT REFERENCES stops(stop_id),
+    trip_id       TEXT REFERENCES trips(trip_id) ON DELETE CASCADE,
+    stop_id       TEXT REFERENCES stops(stop_id) ON DELETE CASCADE,
     arrival_time  INTERVAL,
+    departure_time INTERVAL,
     stop_sequence INT NOT NULL,
     PRIMARY KEY (trip_id, stop_sequence)
 );
 CREATE INDEX IF NOT EXISTS idx_stop_times_stop_arrival ON stop_times(stop_id, arrival_time);
+CREATE INDEX IF NOT EXISTS idx_stop_times_trip_stop ON stop_times(trip_id, stop_id);
 
 -- Vehicles (live tracking)
 CREATE TABLE IF NOT EXISTS vehicles (
     vehicle_id  TEXT PRIMARY KEY,
-    route_id    TEXT,
-    trip_id     TEXT,
+    route_id    TEXT REFERENCES routes(route_id) ON DELETE SET NULL,
+    trip_id     TEXT REFERENCES trips(trip_id) ON DELETE SET NULL,
     location    GEOGRAPHY(POINT, 4326),
     bearing     FLOAT DEFAULT 0,
     speed       FLOAT DEFAULT 0,
     recorded_at TIMESTAMPTZ DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_vehicles_recorded_at ON vehicles(recorded_at DESC);
-CREATE INDEX IF NOT EXISTS idx_vehicles_route_id ON vehicles(route_id);
+CREATE INDEX IF NOT EXISTS idx_vehicles_route_id ON vehicles(route_id, recorded_at DESC);
+CREATE INDEX IF NOT EXISTS idx_vehicles_trip_id ON vehicles(trip_id);
 CREATE INDEX IF NOT EXISTS idx_vehicles_location ON vehicles USING GIST(location);
 
 -- Delay Logs (analytics)
 -- delay_seconds is calculated by the application (GtfsPollingService) and may be NULL when delay cannot be determined
 CREATE TABLE IF NOT EXISTS delay_logs (
     id                BIGSERIAL PRIMARY KEY,
-    vehicle_id        TEXT,
-    stop_id           TEXT,
-    trip_id           TEXT,
-    route_id          TEXT,
+    vehicle_id        TEXT REFERENCES vehicles(vehicle_id) ON DELETE SET NULL,
+    stop_id           TEXT REFERENCES stops(stop_id) ON DELETE SET NULL,
+    trip_id           TEXT REFERENCES trips(trip_id) ON DELETE SET NULL,
+    route_id          TEXT REFERENCES routes(route_id) ON DELETE SET NULL,
     scheduled_arrival TIMESTAMPTZ,
     actual_arrival    TIMESTAMPTZ,
     delay_seconds     INT,  -- application-calculated, nullable
+    delay_bucket      SMALLINT DEFAULT 0, -- 0=OnTime, 1=Slight, 2=Moderate, 3=Severe
     recorded_at       TIMESTAMPTZ DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_delay_logs_route ON delay_logs(route_id, recorded_at DESC);
 CREATE INDEX IF NOT EXISTS idx_delay_logs_stop  ON delay_logs(stop_id, recorded_at DESC);
 CREATE INDEX IF NOT EXISTS idx_delay_logs_recorded_at ON delay_logs(recorded_at DESC);
 CREATE INDEX IF NOT EXISTS idx_delay_logs_vehicle ON delay_logs(vehicle_id, recorded_at DESC);
+CREATE INDEX IF NOT EXISTS idx_delay_logs_route_hour ON delay_logs(route_id, EXTRACT(HOUR FROM scheduled_arrival), recorded_at DESC) WHERE delay_seconds IS NOT NULL;
 
 -- Reliability Scores
 CREATE TABLE IF NOT EXISTS reliability_scores (
-    route_id           TEXT,
+    route_id           TEXT REFERENCES routes(route_id) ON DELETE CASCADE,
     score_date         DATE,
     on_time_pct        FLOAT,
     avg_delay_seconds  FLOAT,
@@ -99,7 +106,8 @@ CREATE TABLE IF NOT EXISTS shapes (
     route_id TEXT NOT NULL REFERENCES routes(route_id) ON DELETE CASCADE,
     sequence INT NOT NULL,
     lat      DOUBLE PRECISION NOT NULL,
-    lon      DOUBLE PRECISION NOT NULL
+    lon      DOUBLE PRECISION NOT NULL,
+    UNIQUE (route_id, sequence)
 );
 CREATE INDEX IF NOT EXISTS idx_shapes_route_sequence ON shapes(route_id, sequence);
 CREATE INDEX IF NOT EXISTS idx_shapes_location ON shapes USING GIST(ST_SetSRID(ST_MakePoint(lon, lat), 4326));

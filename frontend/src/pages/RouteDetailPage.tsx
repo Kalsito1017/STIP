@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { ArrowLeft, Clock } from 'lucide-react';
 import { useRouteDetail } from '../hooks/useRoutes';
 import { useRouteDelayPattern } from '../hooks/useDelays';
@@ -12,8 +12,9 @@ const typeLabels: Record<number, string> = { 0: 'Tram', 1: 'Metro', 3: 'Bus', 11
 export function RouteDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data: route, isLoading } = useRouteDetail(id!);
-  const { data: delayPattern } = useRouteDelayPattern(id!);
+  if (!id) return <Navigate to="/routes" replace />;
+  const { data: route, isLoading } = useRouteDetail(id);
+  const { data: delayPattern } = useRouteDelayPattern(id);
 
   if (isLoading) return <p className="text-slate-500">Loading...</p>;
   if (!route) return <p className="text-slate-500">Route not found</p>;
@@ -60,7 +61,7 @@ export function RouteDetailPage() {
           )}
         </div>
 
-        <PredictPanel routeId={id!} stopId="" />
+        <PredictPanel routeId={id} />
       </div>
 
       <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-5 shadow-sm">

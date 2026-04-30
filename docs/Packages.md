@@ -108,7 +108,7 @@ Every dependency used across the monorepo, grouped by layer and ecosystem.
 
 | Package | Purpose |
 |---------|---------|
-| `leaflet` | Map rendering (free OSM tiles) |
+| `leaflet` | Interactive map with free OSM tiles |
 | `react-leaflet` | React bindings for Leaflet |
 | `@types/leaflet` | TypeScript types |
 

@@ -10,7 +10,7 @@ public class ReliabilityScoreRepository : IReliabilityScoreRepository
 
     public ReliabilityScoreRepository(TransportDbContext db) => _db = db;
 
-    public async Task<ReliabilityScore?> GetByIdAsync(object id) => await _db.ReliabilityScores.FindAsync(id);
+    public async Task<ReliabilityScore?> GetByIdAsync(object id) => await Task.FromResult<ReliabilityScore?>(null);
 
     public async Task<IReadOnlyList<ReliabilityScore>> GetAllAsync() => await _db.ReliabilityScores.AsNoTracking().ToListAsync();
 
