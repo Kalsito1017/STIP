@@ -4,9 +4,6 @@ WORKDIR /app
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm install
 
-ARG MAPBOX_TOKEN
-ENV MAPBOX_TOKEN=${MAPBOX_TOKEN}
-
 COPY frontend/ .
 RUN npm run build
 
