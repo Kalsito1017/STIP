@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Zap, Loader2 } from 'lucide-react';
 import { useDelayPrediction } from '../hooks/usePrediction';
+import { useStops } from '../hooks/useStops';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
@@ -11,16 +12,25 @@ interface PredictPanelProps {
   stopSequence?: number;
 }
 
-export function PredictPanel({ routeId, stopId, stopSequence = 1 }: PredictPanelProps) {
+export function PredictPanel({ routeId, stopId: initialStopId, stopSequence = 1 }: PredictPanelProps) {
   const [dayOfWeek, setDayOfWeek] = useState(new Date().getDay() === 0 ? 6 : new Date().getDay() - 1);
   const [hour, setHour] = useState(new Date().getHours());
+  const [selectedStopId, setSelectedStopId] = useState(initialStopId ?? '');
   const prediction = useDelayPrediction();
+  const { data: stops } = useStops();
 
-  const canPredict = !!stopId && !!routeId;
+  const sortedStops = useMemo(() => {
+    if (!stops) return [];
+    return [...stops].sort((a: { stopName: string }, b: { stopName: string }) =>
+      a.stopName.localeCompare(b.stopName)
+    );
+  }, [stops]);
+
+  const canPredict = !!selectedStopId && !!routeId;
 
   const handlePredict = () => {
     if (!canPredict) return;
-    prediction.mutate({ routeId, stopId: stopId!, stopSequence, hour, dayOfWeek });
+    prediction.mutate({ routeId, stopId: selectedStopId, stopSequence, hour, dayOfWeek });
   };
 
   const isPeak = (hour >= 7 && hour <= 9) || (hour >= 17 && hour <= 19);
@@ -59,6 +69,22 @@ export function PredictPanel({ routeId, stopId, stopSequence = 1 }: PredictPanel
         <Zap className="w-4 h-4 text-purple-500" /> ML Delay Prediction
       </h3>
 
+      <div className="mb-3">
+        <label className="block text-xs text-slate-500 mb-1">Stop</label>
+        <select
+          value={selectedStopId}
+          onChange={(e) => setSelectedStopId(e.target.value)}
+          className="w-full text-sm border border-slate-300 rounded-md px-2 sm:px-3 py-1.5 bg-white"
+        >
+          <option value="">Select a stop...</option>
+          {sortedStops.map((s: { stopId: string; stopName: string }) => (
+            <option key={s.stopId} value={s.stopId}>
+              {s.stopName} ({s.stopId})
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4">
         <div>
           <label className="block text-xs text-slate-500 mb-1">Day</label>
@@ -96,7 +122,7 @@ export function PredictPanel({ routeId, stopId, stopSequence = 1 }: PredictPanel
         onClick={handlePredict}
         disabled={prediction.isPending || !canPredict}
         className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white text-sm font-medium rounded-md px-4 py-2 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        title={!canPredict ? 'Select a stop on this route to predict delay' : undefined}
+        title={!canPredict ? 'Select a stop to predict delay' : undefined}
       >
         {prediction.isPending ? (
           <>
@@ -148,7 +174,7 @@ export function PredictPanel({ routeId, stopId, stopSequence = 1 }: PredictPanel
 
       {!prediction.data && !prediction.isPending && !prediction.error && (
         <p className="text-xs text-slate-400 mt-3 text-center">
-          Select a day and hour, then click Predict to get an ML-based delay estimate for this route.
+          Select a stop, day, and hour, then click Predict to get an ML-based delay estimate.
         </p>
       )}
     </div>

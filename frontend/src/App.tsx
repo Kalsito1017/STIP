@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Layout } from './components/Layout';
@@ -12,6 +13,7 @@ import { StopsPage } from './pages/StopsPage';
 import { StopDetailPage } from './pages/StopDetailPage';
 import { AnalyticsPage } from './pages/AnalyticsPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { useAppStore } from './store/useAppStore';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,10 +24,21 @@ const queryClient = new QueryClient({
   },
 });
 
+function DarkModeRoot() {
+  const darkMode = useAppStore((s) => s.darkMode);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', darkMode);
+  }, [darkMode]);
+
+  return null;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+        <DarkModeRoot />
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />

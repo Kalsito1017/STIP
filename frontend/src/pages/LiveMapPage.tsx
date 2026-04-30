@@ -51,9 +51,21 @@ function stopsToGeoJSON(stops: { stopId: string; stopName: string; lat: number; 
   };
 }
 
+function formatTimeAgo(isoString: string | null): string {
+  if (!isoString) return '';
+  const diff = Date.now() - new Date(isoString).getTime();
+  const seconds = Math.floor(diff / 1000);
+  if (seconds < 5) return 'Just now';
+  if (seconds < 60) return `${seconds}s ago`;
+  const minutes = Math.floor(seconds / 60);
+  return `${minutes}m ago`;
+}
+
 export function LiveMapPage() {
-  const { isConnected: isRealtimeConnected } = useRealtime();
+  useRealtime();
   const vehicles = useAppStore((s) => s.vehicles);
+  const connectionState = useAppStore((s) => s.connectionState);
+  const lastUpdatedAt = useAppStore((s) => s.lastUpdatedAt);
   const darkMode = useAppStore((s) => s.darkMode);
   const toggleDarkMode = useAppStore((s) => s.toggleDarkMode);
   const [routeFilter, setRouteFilter] = useState('');
@@ -63,10 +75,18 @@ export function LiveMapPage() {
   const { data: shapes } = useAllRouteShapes();
   const { data: heatmap } = useDelayHeatmap();
 
+  const routeNames = useMemo(() => {
+    const map: Record<string, string> = {};
+    routes?.forEach((r: { routeId: string; shortName: string }) => {
+      map[r.routeId] = r.shortName;
+    });
+    return map;
+  }, [routes]);
+
   const displayVehicles = useMemo(() => {
-    const source = isRealtimeConnected ? vehicles : (liveVehicles ?? []);
+    const source = connectionState === 'connected' && vehicles.length > 0 ? vehicles : (liveVehicles ?? []);
     return routeFilter ? source.filter((v: { routeId: string | null }) => v.routeId === routeFilter) : source;
-  }, [vehicles, liveVehicles, routeFilter, isRealtimeConnected]);
+  }, [vehicles, liveVehicles, routeFilter, connectionState]);
 
   const stopGeojson = useMemo(() => stopsToGeoJSON(stops), [stops]);
 
@@ -79,7 +99,14 @@ export function LiveMapPage() {
         <ErrorAlert message={routesErr.message} onRetry={() => refetchRoutes()} />
       )}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Live Map</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Live Map</h1>
+          {lastUpdatedAt && (
+            <span className="text-xs text-slate-400">
+              Updated {formatTimeAgo(lastUpdatedAt)}
+            </span>
+          )}
+        </div>
         <FilterPanel
           routes={routes}
           routeFilter={routeFilter}
@@ -114,7 +141,7 @@ export function LiveMapPage() {
           <RouteShapeLayer data={routeLines} />
           <StopLayer data={stopGeojson} />
           {heatmap && heatmap.length > 0 && <DelayHeatmapLayer points={heatmap} />}
-          <VehicleLayer vehicles={displayVehicles} />
+          <VehicleLayer vehicles={displayVehicles} routeNames={routeNames} />
         </MapContainer>
       </div>
     </div>

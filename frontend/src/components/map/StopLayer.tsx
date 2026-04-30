@@ -19,7 +19,17 @@ export function StopLayer({ data }: Props) {
     <GeoJSON
       data={data}
       pointToLayer={(_feature, latlng) => L.circleMarker(latlng, circleOptions)}
-      key={data.features.length}
+      onEachFeature={(feature, layer) => {
+        if (!feature.properties) return;
+        const { stopName, stopId } = feature.properties;
+        layer.bindPopup(
+          `<div class="text-sm">
+            <strong>${stopName ?? 'Unknown'}</strong><br/>
+            ID: ${stopId ?? 'N/A'}
+          </div>`
+        );
+      }}
+      key={JSON.stringify(data.features.length)}
     />
   );
 }

@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { Menu } from 'lucide-react';
+import { clsx } from 'clsx';
+import { Menu, Wifi, WifiOff } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 import { ErrorBoundary } from './ErrorBoundary';
 import { useAppStore } from '../store/useAppStore';
@@ -23,6 +24,7 @@ function getPageTitle(pathname: string): string {
 export function Layout() {
   const location = useLocation();
   const user = useAppStore((s) => s.user);
+  const connectionState = useAppStore((s) => s.connectionState);
   const pageTitle = getPageTitle(location.pathname);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -32,6 +34,10 @@ export function Layout() {
   }, [location.pathname]);
 
   const handleClose = useCallback(() => setSidebarOpen(false), []);
+
+  const connectionLabel =
+    connectionState === 'connected' ? 'Live' :
+    connectionState === 'reconnecting' ? 'Reconnecting...' : 'Offline';
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -60,16 +66,33 @@ export function Layout() {
               {pageTitle}
             </h1>
           </div>
-          {user && (
-            <span className="text-xs sm:text-sm text-slate-500 flex-shrink-0 hidden sm:inline">
-              {user.fullName}
-            </span>
-          )}
-          {user && (
-            <span className="text-xs text-slate-500 flex-shrink-0 sm:hidden">
-              {user.fullName.split(' ')[0]}
-            </span>
-          )}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5">
+              {connectionState === 'connected' ? (
+                <Wifi className="w-3.5 h-3.5 text-green-500" />
+              ) : (
+                <WifiOff className="w-3.5 h-3.5 text-red-500" />
+              )}
+              <span className={clsx(
+                'text-xs font-medium',
+                connectionState === 'connected' && 'text-green-600',
+                connectionState === 'reconnecting' && 'text-yellow-600',
+                connectionState === 'disconnected' && 'text-red-600',
+              )}>
+                {connectionLabel}
+              </span>
+            </div>
+            {user && (
+              <span className="text-xs sm:text-sm text-slate-500 flex-shrink-0 hidden sm:inline">
+                {user.fullName}
+              </span>
+            )}
+            {user && (
+              <span className="text-xs text-slate-500 flex-shrink-0 sm:hidden">
+                {user.fullName.split(' ')[0]}
+              </span>
+            )}
+          </div>
         </header>
         <main className="p-4 sm:p-6">
           <ErrorBoundary>
