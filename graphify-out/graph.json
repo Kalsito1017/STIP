@@ -4849,7 +4849,7 @@
       "label": "getPageTitle()",
       "file_type": "code",
       "source_file": "frontend/src/components/Layout.tsx",
-      "source_location": "L13",
+      "source_location": "L15",
       "id": "components_layout_getpagetitle",
       "community": 105,
       "norm_label": "getpagetitle()"
@@ -13440,7 +13440,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/Layout.tsx",
-      "source_location": "L13",
+      "source_location": "L15",
       "weight": 1.0,
       "_src": "frontend_src_components_layout_tsx",
       "_tgt": "components_layout_getpagetitle",

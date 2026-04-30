@@ -78,18 +78,18 @@ export function LiveMapPage() {
   }, [shapes]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       <AlertBanner />
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900">Live Map</h1>
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-slate-500">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Live Map</h1>
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <span className="text-xs sm:text-sm text-slate-500 order-1 sm:order-none w-full sm:w-auto">
             {displayVehicles.length} vehicles tracking
           </span>
           <select
             value={routeFilter}
             onChange={(e) => setRouteFilter(e.target.value)}
-            className="text-sm border border-slate-300 rounded-md px-3 py-1.5 bg-white"
+            className="text-sm border border-slate-300 rounded-md px-2 sm:px-3 py-1.5 bg-white flex-1 sm:flex-none"
           >
             <option value="">All routes</option>
             {routes?.map((r: { routeId: string; shortName: string }) => (
@@ -100,14 +100,14 @@ export function LiveMapPage() {
           </select>
           <button
             onClick={toggleDarkMode}
-            className="text-sm border border-slate-300 rounded-md px-3 py-1.5 bg-white hover:bg-slate-50"
+            className="text-sm border border-slate-300 rounded-md px-3 py-1.5 bg-white hover:bg-slate-50 flex-shrink-0"
             title="Toggle dark mode"
           >
-            {darkMode ? '☀️' : '🌙'}
+            {darkMode ? '\u2600\uFE0F' : '\uD83C\uDF19'}
           </button>
         </div>
       </div>
-      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-sm" style={{ height: 'calc(100vh - 160px)' }}>
+      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-sm" style={{ height: 'calc(100vh - 200px)' }}>
         <Map
           mapboxAccessToken={MAPBOX_TOKEN}
           mapStyle={darkMode ? DARK_STYLE : LIGHT_STYLE}
@@ -173,7 +173,7 @@ export function LiveMapPage() {
                   cursor: 'pointer',
                 }}
               >
-                🚌
+                {'\uD83D\uDE8C'}
               </div>
             </Marker>
           ))}
@@ -190,7 +190,7 @@ export function LiveMapPage() {
               <div className="text-sm">
                 <p><strong>Route:</strong> {popupInfo.routeId ?? 'N/A'}</p>
                 <p><strong>Speed:</strong> {popupInfo.speed} km/h</p>
-                <p><strong>Bearing:</strong> {popupInfo.bearing}°</p>
+                <p><strong>Bearing:</strong> {popupInfo.bearing}\u00B0</p>
               </div>
             </Popup>
           )}

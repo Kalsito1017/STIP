@@ -22,10 +22,10 @@ export function DashboardPage() {
   }, [ranking]);
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Dashboard</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <StatCard
           title="Active Vehicles"
           value={vehicles?.length ?? 0}
@@ -41,7 +41,7 @@ export function DashboardPage() {
         />
         <StatCard
           title="Best Route"
-          value={ranking?.[0]?.shortName ?? '—'}
+          value={ranking?.[0]?.shortName ?? '\u2014'}
           subtitle={`Score: ${Math.round(ranking?.[0]?.score ?? 0)}`}
           icon={TrendingUp}
         />
@@ -56,8 +56,8 @@ export function DashboardPage() {
 
       <AlertBanner />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="bg-white rounded-lg border border-slate-200 p-5 shadow-sm">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="bg-white rounded-lg border border-slate-200 p-4 sm:p-5 shadow-sm">
           <h3 className="text-sm font-semibold text-slate-700 mb-4">Peak Hour Delays</h3>
           {peakHours?.length ? (
             <ResponsiveContainer width="100%" height={250}>
@@ -74,22 +74,22 @@ export function DashboardPage() {
           )}
         </div>
 
-        <div className="bg-white rounded-lg border border-slate-200 p-5 shadow-sm">
+        <div className="bg-white rounded-lg border border-slate-200 p-4 sm:p-5 shadow-sm">
           <h3 className="text-sm font-semibold text-slate-700 mb-4">Reliability Ranking (Top 10)</h3>
           {ranking?.length ? (
             <div className="space-y-2 max-h-[250px] overflow-y-auto">
               {ranking.slice(0, 10).map((r: { routeId: string; shortName: string; score: number; onTimePct: number }, i: number) => (
-                <div key={r.routeId} className="flex items-center gap-3 text-sm">
-                  <span className="w-6 text-center font-mono text-slate-400">{i + 1}</span>
-                  <span className="font-medium text-slate-800 w-16">{r.shortName}</span>
+                <div key={r.routeId} className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm">
+                  <span className="w-5 sm:w-6 text-center font-mono text-slate-400 flex-shrink-0">{i + 1}</span>
+                  <span className="font-medium text-slate-800 w-14 sm:w-16 truncate">{r.shortName}</span>
                   <div className="flex-1 bg-slate-100 rounded-full h-2">
                     <div
                       className="bg-blue-500 h-2 rounded-full"
                       style={{ width: `${Math.min(Math.max(r.score, 0), 100)}%` }}
                     />
                   </div>
-                  <span className="text-slate-500 w-12 text-right">{Math.round(r.score)}</span>
-                  <span className="text-slate-400 w-16 text-right">{(r.onTimePct * 100).toFixed(0)}%</span>
+                  <span className="text-slate-500 w-10 sm:w-12 text-right flex-shrink-0">{Math.round(r.score)}</span>
+                  <span className="text-slate-400 w-14 sm:w-16 text-right flex-shrink-0">{(r.onTimePct * 100).toFixed(0)}%</span>
                 </div>
               ))}
             </div>

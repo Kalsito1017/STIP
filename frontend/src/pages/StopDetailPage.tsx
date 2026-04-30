@@ -15,25 +15,25 @@ export function StopDetailPage() {
   if (!stop) return <p className="text-slate-500">Stop not found</p>;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-800">
         <ArrowLeft className="w-4 h-4" /> Back
       </button>
 
-      <div className="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
-        <div className="flex items-start gap-4">
-          <MapPin className="w-8 h-8 text-blue-600 mt-1" />
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900">{stop.stopName}</h1>
-            <p className="text-sm text-slate-500 mt-1">Stop ID: {stop.stopId}</p>
-            <p className="text-sm text-slate-500">
+      <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-6 shadow-sm">
+        <div className="flex items-start gap-3 sm:gap-4">
+          <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 mt-1 flex-shrink-0" />
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 truncate">{stop.stopName}</h1>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">Stop ID: {stop.stopId}</p>
+            <p className="text-xs sm:text-sm text-slate-500">
               Coordinates: {stop.lat.toFixed(4)}, {stop.lon.toFixed(4)}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm">
+      <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-5 shadow-sm">
         <h3 className="text-sm font-semibold text-slate-700 mb-4">Hourly Congestion</h3>
         {congestion?.length ? (
           <ResponsiveContainer width="100%" height={250}>

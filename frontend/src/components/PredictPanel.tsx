@@ -50,18 +50,18 @@ export function PredictPanel({ routeId, stopId }: PredictPanelProps) {
           : 'bg-red-50';
 
   return (
-    <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm">
+    <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-5 shadow-sm">
       <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-4">
         <Zap className="w-4 h-4 text-purple-500" /> ML Delay Prediction
       </h3>
 
-      <div className="grid grid-cols-2 gap-3 mb-4">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4">
         <div>
           <label className="block text-xs text-slate-500 mb-1">Day</label>
           <select
             value={dayOfWeek}
             onChange={(e) => setDayOfWeek(Number(e.target.value))}
-            className="w-full text-sm border border-slate-300 rounded-md px-3 py-1.5 bg-white"
+            className="w-full text-sm border border-slate-300 rounded-md px-2 sm:px-3 py-1.5 bg-white"
           >
             {DAYS.map((d, i) => (
               <option key={d} value={i}>{d}</option>
@@ -73,7 +73,7 @@ export function PredictPanel({ routeId, stopId }: PredictPanelProps) {
           <select
             value={hour}
             onChange={(e) => setHour(Number(e.target.value))}
-            className="w-full text-sm border border-slate-300 rounded-md px-3 py-1.5 bg-white"
+            className="w-full text-sm border border-slate-300 rounded-md px-2 sm:px-3 py-1.5 bg-white"
           >
             {HOURS.map((h) => (
               <option key={h} value={h}>{String(h).padStart(2, '0')}:00</option>
@@ -84,7 +84,7 @@ export function PredictPanel({ routeId, stopId }: PredictPanelProps) {
 
       {isPeak && (
         <div className="bg-amber-50 border border-amber-200 rounded-md px-3 py-1.5 text-xs text-amber-700 mb-4">
-          Peak hours selected — delays are typically higher during this window
+          Peak hours selected \u2014 delays are typically higher during this window
         </div>
       )}
 
@@ -111,29 +111,29 @@ export function PredictPanel({ routeId, stopId }: PredictPanelProps) {
       )}
 
       {prediction.data && (
-        <div className={`mt-4 rounded-md p-4 ${bucketBg}`}>
-          <div className="flex items-center justify-between mb-2">
+        <div className={`mt-4 rounded-md p-3 sm:p-4 ${bucketBg}`}>
+          <div className="flex items-center justify-between mb-2 flex-wrap gap-1">
             <span className="text-xs text-slate-500">Predicted Delay</span>
             <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${bucketBg} ${bucketColor}`}>
               {delayBucket}
             </span>
           </div>
           <div className="flex items-baseline gap-2">
-            <span className={`text-3xl font-bold ${bucketColor}`}>
+            <span className={`text-2xl sm:text-3xl font-bold ${bucketColor}`}>
               {Math.round(prediction.data.predictedDelaySeconds)}s
             </span>
             <span className="text-xs text-slate-500">
-              ±{Math.round(prediction.data.confidenceInterval[1] - prediction.data.predictedDelaySeconds)}s
+              \u00B1{Math.round(prediction.data.confidenceInterval[1] - prediction.data.predictedDelaySeconds)}s
             </span>
           </div>
           <div className="mt-2 space-y-1 text-xs text-slate-500">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-1">
               <span>Confidence range</span>
               <span>
-                {Math.round(prediction.data.confidenceInterval[0])}s – {Math.round(prediction.data.confidenceInterval[1])}s
+                {Math.round(prediction.data.confidenceInterval[0])}s \u2013 {Math.round(prediction.data.confidenceInterval[1])}s
               </span>
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-1">
               <span>Model</span>
               <span className="font-mono">{prediction.data.modelVersion}</span>
             </div>

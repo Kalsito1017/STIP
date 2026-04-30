@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Map, LayoutDashboard, Bus, MapPin, TrendingUp, User, LogOut } from 'lucide-react';
+import { Map, LayoutDashboard, Bus, MapPin, TrendingUp, User, LogOut, X } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 import { useLogout } from '../hooks/useAuth';
 
@@ -11,15 +11,30 @@ const navItems = [
   { to: '/analytics', label: 'Analytics', icon: TrendingUp },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+export function Sidebar({ open, onClose }: SidebarProps) {
   const user = useAppStore((s) => s.user);
   const logout = useLogout();
 
-  return (
-    <aside className="fixed left-0 top-0 h-full w-56 bg-white border-r border-slate-200 flex flex-col z-30">
-      <div className="p-4 border-b border-slate-200">
-        <h1 className="text-lg font-bold text-slate-900">STIP</h1>
-        <p className="text-xs text-slate-500">Sofia Transport Intelligence</p>
+  const sidebarContent = (
+    <>
+      <div className="p-4 border-b border-slate-200 flex items-center justify-between">
+        <div>
+          <h1 className="text-lg font-bold text-slate-900" title="Sofia Transport Intelligence Platform">STIP</h1>
+          <p className="text-xs text-slate-500">Sofia Transport Intelligence</p>
+        </div>
+        {/* Close button — visible only on mobile/tablet */}
+        <button
+          onClick={onClose}
+          className="lg:hidden flex items-center justify-center w-8 h-8 rounded-md text-slate-500 hover:bg-slate-100"
+          aria-label="Close menu"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
       <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
         {navItems.map(({ to, label, icon: Icon }) => (
@@ -34,7 +49,7 @@ export function Sidebar() {
               }`
             }
           >
-            <Icon className="w-4 h-4" />
+            <Icon className="w-4 h-4 flex-shrink-0" />
             {label}
           </NavLink>
         ))}
@@ -60,6 +75,24 @@ export function Sidebar() {
           </button>
         </div>
       )}
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Desktop sidebar: always visible, fixed */}
+      <aside className="hidden lg:flex fixed left-0 top-0 h-full w-56 bg-white border-r border-slate-200 flex-col z-30">
+        {sidebarContent}
+      </aside>
+
+      {/* Mobile/tablet drawer: slides in from left with transition */}
+      <aside
+        className={`lg:hidden fixed left-0 top-0 h-full w-64 bg-white border-r border-slate-200 flex flex-col z-30 transition-transform duration-300 ease-in-out ${
+          open ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        {sidebarContent}
+      </aside>
+    </>
   );
 }
