@@ -5,10 +5,9 @@ import { ErrorAlert } from '../components/ErrorAlert';
 import { SkeletonCard } from '../components/Skeleton';
 import { RouteBadge } from '../components/RouteBadge';
 import { Input } from '../components/ui/input';
-import { TransitTypeBadgeClass, TransitTypeName } from '../constants/transit';
+import { TransitTypeName } from '../constants/transit';
 
 const typeLabels = TransitTypeName;
-const typeColors = TransitTypeBadgeClass;
 
 interface Route {
   routeId: string;

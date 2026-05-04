@@ -13,8 +13,10 @@ import { ErrorAlert } from '../components/ErrorAlert';
 import { RouteShapeLayer } from '../components/map/RouteShapeLayer';
 import { StopLayer } from '../components/map/StopLayer';
 import { VehicleLayer } from '../components/map/VehicleLayer';
+import { VehicleClusterLayer } from '../components/map/VehicleClusterLayer';
 import { DelayHeatmapLayer } from '../components/map/DelayHeatmapLayer';
 import { FilterPanel } from '../components/map/FilterPanel';
+import { LocateControl } from '../components/map/LocateControl';
 import { Card } from '../components/ui/card';
 import type { StopFeatureCollection } from '../types/map';
 
@@ -75,6 +77,7 @@ export function LiveMapPage() {
   const { data: liveVehicles } = useLiveVehicles();
   const { data: shapes } = useAllRouteShapes();
   const { data: heatmap } = useDelayHeatmap();
+  const [clusterMode, setClusterMode] = useState(false);
 
   const routeNames = useMemo(() => {
     const map: Record<string, string> = {};
@@ -115,6 +118,8 @@ export function LiveMapPage() {
           darkMode={darkMode}
           onToggleDarkMode={toggleDarkMode}
           vehicleCount={displayVehicles.length}
+          clusterMode={clusterMode}
+          onToggleCluster={() => setClusterMode((v) => !v)}
         />
       </div>
       <Card className="overflow-hidden" style={{ height: 'calc(100vh - 200px)' }}>
@@ -142,7 +147,12 @@ export function LiveMapPage() {
           <RouteShapeLayer data={routeLines} />
           <StopLayer data={stopGeojson} />
           {heatmap && heatmap.length > 0 && <DelayHeatmapLayer points={heatmap} />}
-          <VehicleLayer vehicles={displayVehicles} routeNames={routeNames} />
+          {clusterMode ? (
+            <VehicleClusterLayer vehicles={displayVehicles} routeNames={routeNames} />
+          ) : (
+            <VehicleLayer vehicles={displayVehicles} routeNames={routeNames} />
+          )}
+          <LocateControl />
         </MapContainer>
       </Card>
     </div>

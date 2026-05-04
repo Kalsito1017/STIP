@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import * as signalR from '@microsoft/signalr';
+import { toast } from 'sonner';
 import { useAppStore } from '../store/useAppStore';
 import type { Vehicle, TripUpdate, ServiceAlert } from '../store/useAppStore';
 
@@ -43,19 +44,33 @@ export function useRealtime() {
     });
 
     connection.on('AlertUpdated', (alert: ServiceAlert) => {
-      if (!cancelled) addAlert(alert);
+      if (!cancelled) {
+        addAlert(alert);
+        toast(alert.headerText || 'New service alert', {
+          description: alert.descriptionText?.slice(0, 120),
+        });
+      }
     });
 
     connection.onreconnecting(() => {
-      if (!cancelled) setConnectionState('reconnecting');
+      if (!cancelled) {
+        setConnectionState('reconnecting');
+        toast.warning('Connection lost. Reconnecting...', { id: 'signalr-connection', duration: Infinity });
+      }
     });
 
     connection.onreconnected(() => {
-      if (!cancelled) setConnectionState('connected');
+      if (!cancelled) {
+        setConnectionState('connected');
+        toast.success('Reconnected', { id: 'signalr-connection' });
+      }
     });
 
     connection.onclose(() => {
-      if (!cancelled) setConnectionState('disconnected');
+      if (!cancelled) {
+        setConnectionState('disconnected');
+        toast.error('Connection lost', { id: 'signalr-connection' });
+      }
     });
 
     connection.start()

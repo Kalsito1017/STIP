@@ -1,4 +1,4 @@
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, Layers } from 'lucide-react';
 import { Button } from '../ui/button';
 
 interface RouteOption {
@@ -13,6 +13,8 @@ interface Props {
   darkMode: boolean;
   onToggleDarkMode: () => void;
   vehicleCount: number;
+  clusterMode: boolean;
+  onToggleCluster: () => void;
 }
 
 export function FilterPanel({
@@ -22,6 +24,8 @@ export function FilterPanel({
   darkMode,
   onToggleDarkMode,
   vehicleCount,
+  clusterMode,
+  onToggleCluster,
 }: Props) {
   return (
     <div className="flex flex-wrap items-center gap-2 sm:gap-3">
@@ -41,6 +45,16 @@ export function FilterPanel({
           </option>
         ))}
       </select>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={onToggleCluster}
+        aria-label={clusterMode ? 'Show individual vehicles' : 'Show clusters'}
+        title={clusterMode ? 'Individual markers' : 'Cluster markers'}
+      >
+        <Layers className="w-4 h-4" />
+        <span className="hidden sm:inline">{clusterMode ? 'Clusters' : 'Individual'}</span>
+      </Button>
       <Button
         variant="outline"
         size="icon"

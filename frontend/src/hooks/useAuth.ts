@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { useAppStore } from '../store/useAppStore';
 import { authApi, type RegisterRequest, type LoginRequest } from '../services/api';
 
@@ -15,6 +16,7 @@ export function useRegister() {
         email: response.email,
         fullName: response.fullName,
       });
+      toast.success('Account created successfully');
       navigate('/dashboard');
     },
   });
@@ -32,6 +34,7 @@ export function useLogin() {
         email: response.email,
         fullName: response.fullName,
       });
+      toast.success('Signed in successfully');
       navigate('/dashboard');
     },
   });
