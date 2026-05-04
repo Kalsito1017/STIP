@@ -31,6 +31,7 @@ public class PredictionsController : ControllerBase
 
     [HttpPost("delay")]
     [ProducesResponseType(typeof(PredictDelayResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PredictDelayResponse>> PredictDelay([FromBody] PredictDelayRequest request)
     {
         var result = await _mediator.Send(new PredictDelayCommand(
@@ -41,6 +42,7 @@ public class PredictionsController : ControllerBase
 
     [HttpPost("travel-time")]
     [ProducesResponseType(typeof(TravelTimePredictionResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<TravelTimePredictionResponse>> PredictTravelTime([FromBody] PredictTravelTimeRequest request)
     {
         var result = await _mediator.Send(new PredictTravelTimeCommand(

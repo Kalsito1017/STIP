@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
@@ -21,7 +22,8 @@ public static class InfrastructureServiceRegistration
     {
         services.AddDbContext<TransportDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection") ?? configuration["DB_CONNECTION_STRING"],
-                npgsql => npgsql.UseNetTopologySuite()));
+                npgsql => npgsql.UseNetTopologySuite())
+            .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning)));
 
         var redisConn = configuration["REDIS_CONNECTION"] ?? "localhost:6379";
         var redisConfig = ConfigurationOptions.Parse(redisConn);

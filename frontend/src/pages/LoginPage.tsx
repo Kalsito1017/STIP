@@ -1,11 +1,15 @@
 import { useState, type FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { LogIn, Mail, Lock } from 'lucide-react';
 import { useLogin } from '../hooks/useAuth';
+import { Input } from '../components/ui/input';
+import { Button } from '../components/ui/button';
 import type { AxiosError } from 'axios';
 
 export function LoginPage() {
-  const [email, setEmail] = useState('');
+  const [searchParams] = useSearchParams();
+  const prefilledEmail = searchParams.get('email') || '';
+  const [email, setEmail] = useState(prefilledEmail);
   const [password, setPassword] = useState('');
   const { mutate, isPending, error } = useLogin();
 
@@ -16,7 +20,8 @@ export function LoginPage() {
 
   const serverError =
     error instanceof Error
-      ? ((error as AxiosError<{ message?: string }>).response?.data?.message
+      ? ((error as AxiosError<{ error?: string; details?: string[] }>).response?.data?.details?.join?.(', ')
+        ?? (error as AxiosError<{ error?: string }>).response?.data?.error
         ?? (error as AxiosError).message)
       : null;
 
@@ -35,8 +40,8 @@ export function LoginPage() {
                 Email
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 z-10" />
+                <Input
                   id="email"
                   type="email"
                   value={email}
@@ -44,7 +49,7 @@ export function LoginPage() {
                   required
                   autoComplete="email"
                   placeholder="you@example.com"
-                  className="w-full pl-10 pr-3 py-2 sm:py-2.5 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="pl-10"
                 />
               </div>
             </div>
@@ -54,8 +59,8 @@ export function LoginPage() {
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 z-10" />
+                <Input
                   id="password"
                   type="password"
                   value={password}
@@ -63,7 +68,7 @@ export function LoginPage() {
                   required
                   autoComplete="current-password"
                   placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
-                  className="w-full pl-10 pr-3 py-2 sm:py-2.5 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="pl-10"
                 />
               </div>
             </div>
@@ -74,14 +79,14 @@ export function LoginPage() {
               </p>
             )}
 
-            <button
+            <Button
               type="submit"
               disabled={isPending}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-md font-medium text-sm transition-colors"
+              className="w-full"
             >
               <LogIn className="w-4 h-4" />
               {isPending ? 'Signing in...' : 'Sign In'}
-            </button>
+            </Button>
           </form>
 
           <p className="mt-5 text-center text-sm text-slate-500">

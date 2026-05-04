@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'sonner';
 
 const api = axios.create({
   baseURL: '/api',
@@ -16,6 +17,15 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    if (error.response?.status === 400) {
+      const isRegisterRoute = error.config?.url?.includes('/auth/register');
+      if (!isRegisterRoute) {
+        const data = error.response?.data;
+        const message = data?.details?.join?.(', ') || data?.error || 'Bad request';
+        toast.error(message);
+      }
+    }
+
     if (error.response?.status === 401) {
       import('../store/useAppStore').then(({ useAppStore }) => {
         useAppStore.getState().clearAuth();

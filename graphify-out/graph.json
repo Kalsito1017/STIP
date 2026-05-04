@@ -9,7 +9,7 @@
       "source_file": "backend/SofiaTransport.Api/Program.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_api_program_cs",
-      "community": 121,
+      "community": 122,
       "norm_label": "program.cs"
     },
     {
@@ -88,7 +88,7 @@
       "label": ".GetReliabilityRanking()",
       "file_type": "code",
       "source_file": "backend/SofiaTransport.Api/Controllers/AnalyticsController.cs",
-      "source_location": "L33",
+      "source_location": "L34",
       "id": "controllers_analyticscontroller_analyticscontroller_getreliabilityranking",
       "community": 1,
       "norm_label": ".getreliabilityranking()"
@@ -97,7 +97,7 @@
       "label": ".GetPeakHours()",
       "file_type": "code",
       "source_file": "backend/SofiaTransport.Api/Controllers/AnalyticsController.cs",
-      "source_location": "L41",
+      "source_location": "L43",
       "id": "controllers_analyticscontroller_analyticscontroller_getpeakhours",
       "community": 1,
       "norm_label": ".getpeakhours()"
@@ -178,7 +178,7 @@
       "label": ".PredictTravelTime()",
       "file_type": "code",
       "source_file": "backend/SofiaTransport.Api/Controllers/PredictionsController.cs",
-      "source_location": "L42",
+      "source_location": "L43",
       "id": "controllers_predictionscontroller_predictionscontroller_predicttraveltime",
       "community": 1,
       "norm_label": ".predicttraveltime()"
@@ -214,7 +214,7 @@
       "label": ".GetAllShapes()",
       "file_type": "code",
       "source_file": "backend/SofiaTransport.Api/Controllers/RoutesController.cs",
-      "source_location": "L27",
+      "source_location": "L28",
       "id": "controllers_routescontroller_routescontroller_getallshapes",
       "community": 1,
       "norm_label": ".getallshapes()"
@@ -223,7 +223,7 @@
       "label": ".GetById()",
       "file_type": "code",
       "source_file": "backend/SofiaTransport.Api/Controllers/RoutesController.cs",
-      "source_location": "L35",
+      "source_location": "L36",
       "id": "controllers_routescontroller_routescontroller_getbyid",
       "community": 1,
       "norm_label": ".getbyid()"
@@ -232,7 +232,7 @@
       "label": ".GetShape()",
       "file_type": "code",
       "source_file": "backend/SofiaTransport.Api/Controllers/RoutesController.cs",
-      "source_location": "L44",
+      "source_location": "L46",
       "id": "controllers_routescontroller_routescontroller_getshape",
       "community": 1,
       "norm_label": ".getshape()"
@@ -241,7 +241,7 @@
       "label": ".GetReliability()",
       "file_type": "code",
       "source_file": "backend/SofiaTransport.Api/Controllers/RoutesController.cs",
-      "source_location": "L53",
+      "source_location": "L55",
       "id": "controllers_routescontroller_routescontroller_getreliability",
       "community": 1,
       "norm_label": ".getreliability()"
@@ -250,7 +250,7 @@
       "label": ".GetReliabilityHistory()",
       "file_type": "code",
       "source_file": "backend/SofiaTransport.Api/Controllers/RoutesController.cs",
-      "source_location": "L62",
+      "source_location": "L64",
       "id": "controllers_routescontroller_routescontroller_getreliabilityhistory",
       "community": 1,
       "norm_label": ".getreliabilityhistory()"
@@ -259,7 +259,7 @@
       "label": ".GetDelayPattern()",
       "file_type": "code",
       "source_file": "backend/SofiaTransport.Api/Controllers/RoutesController.cs",
-      "source_location": "L70",
+      "source_location": "L73",
       "id": "controllers_routescontroller_routescontroller_getdelaypattern",
       "community": 1,
       "norm_label": ".getdelaypattern()"
@@ -304,7 +304,7 @@
       "label": ".GetById()",
       "file_type": "code",
       "source_file": "backend/SofiaTransport.Api/Controllers/StopsController.cs",
-      "source_location": "L33",
+      "source_location": "L34",
       "id": "controllers_stopscontroller_stopscontroller_getbyid",
       "community": 1,
       "norm_label": ".getbyid()"
@@ -313,7 +313,7 @@
       "label": ".GetCongestion()",
       "file_type": "code",
       "source_file": "backend/SofiaTransport.Api/Controllers/StopsController.cs",
-      "source_location": "L42",
+      "source_location": "L44",
       "id": "controllers_stopscontroller_stopscontroller_getcongestion",
       "community": 1,
       "norm_label": ".getcongestion()"
@@ -322,7 +322,7 @@
       "label": ".GetPredictedArrivals()",
       "file_type": "code",
       "source_file": "backend/SofiaTransport.Api/Controllers/StopsController.cs",
-      "source_location": "L50",
+      "source_location": "L53",
       "id": "controllers_stopscontroller_stopscontroller_getpredictedarrivals",
       "community": 1,
       "norm_label": ".getpredictedarrivals()"
@@ -387,7 +387,7 @@
       "source_file": "backend/SofiaTransport.Api/DependencyInjection/ApiServiceRegistration.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_api_dependencyinjection_apiserviceregistration_cs",
-      "community": 86,
+      "community": 87,
       "norm_label": "apiserviceregistration.cs"
     },
     {
@@ -396,7 +396,7 @@
       "source_file": "backend/SofiaTransport.Api/DependencyInjection/ApiServiceRegistration.cs",
       "source_location": "L13",
       "id": "dependencyinjection_apiserviceregistration_apiserviceregistration",
-      "community": 86,
+      "community": 87,
       "norm_label": "apiserviceregistration"
     },
     {
@@ -405,7 +405,7 @@
       "source_file": "backend/SofiaTransport.Api/DependencyInjection/ApiServiceRegistration.cs",
       "source_location": "L15",
       "id": "dependencyinjection_apiserviceregistration_apiserviceregistration_addapiservices",
-      "community": 86,
+      "community": 87,
       "norm_label": ".addapiservices()"
     },
     {
@@ -567,7 +567,7 @@
       "source_file": "backend/SofiaTransport.Api/obj/Debug/net10.0/SofiaTransport.Api.AssemblyInfo.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_api_obj_debug_net10_0_sofiatransport_api_assemblyinfo_cs",
-      "community": 122,
+      "community": 123,
       "norm_label": "sofiatransport.api.assemblyinfo.cs"
     },
     {
@@ -576,7 +576,7 @@
       "source_file": "backend/SofiaTransport.Api/obj/Debug/net10.0/SofiaTransport.Api.GlobalUsings.g.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_api_obj_debug_net10_0_sofiatransport_api_globalusings_g_cs",
-      "community": 123,
+      "community": 124,
       "norm_label": "sofiatransport.api.globalusings.g.cs"
     },
     {
@@ -585,7 +585,7 @@
       "source_file": "backend/SofiaTransport.Api/obj/Debug/net10.0/SofiaTransport.Api.MvcApplicationPartsAssemblyInfo.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_api_obj_debug_net10_0_sofiatransport_api_mvcapplicationpartsassemblyinfo_cs",
-      "community": 124,
+      "community": 125,
       "norm_label": "sofiatransport.api.mvcapplicationpartsassemblyinfo.cs"
     },
     {
@@ -630,7 +630,7 @@
       "source_file": "backend/SofiaTransport.Application/Alerts/ServiceAlertDto.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_application_alerts_servicealertdto_cs",
-      "community": 125,
+      "community": 126,
       "norm_label": "servicealertdto.cs"
     },
     {
@@ -639,7 +639,7 @@
       "source_file": "backend/SofiaTransport.Application/Analytics/AnalyticsDto.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_application_analytics_analyticsdto_cs",
-      "community": 126,
+      "community": 127,
       "norm_label": "analyticsdto.cs"
     },
     {
@@ -891,7 +891,7 @@
       "source_file": "backend/SofiaTransport.Application/Common/Interfaces/IAlertFeedClient.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_application_common_interfaces_ialertfeedclient_cs",
-      "community": 87,
+      "community": 88,
       "norm_label": "ialertfeedclient.cs"
     },
     {
@@ -900,7 +900,7 @@
       "source_file": "backend/SofiaTransport.Application/Common/Interfaces/IAlertFeedClient.cs",
       "source_location": "L5",
       "id": "interfaces_ialertfeedclient_ialertfeedclient",
-      "community": 87,
+      "community": 88,
       "norm_label": "ialertfeedclient"
     },
     {
@@ -909,7 +909,7 @@
       "source_file": "backend/SofiaTransport.Application/Common/Interfaces/IAlertFeedClient.cs",
       "source_location": "L7",
       "id": "interfaces_ialertfeedclient_ialertfeedclient_fetchalertsasync",
-      "community": 87,
+      "community": 88,
       "norm_label": ".fetchalertsasync()"
     },
     {
@@ -981,7 +981,7 @@
       "source_file": "backend/SofiaTransport.Application/Common/Interfaces/IGtfsFeedClient.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_application_common_interfaces_igtfsfeedclient_cs",
-      "community": 88,
+      "community": 89,
       "norm_label": "igtfsfeedclient.cs"
     },
     {
@@ -990,7 +990,7 @@
       "source_file": "backend/SofiaTransport.Application/Common/Interfaces/IGtfsFeedClient.cs",
       "source_location": "L5",
       "id": "interfaces_igtfsfeedclient_igtfsfeedclient",
-      "community": 88,
+      "community": 89,
       "norm_label": "igtfsfeedclient"
     },
     {
@@ -999,7 +999,7 @@
       "source_file": "backend/SofiaTransport.Application/Common/Interfaces/IGtfsFeedClient.cs",
       "source_location": "L7",
       "id": "interfaces_igtfsfeedclient_igtfsfeedclient_fetchvehiclepositionsasync",
-      "community": 88,
+      "community": 89,
       "norm_label": ".fetchvehiclepositionsasync()"
     },
     {
@@ -1368,7 +1368,7 @@
       "source_file": "backend/SofiaTransport.Application/Common/Interfaces/ITripUpdateFeedClient.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_application_common_interfaces_itripupdatefeedclient_cs",
-      "community": 89,
+      "community": 90,
       "norm_label": "itripupdatefeedclient.cs"
     },
     {
@@ -1377,7 +1377,7 @@
       "source_file": "backend/SofiaTransport.Application/Common/Interfaces/ITripUpdateFeedClient.cs",
       "source_location": "L5",
       "id": "interfaces_itripupdatefeedclient_itripupdatefeedclient",
-      "community": 89,
+      "community": 90,
       "norm_label": "itripupdatefeedclient"
     },
     {
@@ -1386,7 +1386,7 @@
       "source_file": "backend/SofiaTransport.Application/Common/Interfaces/ITripUpdateFeedClient.cs",
       "source_location": "L7",
       "id": "interfaces_itripupdatefeedclient_itripupdatefeedclient_fetchtripupdatesasync",
-      "community": 89,
+      "community": 90,
       "norm_label": ".fetchtripupdatesasync()"
     },
     {
@@ -1539,7 +1539,7 @@
       "source_file": "backend/SofiaTransport.Application/obj/Debug/net10.0/SofiaTransport.Application.AssemblyInfo.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_application_obj_debug_net10_0_sofiatransport_application_assemblyinfo_cs",
-      "community": 127,
+      "community": 128,
       "norm_label": "sofiatransport.application.assemblyinfo.cs"
     },
     {
@@ -1548,7 +1548,7 @@
       "source_file": "backend/SofiaTransport.Application/obj/Debug/net10.0/SofiaTransport.Application.GlobalUsings.g.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_application_obj_debug_net10_0_sofiatransport_application_globalusings_g_cs",
-      "community": 128,
+      "community": 129,
       "norm_label": "sofiatransport.application.globalusings.g.cs"
     },
     {
@@ -1602,7 +1602,7 @@
       "source_file": "backend/SofiaTransport.Application/Predictions/PredictionDto.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_application_predictions_predictiondto_cs",
-      "community": 129,
+      "community": 130,
       "norm_label": "predictiondto.cs"
     },
     {
@@ -1836,7 +1836,7 @@
       "source_file": "backend/SofiaTransport.Application/Routes/RouteDto.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_application_routes_routedto_cs",
-      "community": 130,
+      "community": 131,
       "norm_label": "routedto.cs"
     },
     {
@@ -1908,7 +1908,7 @@
       "source_file": "backend/SofiaTransport.Application/Shapes/ShapeDto.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_application_shapes_shapedto_cs",
-      "community": 131,
+      "community": 132,
       "norm_label": "shapedto.cs"
     },
     {
@@ -2124,7 +2124,7 @@
       "source_file": "backend/SofiaTransport.Application/Stops/StopDto.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_application_stops_stopdto_cs",
-      "community": 132,
+      "community": 133,
       "norm_label": "stopdto.cs"
     },
     {
@@ -2160,7 +2160,7 @@
       "source_file": "backend/SofiaTransport.Application/TripUpdates/TripUpdateDto.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_application_tripupdates_tripupdatedto_cs",
-      "community": 133,
+      "community": 134,
       "norm_label": "tripupdatedto.cs"
     },
     {
@@ -2286,7 +2286,7 @@
       "source_file": "backend/SofiaTransport.Application/Users/UserDto.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_application_users_userdto_cs",
-      "community": 134,
+      "community": 135,
       "norm_label": "userdto.cs"
     },
     {
@@ -2340,7 +2340,7 @@
       "source_file": "backend/SofiaTransport.Application/Vehicles/VehicleDto.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_application_vehicles_vehicledto_cs",
-      "community": 135,
+      "community": 136,
       "norm_label": "vehicledto.cs"
     },
     {
@@ -2349,7 +2349,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/DelayLog.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_entities_delaylog_cs",
-      "community": 98,
+      "community": 99,
       "norm_label": "delaylog.cs"
     },
     {
@@ -2358,7 +2358,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/DelayLog.cs",
       "source_location": "L3",
       "id": "entities_delaylog_delaylog",
-      "community": 98,
+      "community": 99,
       "norm_label": "delaylog"
     },
     {
@@ -2367,7 +2367,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/ReliabilityScore.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_entities_reliabilityscore_cs",
-      "community": 90,
+      "community": 91,
       "norm_label": "reliabilityscore.cs"
     },
     {
@@ -2376,7 +2376,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/ReliabilityScore.cs",
       "source_location": "L3",
       "id": "entities_reliabilityscore_reliabilityscore",
-      "community": 90,
+      "community": 91,
       "norm_label": "reliabilityscore"
     },
     {
@@ -2385,7 +2385,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/ReliabilityScore.cs",
       "source_location": "L15",
       "id": "entities_reliabilityscore_reliabilityscore_calculate",
-      "community": 90,
+      "community": 91,
       "norm_label": ".calculate()"
     },
     {
@@ -2394,7 +2394,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/Route.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_entities_route_cs",
-      "community": 99,
+      "community": 100,
       "norm_label": "route.cs"
     },
     {
@@ -2403,7 +2403,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/Route.cs",
       "source_location": "L5",
       "id": "entities_route_route",
-      "community": 99,
+      "community": 100,
       "norm_label": "route"
     },
     {
@@ -2412,7 +2412,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/ServiceAlert.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_entities_servicealert_cs",
-      "community": 100,
+      "community": 101,
       "norm_label": "servicealert.cs"
     },
     {
@@ -2421,7 +2421,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/ServiceAlert.cs",
       "source_location": "L5",
       "id": "entities_servicealert_servicealert",
-      "community": 100,
+      "community": 101,
       "norm_label": "servicealert"
     },
     {
@@ -2430,7 +2430,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/Shape.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_entities_shape_cs",
-      "community": 101,
+      "community": 102,
       "norm_label": "shape.cs"
     },
     {
@@ -2439,7 +2439,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/Shape.cs",
       "source_location": "L3",
       "id": "entities_shape_shape",
-      "community": 101,
+      "community": 102,
       "norm_label": "shape"
     },
     {
@@ -2448,7 +2448,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/Stop.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_entities_stop_cs",
-      "community": 102,
+      "community": 103,
       "norm_label": "stop.cs"
     },
     {
@@ -2457,7 +2457,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/Stop.cs",
       "source_location": "L7",
       "id": "entities_stop_stop",
-      "community": 102,
+      "community": 103,
       "norm_label": "stop"
     },
     {
@@ -2466,7 +2466,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/StopTime.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_entities_stoptime_cs",
-      "community": 103,
+      "community": 104,
       "norm_label": "stoptime.cs"
     },
     {
@@ -2475,7 +2475,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/StopTime.cs",
       "source_location": "L3",
       "id": "entities_stoptime_stoptime",
-      "community": 103,
+      "community": 104,
       "norm_label": "stoptime"
     },
     {
@@ -2484,7 +2484,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/Trip.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_entities_trip_cs",
-      "community": 104,
+      "community": 105,
       "norm_label": "trip.cs"
     },
     {
@@ -2493,7 +2493,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/Trip.cs",
       "source_location": "L3",
       "id": "entities_trip_trip",
-      "community": 104,
+      "community": 105,
       "norm_label": "trip"
     },
     {
@@ -2502,7 +2502,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/TripUpdate.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_entities_tripupdate_cs",
-      "community": 91,
+      "community": 92,
       "norm_label": "tripupdate.cs"
     },
     {
@@ -2511,7 +2511,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/TripUpdate.cs",
       "source_location": "L3",
       "id": "entities_tripupdate_tripupdate",
-      "community": 91,
+      "community": 92,
       "norm_label": "tripupdate"
     },
     {
@@ -2520,7 +2520,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/TripUpdate.cs",
       "source_location": "L15",
       "id": "entities_tripupdate_stoptimeupdate",
-      "community": 91,
+      "community": 92,
       "norm_label": "stoptimeupdate"
     },
     {
@@ -2529,7 +2529,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/User.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_entities_user_cs",
-      "community": 105,
+      "community": 106,
       "norm_label": "user.cs"
     },
     {
@@ -2538,7 +2538,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/User.cs",
       "source_location": "L3",
       "id": "entities_user_user",
-      "community": 105,
+      "community": 106,
       "norm_label": "user"
     },
     {
@@ -2547,7 +2547,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/Vehicle.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_entities_vehicle_cs",
-      "community": 106,
+      "community": 107,
       "norm_label": "vehicle.cs"
     },
     {
@@ -2556,7 +2556,7 @@
       "source_file": "backend/SofiaTransport.Domain/Entities/Vehicle.cs",
       "source_location": "L7",
       "id": "entities_vehicle_vehicle",
-      "community": 106,
+      "community": 107,
       "norm_label": "vehicle"
     },
     {
@@ -2565,7 +2565,7 @@
       "source_file": "backend/SofiaTransport.Domain/Enums/AlertEnums.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_enums_alertenums_cs",
-      "community": 136,
+      "community": 137,
       "norm_label": "alertenums.cs"
     },
     {
@@ -2574,7 +2574,7 @@
       "source_file": "backend/SofiaTransport.Domain/Enums/DelayBucket.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_enums_delaybucket_cs",
-      "community": 137,
+      "community": 138,
       "norm_label": "delaybucket.cs"
     },
     {
@@ -2583,7 +2583,7 @@
       "source_file": "backend/SofiaTransport.Domain/Enums/TransitType.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_enums_transittype_cs",
-      "community": 138,
+      "community": 139,
       "norm_label": "transittype.cs"
     },
     {
@@ -2592,7 +2592,7 @@
       "source_file": "backend/SofiaTransport.Domain/obj/Debug/net10.0/SofiaTransport.Domain.AssemblyInfo.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_obj_debug_net10_0_sofiatransport_domain_assemblyinfo_cs",
-      "community": 139,
+      "community": 140,
       "norm_label": "sofiatransport.domain.assemblyinfo.cs"
     },
     {
@@ -2601,7 +2601,7 @@
       "source_file": "backend/SofiaTransport.Domain/obj/Debug/net10.0/SofiaTransport.Domain.GlobalUsings.g.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_obj_debug_net10_0_sofiatransport_domain_globalusings_g_cs",
-      "community": 140,
+      "community": 141,
       "norm_label": "sofiatransport.domain.globalusings.g.cs"
     },
     {
@@ -2610,7 +2610,7 @@
       "source_file": "backend/SofiaTransport.Domain/ValueObjects/ActivePeriod.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_valueobjects_activeperiod_cs",
-      "community": 141,
+      "community": 142,
       "norm_label": "activeperiod.cs"
     },
     {
@@ -2619,7 +2619,7 @@
       "source_file": "backend/SofiaTransport.Domain/ValueObjects/Coordinates.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_valueobjects_coordinates_cs",
-      "community": 107,
+      "community": 108,
       "norm_label": "coordinates.cs"
     },
     {
@@ -2628,7 +2628,7 @@
       "source_file": "backend/SofiaTransport.Domain/ValueObjects/Coordinates.cs",
       "source_location": "L19",
       "id": "valueobjects_coordinates_tostring",
-      "community": 107,
+      "community": 108,
       "norm_label": "tostring()"
     },
     {
@@ -2637,7 +2637,7 @@
       "source_file": "backend/SofiaTransport.Domain/ValueObjects/InformedEntity.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_domain_valueobjects_informedentity_cs",
-      "community": 142,
+      "community": 143,
       "norm_label": "informedentity.cs"
     },
     {
@@ -2871,25 +2871,25 @@
       "source_file": "backend/SofiaTransport.Infrastructure/DependencyInjection/InfrastructureServiceRegistration.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_infrastructure_dependencyinjection_infrastructureserviceregistration_cs",
-      "community": 92,
+      "community": 93,
       "norm_label": "infrastructureserviceregistration.cs"
     },
     {
       "label": "InfrastructureServiceRegistration",
       "file_type": "code",
       "source_file": "backend/SofiaTransport.Infrastructure/DependencyInjection/InfrastructureServiceRegistration.cs",
-      "source_location": "L18",
+      "source_location": "L19",
       "id": "dependencyinjection_infrastructureserviceregistration_infrastructureserviceregistration",
-      "community": 92,
+      "community": 93,
       "norm_label": "infrastructureserviceregistration"
     },
     {
       "label": ".AddInfrastructure()",
       "file_type": "code",
       "source_file": "backend/SofiaTransport.Infrastructure/DependencyInjection/InfrastructureServiceRegistration.cs",
-      "source_location": "L20",
+      "source_location": "L21",
       "id": "dependencyinjection_infrastructureserviceregistration_infrastructureserviceregistration_addinfrastructure",
-      "community": 92,
+      "community": 93,
       "norm_label": ".addinfrastructure()"
     },
     {
@@ -3321,7 +3321,7 @@
       "source_file": "backend/SofiaTransport.Infrastructure/obj/Debug/net10.0/EFCoreNpgsqlNetTopologySuite.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_infrastructure_obj_debug_net10_0_efcorenpgsqlnettopologysuite_cs",
-      "community": 143,
+      "community": 144,
       "norm_label": "efcorenpgsqlnettopologysuite.cs"
     },
     {
@@ -3330,7 +3330,7 @@
       "source_file": "backend/SofiaTransport.Infrastructure/obj/Debug/net10.0/SofiaTransport.Infrastructure.AssemblyInfo.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_infrastructure_obj_debug_net10_0_sofiatransport_infrastructure_assemblyinfo_cs",
-      "community": 144,
+      "community": 145,
       "norm_label": "sofiatransport.infrastructure.assemblyinfo.cs"
     },
     {
@@ -3339,7 +3339,7 @@
       "source_file": "backend/SofiaTransport.Infrastructure/obj/Debug/net10.0/SofiaTransport.Infrastructure.GlobalUsings.g.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_infrastructure_obj_debug_net10_0_sofiatransport_infrastructure_globalusings_g_cs",
-      "community": 145,
+      "community": 146,
       "norm_label": "sofiatransport.infrastructure.globalusings.g.cs"
     },
     {
@@ -4608,7 +4608,7 @@
       "source_file": "backend/SofiaTransport.Worker/Program.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_worker_program_cs",
-      "community": 146,
+      "community": 147,
       "norm_label": "program.cs"
     },
     {
@@ -4779,7 +4779,7 @@
       "source_file": "backend/SofiaTransport.Worker/obj/Debug/net10.0/SofiaTransport.Worker.AssemblyInfo.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_worker_obj_debug_net10_0_sofiatransport_worker_assemblyinfo_cs",
-      "community": 147,
+      "community": 148,
       "norm_label": "sofiatransport.worker.assemblyinfo.cs"
     },
     {
@@ -4788,7 +4788,7 @@
       "source_file": "backend/SofiaTransport.Worker/obj/Debug/net10.0/SofiaTransport.Worker.GlobalUsings.g.cs",
       "source_location": "L1",
       "id": "backend_sofiatransport_worker_obj_debug_net10_0_sofiatransport_worker_globalusings_g_cs",
-      "community": 148,
+      "community": 149,
       "norm_label": "sofiatransport.worker.globalusings.g.cs"
     },
     {
@@ -4797,7 +4797,7 @@
       "source_file": "frontend/eslint.config.js",
       "source_location": "L1",
       "id": "frontend_eslint_config_js",
-      "community": 149,
+      "community": 150,
       "norm_label": "eslint.config.js"
     },
     {
@@ -4806,7 +4806,7 @@
       "source_file": "frontend/vite.config.ts",
       "source_location": "L1",
       "id": "frontend_vite_config_ts",
-      "community": 150,
+      "community": 151,
       "norm_label": "vite.config.ts"
     },
     {
@@ -4815,17 +4815,17 @@
       "source_file": "frontend/src/App.tsx",
       "source_location": "L1",
       "id": "frontend_src_app_tsx",
-      "community": 93,
+      "community": 94,
       "norm_label": "app.tsx"
     },
     {
-      "label": "DarkModeRoot()",
+      "label": "useDarkModeClass()",
       "file_type": "code",
       "source_file": "frontend/src/App.tsx",
-      "source_location": "L27",
-      "id": "src_app_darkmoderoot",
-      "community": 93,
-      "norm_label": "darkmoderoot()"
+      "source_location": "L29",
+      "id": "src_app_usedarkmodeclass",
+      "community": 94,
+      "norm_label": "usedarkmodeclass()"
     },
     {
       "label": "main.tsx",
@@ -4833,7 +4833,7 @@
       "source_file": "frontend/src/main.tsx",
       "source_location": "L1",
       "id": "frontend_src_main_tsx",
-      "community": 93,
+      "community": 94,
       "norm_label": "main.tsx"
     },
     {
@@ -4842,7 +4842,7 @@
       "source_file": "frontend/src/vite-env.d.ts",
       "source_location": "L1",
       "id": "frontend_src_vite_env_d_ts",
-      "community": 151,
+      "community": 152,
       "norm_label": "vite-env.d.ts"
     },
     {
@@ -4851,8 +4851,26 @@
       "source_file": "frontend/src/components/AlertBanner.tsx",
       "source_location": "L1",
       "id": "frontend_src_components_alertbanner_tsx",
-      "community": 152,
+      "community": 153,
       "norm_label": "alertbanner.tsx"
+    },
+    {
+      "label": "AnimatedStat.tsx",
+      "file_type": "code",
+      "source_file": "frontend/src/components/AnimatedStat.tsx",
+      "source_location": "L1",
+      "id": "frontend_src_components_animatedstat_tsx",
+      "community": 77,
+      "norm_label": "animatedstat.tsx"
+    },
+    {
+      "label": "AnimatedStat()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/AnimatedStat.tsx",
+      "source_location": "L8",
+      "id": "components_animatedstat_animatedstat",
+      "community": 77,
+      "norm_label": "animatedstat()"
     },
     {
       "label": "ErrorAlert.tsx",
@@ -4860,7 +4878,7 @@
       "source_file": "frontend/src/components/ErrorAlert.tsx",
       "source_location": "L1",
       "id": "frontend_src_components_erroralert_tsx",
-      "community": 153,
+      "community": 154,
       "norm_label": "erroralert.tsx"
     },
     {
@@ -4905,7 +4923,7 @@
       "source_file": "frontend/src/components/Layout.tsx",
       "source_location": "L1",
       "id": "frontend_src_components_layout_tsx",
-      "community": 94,
+      "community": 95,
       "norm_label": "layout.tsx"
     },
     {
@@ -4914,7 +4932,7 @@
       "source_file": "frontend/src/components/Layout.tsx",
       "source_location": "L17",
       "id": "components_layout_getpagetitle",
-      "community": 94,
+      "community": 95,
       "norm_label": "getpagetitle()"
     },
     {
@@ -4923,7 +4941,7 @@
       "source_file": "frontend/src/components/Layout.tsx",
       "source_location": "L76",
       "id": "components_layout_clsx",
-      "community": 94,
+      "community": 95,
       "norm_label": "clsx()"
     },
     {
@@ -4939,7 +4957,7 @@
       "label": "PredictPanel()",
       "file_type": "code",
       "source_file": "frontend/src/components/PredictPanel.tsx",
-      "source_location": "L15",
+      "source_location": "L16",
       "id": "components_predictpanel_predictpanel",
       "community": 34,
       "norm_label": "predictpanel()"
@@ -4950,7 +4968,7 @@
       "source_file": "frontend/src/components/ProtectedRoute.tsx",
       "source_location": "L1",
       "id": "frontend_src_components_protectedroute_tsx",
-      "community": 108,
+      "community": 109,
       "norm_label": "protectedroute.tsx"
     },
     {
@@ -4959,7 +4977,7 @@
       "source_file": "frontend/src/components/ProtectedRoute.tsx",
       "source_location": "L4",
       "id": "components_protectedroute_protectedroute",
-      "community": 108,
+      "community": 109,
       "norm_label": "protectedroute()"
     },
     {
@@ -4968,7 +4986,7 @@
       "source_file": "frontend/src/components/Sidebar.tsx",
       "source_location": "L1",
       "id": "frontend_src_components_sidebar_tsx",
-      "community": 154,
+      "community": 155,
       "norm_label": "sidebar.tsx"
     },
     {
@@ -4977,7 +4995,7 @@
       "source_file": "frontend/src/components/Skeleton.tsx",
       "source_location": "L1",
       "id": "frontend_src_components_skeleton_tsx",
-      "community": 109,
+      "community": 110,
       "norm_label": "skeleton.tsx"
     },
     {
@@ -4986,7 +5004,7 @@
       "source_file": "frontend/src/components/Skeleton.tsx",
       "source_location": "L13",
       "id": "components_skeleton_skeletoncard",
-      "community": 109,
+      "community": 110,
       "norm_label": "skeletoncard()"
     },
     {
@@ -4995,7 +5013,7 @@
       "source_file": "frontend/src/components/StatCard.tsx",
       "source_location": "L1",
       "id": "frontend_src_components_statcard_tsx",
-      "community": 155,
+      "community": 156,
       "norm_label": "statcard.tsx"
     },
     {
@@ -5004,7 +5022,7 @@
       "source_file": "frontend/src/components/TripUpdatesList.tsx",
       "source_location": "L1",
       "id": "frontend_src_components_tripupdateslist_tsx",
-      "community": 95,
+      "community": 96,
       "norm_label": "tripupdateslist.tsx"
     },
     {
@@ -5013,7 +5031,7 @@
       "source_file": "frontend/src/components/TripUpdatesList.tsx",
       "source_location": "L10",
       "id": "components_tripupdateslist_formatdelay",
-      "community": 95,
+      "community": 96,
       "norm_label": "formatdelay()"
     },
     {
@@ -5022,7 +5040,7 @@
       "source_file": "frontend/src/components/TripUpdatesList.tsx",
       "source_location": "L18",
       "id": "components_tripupdateslist_delaycolor",
-      "community": 95,
+      "community": 96,
       "norm_label": "delaycolor()"
     },
     {
@@ -5067,7 +5085,7 @@
       "source_file": "frontend/src/components/map/FilterPanel.tsx",
       "source_location": "L1",
       "id": "frontend_src_components_map_filterpanel_tsx",
-      "community": 110,
+      "community": 111,
       "norm_label": "filterpanel.tsx"
     },
     {
@@ -5076,7 +5094,7 @@
       "source_file": "frontend/src/components/map/FilterPanel.tsx",
       "source_location": "L17",
       "id": "map_filterpanel_filterpanel",
-      "community": 110,
+      "community": 111,
       "norm_label": "filterpanel()"
     },
     {
@@ -5085,7 +5103,7 @@
       "source_file": "frontend/src/components/map/RouteShapeLayer.tsx",
       "source_location": "L1",
       "id": "frontend_src_components_map_routeshapelayer_tsx",
-      "community": 111,
+      "community": 112,
       "norm_label": "routeshapelayer.tsx"
     },
     {
@@ -5094,7 +5112,7 @@
       "source_file": "frontend/src/components/map/RouteShapeLayer.tsx",
       "source_location": "L8",
       "id": "map_routeshapelayer_routeshapelayer",
-      "community": 111,
+      "community": 112,
       "norm_label": "routeshapelayer()"
     },
     {
@@ -5103,7 +5121,7 @@
       "source_file": "frontend/src/components/map/StopLayer.tsx",
       "source_location": "L1",
       "id": "frontend_src_components_map_stoplayer_tsx",
-      "community": 112,
+      "community": 113,
       "norm_label": "stoplayer.tsx"
     },
     {
@@ -5112,7 +5130,7 @@
       "source_file": "frontend/src/components/map/StopLayer.tsx",
       "source_location": "L17",
       "id": "map_stoplayer_stoplayer",
-      "community": 112,
+      "community": 113,
       "norm_label": "stoplayer()"
     },
     {
@@ -5121,7 +5139,7 @@
       "source_file": "frontend/src/components/map/VehicleLayer.tsx",
       "source_location": "L1",
       "id": "frontend_src_components_map_vehiclelayer_tsx",
-      "community": 156,
+      "community": 157,
       "norm_label": "vehiclelayer.tsx"
     },
     {
@@ -5159,6 +5177,24 @@
       "id": "hooks_useauth_uselogout",
       "community": 76,
       "norm_label": "uselogout()"
+    },
+    {
+      "label": "useCountUp.ts",
+      "file_type": "code",
+      "source_file": "frontend/src/hooks/useCountUp.ts",
+      "source_location": "L1",
+      "id": "frontend_src_hooks_usecountup_ts",
+      "community": 77,
+      "norm_label": "usecountup.ts"
+    },
+    {
+      "label": "useCountUp()",
+      "file_type": "code",
+      "source_file": "frontend/src/hooks/useCountUp.ts",
+      "source_location": "L3",
+      "id": "hooks_usecountup_usecountup",
+      "community": 77,
+      "norm_label": "usecountup()"
     },
     {
       "label": "useDelays.ts",
@@ -5211,7 +5247,7 @@
       "source_file": "frontend/src/hooks/useHeatmap.ts",
       "source_location": "L1",
       "id": "frontend_src_hooks_useheatmap_ts",
-      "community": 113,
+      "community": 114,
       "norm_label": "useheatmap.ts"
     },
     {
@@ -5220,7 +5256,7 @@
       "source_file": "frontend/src/hooks/useHeatmap.ts",
       "source_location": "L4",
       "id": "hooks_useheatmap_usedelayheatmap",
-      "community": 113,
+      "community": 114,
       "norm_label": "usedelayheatmap()"
     },
     {
@@ -5247,7 +5283,7 @@
       "source_file": "frontend/src/hooks/useRealtime.ts",
       "source_location": "L1",
       "id": "frontend_src_hooks_userealtime_ts",
-      "community": 114,
+      "community": 115,
       "norm_label": "userealtime.ts"
     },
     {
@@ -5256,7 +5292,7 @@
       "source_file": "frontend/src/hooks/useRealtime.ts",
       "source_location": "L6",
       "id": "hooks_userealtime_userealtime",
-      "community": 114,
+      "community": 115,
       "norm_label": "userealtime()"
     },
     {
@@ -5265,7 +5301,7 @@
       "source_file": "frontend/src/hooks/useRoutes.ts",
       "source_location": "L1",
       "id": "frontend_src_hooks_useroutes_ts",
-      "community": 96,
+      "community": 97,
       "norm_label": "useroutes.ts"
     },
     {
@@ -5274,7 +5310,7 @@
       "source_file": "frontend/src/hooks/useRoutes.ts",
       "source_location": "L4",
       "id": "hooks_useroutes_useroutes",
-      "community": 96,
+      "community": 97,
       "norm_label": "useroutes()"
     },
     {
@@ -5283,7 +5319,7 @@
       "source_file": "frontend/src/hooks/useRoutes.ts",
       "source_location": "L12",
       "id": "hooks_useroutes_useroutedetail",
-      "community": 96,
+      "community": 97,
       "norm_label": "useroutedetail()"
     },
     {
@@ -5346,7 +5382,7 @@
       "source_file": "frontend/src/hooks/useVehicles.ts",
       "source_location": "L1",
       "id": "frontend_src_hooks_usevehicles_ts",
-      "community": 115,
+      "community": 116,
       "norm_label": "usevehicles.ts"
     },
     {
@@ -5355,7 +5391,7 @@
       "source_file": "frontend/src/hooks/useVehicles.ts",
       "source_location": "L4",
       "id": "hooks_usevehicles_uselivevehicles",
-      "community": 115,
+      "community": 116,
       "norm_label": "uselivevehicles()"
     },
     {
@@ -5364,7 +5400,7 @@
       "source_file": "frontend/src/pages/AnalyticsPage.tsx",
       "source_location": "L1",
       "id": "frontend_src_pages_analyticspage_tsx",
-      "community": 157,
+      "community": 158,
       "norm_label": "analyticspage.tsx"
     },
     {
@@ -5373,7 +5409,7 @@
       "source_file": "frontend/src/pages/DashboardPage.tsx",
       "source_location": "L1",
       "id": "frontend_src_pages_dashboardpage_tsx",
-      "community": 116,
+      "community": 117,
       "norm_label": "dashboardpage.tsx"
     },
     {
@@ -5382,8 +5418,17 @@
       "source_file": "frontend/src/pages/DashboardPage.tsx",
       "source_location": "L24",
       "id": "pages_dashboardpage_retryall",
-      "community": 116,
+      "community": 117,
       "norm_label": "retryall()"
+    },
+    {
+      "label": "LandingPage.tsx",
+      "file_type": "code",
+      "source_file": "frontend/src/pages/LandingPage.tsx",
+      "source_location": "L1",
+      "id": "frontend_src_pages_landingpage_tsx",
+      "community": 159,
+      "norm_label": "landingpage.tsx"
     },
     {
       "label": "LiveMapPage.tsx",
@@ -5427,7 +5472,7 @@
       "source_file": "frontend/src/pages/LoginPage.tsx",
       "source_location": "L1",
       "id": "frontend_src_pages_loginpage_tsx",
-      "community": 117,
+      "community": 118,
       "norm_label": "loginpage.tsx"
     },
     {
@@ -5436,7 +5481,7 @@
       "source_file": "frontend/src/pages/LoginPage.tsx",
       "source_location": "L12",
       "id": "pages_loginpage_handlesubmit",
-      "community": 117,
+      "community": 118,
       "norm_label": "handlesubmit()"
     },
     {
@@ -5445,7 +5490,7 @@
       "source_file": "frontend/src/pages/NotFoundPage.tsx",
       "source_location": "L1",
       "id": "frontend_src_pages_notfoundpage_tsx",
-      "community": 118,
+      "community": 119,
       "norm_label": "notfoundpage.tsx"
     },
     {
@@ -5454,7 +5499,7 @@
       "source_file": "frontend/src/pages/NotFoundPage.tsx",
       "source_location": "L4",
       "id": "pages_notfoundpage_notfoundpage",
-      "community": 118,
+      "community": 119,
       "norm_label": "notfoundpage()"
     },
     {
@@ -5463,7 +5508,7 @@
       "source_file": "frontend/src/pages/RegisterPage.tsx",
       "source_location": "L1",
       "id": "frontend_src_pages_registerpage_tsx",
-      "community": 119,
+      "community": 120,
       "norm_label": "registerpage.tsx"
     },
     {
@@ -5472,7 +5517,7 @@
       "source_file": "frontend/src/pages/RegisterPage.tsx",
       "source_location": "L13",
       "id": "pages_registerpage_handlesubmit",
-      "community": 119,
+      "community": 120,
       "norm_label": "handlesubmit()"
     },
     {
@@ -5481,7 +5526,7 @@
       "source_file": "frontend/src/pages/RouteDetailPage.tsx",
       "source_location": "L1",
       "id": "frontend_src_pages_routedetailpage_tsx",
-      "community": 158,
+      "community": 160,
       "norm_label": "routedetailpage.tsx"
     },
     {
@@ -5490,7 +5535,7 @@
       "source_file": "frontend/src/pages/RoutesPage.tsx",
       "source_location": "L1",
       "id": "frontend_src_pages_routespage_tsx",
-      "community": 159,
+      "community": 161,
       "norm_label": "routespage.tsx"
     },
     {
@@ -5499,7 +5544,7 @@
       "source_file": "frontend/src/pages/StopDetailPage.tsx",
       "source_location": "L1",
       "id": "frontend_src_pages_stopdetailpage_tsx",
-      "community": 160,
+      "community": 162,
       "norm_label": "stopdetailpage.tsx"
     },
     {
@@ -5508,7 +5553,7 @@
       "source_file": "frontend/src/pages/StopsPage.tsx",
       "source_location": "L1",
       "id": "frontend_src_pages_stopspage_tsx",
-      "community": 77,
+      "community": 78,
       "norm_label": "stopspage.tsx"
     },
     {
@@ -5517,7 +5562,7 @@
       "source_file": "frontend/src/pages/StopsPage.tsx",
       "source_location": "L17",
       "id": "pages_stopspage_sorticon",
-      "community": 77,
+      "community": 78,
       "norm_label": "sorticon()"
     },
     {
@@ -5526,7 +5571,7 @@
       "source_file": "frontend/src/pages/StopsPage.tsx",
       "source_location": "L31",
       "id": "pages_stopspage_handlesort",
-      "community": 77,
+      "community": 78,
       "norm_label": "handlesort()"
     },
     {
@@ -5535,7 +5580,7 @@
       "source_file": "frontend/src/pages/StopsPage.tsx",
       "source_location": "L71",
       "id": "pages_stopspage_handlerowkeydown",
-      "community": 77,
+      "community": 78,
       "norm_label": "handlerowkeydown()"
     },
     {
@@ -5544,7 +5589,7 @@
       "source_file": "frontend/src/services/api.ts",
       "source_location": "L1",
       "id": "frontend_src_services_api_ts",
-      "community": 161,
+      "community": 163,
       "norm_label": "api.ts"
     },
     {
@@ -5553,7 +5598,7 @@
       "source_file": "frontend/src/store/useAppStore.ts",
       "source_location": "L1",
       "id": "frontend_src_store_useappstore_ts",
-      "community": 120,
+      "community": 121,
       "norm_label": "useappstore.ts"
     },
     {
@@ -5562,7 +5607,7 @@
       "source_file": "frontend/src/store/useAppStore.ts",
       "source_location": "L92",
       "id": "store_useappstore_loaduser",
-      "community": 120,
+      "community": 121,
       "norm_label": "loaduser()"
     },
     {
@@ -5571,7 +5616,7 @@
       "source_file": "frontend/src/types/map.ts",
       "source_location": "L1",
       "id": "frontend_src_types_map_ts",
-      "community": 162,
+      "community": 164,
       "norm_label": "map.ts"
     },
     {
@@ -5976,7 +6021,7 @@
       "source_file": "ml/__init__.py",
       "source_location": "L1",
       "id": "ml_init_py",
-      "community": 163,
+      "community": 165,
       "norm_label": "__init__.py"
     },
     {
@@ -6327,7 +6372,7 @@
       "source_file": "tests/SofiaTransport.Api.Tests/Controllers/VehiclesControllerTests.cs",
       "source_location": "L1",
       "id": "tests_sofiatransport_api_tests_controllers_vehiclescontrollertests_cs",
-      "community": 78,
+      "community": 79,
       "norm_label": "vehiclescontrollertests.cs"
     },
     {
@@ -6336,7 +6381,7 @@
       "source_file": "tests/SofiaTransport.Api.Tests/Controllers/VehiclesControllerTests.cs",
       "source_location": "L10",
       "id": "controllers_vehiclescontrollertests_vehiclescontrollertests",
-      "community": 78,
+      "community": 79,
       "norm_label": "vehiclescontrollertests"
     },
     {
@@ -6345,7 +6390,7 @@
       "source_file": "tests/SofiaTransport.Api.Tests/Controllers/VehiclesControllerTests.cs",
       "source_location": "L21",
       "id": "controllers_vehiclescontrollertests_vehiclescontrollertests_getlive_returnsvehicleswithoutfilter",
-      "community": 78,
+      "community": 79,
       "norm_label": ".getlive_returnsvehicleswithoutfilter()"
     },
     {
@@ -6354,7 +6399,7 @@
       "source_file": "tests/SofiaTransport.Api.Tests/Controllers/VehiclesControllerTests.cs",
       "source_location": "L44",
       "id": "controllers_vehiclescontrollertests_vehiclescontrollertests_getlive_passesrouteidfilter",
-      "community": 78,
+      "community": 79,
       "norm_label": ".getlive_passesrouteidfilter()"
     },
     {
@@ -6408,7 +6453,7 @@
       "source_file": "tests/SofiaTransport.Api.Tests/Middleware/SecurityHeadersMiddlewareTests.cs",
       "source_location": "L1",
       "id": "tests_sofiatransport_api_tests_middleware_securityheadersmiddlewaretests_cs",
-      "community": 79,
+      "community": 80,
       "norm_label": "securityheadersmiddlewaretests.cs"
     },
     {
@@ -6417,7 +6462,7 @@
       "source_file": "tests/SofiaTransport.Api.Tests/Middleware/SecurityHeadersMiddlewareTests.cs",
       "source_location": "L7",
       "id": "middleware_securityheadersmiddlewaretests_securityheadersmiddlewaretests",
-      "community": 79,
+      "community": 80,
       "norm_label": "securityheadersmiddlewaretests"
     },
     {
@@ -6426,7 +6471,7 @@
       "source_file": "tests/SofiaTransport.Api.Tests/Middleware/SecurityHeadersMiddlewareTests.cs",
       "source_location": "L9",
       "id": "middleware_securityheadersmiddlewaretests_securityheadersmiddlewaretests_invokeasync_setsallfivesecurityheaders",
-      "community": 79,
+      "community": 80,
       "norm_label": ".invokeasync_setsallfivesecurityheaders()"
     },
     {
@@ -6435,7 +6480,7 @@
       "source_file": "tests/SofiaTransport.Api.Tests/Middleware/SecurityHeadersMiddlewareTests.cs",
       "source_location": "L37",
       "id": "middleware_securityheadersmiddlewaretests_securityheadersmiddlewaretests_invokeasync_callsnextdelegate",
-      "community": 79,
+      "community": 80,
       "norm_label": ".invokeasync_callsnextdelegate()"
     },
     {
@@ -6444,7 +6489,7 @@
       "source_file": "tests/SofiaTransport.Api.Tests/obj/Debug/net10.0/SofiaTransport.Api.Tests.AssemblyInfo.cs",
       "source_location": "L1",
       "id": "tests_sofiatransport_api_tests_obj_debug_net10_0_sofiatransport_api_tests_assemblyinfo_cs",
-      "community": 164,
+      "community": 166,
       "norm_label": "sofiatransport.api.tests.assemblyinfo.cs"
     },
     {
@@ -6453,7 +6498,7 @@
       "source_file": "tests/SofiaTransport.Api.Tests/obj/Debug/net10.0/SofiaTransport.Api.Tests.GlobalUsings.g.cs",
       "source_location": "L1",
       "id": "tests_sofiatransport_api_tests_obj_debug_net10_0_sofiatransport_api_tests_globalusings_g_cs",
-      "community": 165,
+      "community": 167,
       "norm_label": "sofiatransport.api.tests.globalusings.g.cs"
     },
     {
@@ -6615,7 +6660,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Analytics/GetSystemOverviewHandlerTests.cs",
       "source_location": "L1",
       "id": "tests_sofiatransport_application_tests_analytics_getsystemoverviewhandlertests_cs",
-      "community": 80,
+      "community": 81,
       "norm_label": "getsystemoverviewhandlertests.cs"
     },
     {
@@ -6624,7 +6669,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Analytics/GetSystemOverviewHandlerTests.cs",
       "source_location": "L10",
       "id": "analytics_getsystemoverviewhandlertests_getsystemoverviewhandlertests",
-      "community": 80,
+      "community": 81,
       "norm_label": "getsystemoverviewhandlertests"
     },
     {
@@ -6633,7 +6678,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Analytics/GetSystemOverviewHandlerTests.cs",
       "source_location": "L12",
       "id": "analytics_getsystemoverviewhandlertests_getsystemoverviewhandlertests_handle_returnsoverview",
-      "community": 80,
+      "community": 81,
       "norm_label": ".handle_returnsoverview()"
     },
     {
@@ -6642,7 +6687,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Analytics/GetSystemOverviewHandlerTests.cs",
       "source_location": "L66",
       "id": "analytics_getsystemoverviewhandlertests_getsystemoverviewhandlertests_handle_novehicles_returnszerocount",
-      "community": 80,
+      "community": 81,
       "norm_label": ".handle_novehicles_returnszerocount()"
     },
     {
@@ -6651,7 +6696,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/obj/Debug/net10.0/SofiaTransport.Application.Tests.AssemblyInfo.cs",
       "source_location": "L1",
       "id": "tests_sofiatransport_application_tests_obj_debug_net10_0_sofiatransport_application_tests_assemblyinfo_cs",
-      "community": 166,
+      "community": 168,
       "norm_label": "sofiatransport.application.tests.assemblyinfo.cs"
     },
     {
@@ -6660,7 +6705,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/obj/Debug/net10.0/SofiaTransport.Application.Tests.GlobalUsings.g.cs",
       "source_location": "L1",
       "id": "tests_sofiatransport_application_tests_obj_debug_net10_0_sofiatransport_application_tests_globalusings_g_cs",
-      "community": 167,
+      "community": 169,
       "norm_label": "sofiatransport.application.tests.globalusings.g.cs"
     },
     {
@@ -6669,7 +6714,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Predictions/PredictDelayHandlerTests.cs",
       "source_location": "L1",
       "id": "tests_sofiatransport_application_tests_predictions_predictdelayhandlertests_cs",
-      "community": 81,
+      "community": 82,
       "norm_label": "predictdelayhandlertests.cs"
     },
     {
@@ -6678,7 +6723,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Predictions/PredictDelayHandlerTests.cs",
       "source_location": "L8",
       "id": "predictions_predictdelayhandlertests_predictdelayhandlertests",
-      "community": 81,
+      "community": 82,
       "norm_label": "predictdelayhandlertests"
     },
     {
@@ -6687,7 +6732,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Predictions/PredictDelayHandlerTests.cs",
       "source_location": "L10",
       "id": "predictions_predictdelayhandlertests_predictdelayhandlertests_handle_delegatestomlservice_returnsresponse",
-      "community": 81,
+      "community": 82,
       "norm_label": ".handle_delegatestomlservice_returnsresponse()"
     },
     {
@@ -6696,7 +6741,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Predictions/PredictDelayHandlerTests.cs",
       "source_location": "L42",
       "id": "predictions_predictdelayhandlertests_predictdelayhandlertests_handle_passesallparameterscorrectly",
-      "community": 81,
+      "community": 82,
       "norm_label": ".handle_passesallparameterscorrectly()"
     },
     {
@@ -6705,7 +6750,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Predictions/PredictTravelTimeHandlerTests.cs",
       "source_location": "L1",
       "id": "tests_sofiatransport_application_tests_predictions_predicttraveltimehandlertests_cs",
-      "community": 82,
+      "community": 83,
       "norm_label": "predicttraveltimehandlertests.cs"
     },
     {
@@ -6714,7 +6759,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Predictions/PredictTravelTimeHandlerTests.cs",
       "source_location": "L10",
       "id": "predictions_predicttraveltimehandlertests_predicttraveltimehandlertests",
-      "community": 82,
+      "community": 83,
       "norm_label": "predicttraveltimehandlertests"
     },
     {
@@ -6723,7 +6768,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Predictions/PredictTravelTimeHandlerTests.cs",
       "source_location": "L12",
       "id": "predictions_predicttraveltimehandlertests_predicttraveltimehandlertests_handle_withmatchingtrips_returnsheuristicprediction",
-      "community": 82,
+      "community": 83,
       "norm_label": ".handle_withmatchingtrips_returnsheuristicprediction()"
     },
     {
@@ -6732,7 +6777,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Predictions/PredictTravelTimeHandlerTests.cs",
       "source_location": "L57",
       "id": "predictions_predicttraveltimehandlertests_predicttraveltimehandlertests_handle_nomatchingtrips_returnszeroprediction",
-      "community": 82,
+      "community": 83,
       "norm_label": ".handle_nomatchingtrips_returnszeroprediction()"
     },
     {
@@ -6894,7 +6939,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Routes/GetRoutesHandlerTests.cs",
       "source_location": "L1",
       "id": "tests_sofiatransport_application_tests_routes_getrouteshandlertests_cs",
-      "community": 83,
+      "community": 84,
       "norm_label": "getrouteshandlertests.cs"
     },
     {
@@ -6903,7 +6948,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Routes/GetRoutesHandlerTests.cs",
       "source_location": "L10",
       "id": "routes_getrouteshandlertests_getrouteshandlertests",
-      "community": 83,
+      "community": 84,
       "norm_label": "getrouteshandlertests"
     },
     {
@@ -6912,7 +6957,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Routes/GetRoutesHandlerTests.cs",
       "source_location": "L12",
       "id": "routes_getrouteshandlertests_getrouteshandlertests_handle_returnsallroutes",
-      "community": 83,
+      "community": 84,
       "norm_label": ".handle_returnsallroutes()"
     },
     {
@@ -6921,7 +6966,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Routes/GetRoutesHandlerTests.cs",
       "source_location": "L32",
       "id": "routes_getrouteshandlertests_getrouteshandlertests_handle_emptyrepository_returnsemptylist",
-      "community": 83,
+      "community": 84,
       "norm_label": ".handle_emptyrepository_returnsemptylist()"
     },
     {
@@ -6930,7 +6975,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Stops/GetNearbyStopsHandlerTests.cs",
       "source_location": "L1",
       "id": "tests_sofiatransport_application_tests_stops_getnearbystopshandlertests_cs",
-      "community": 84,
+      "community": 85,
       "norm_label": "getnearbystopshandlertests.cs"
     },
     {
@@ -6939,7 +6984,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Stops/GetNearbyStopsHandlerTests.cs",
       "source_location": "L10",
       "id": "stops_getnearbystopshandlertests_getnearbystopshandlertests",
-      "community": 84,
+      "community": 85,
       "norm_label": "getnearbystopshandlertests"
     },
     {
@@ -6948,7 +6993,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Stops/GetNearbyStopsHandlerTests.cs",
       "source_location": "L12",
       "id": "stops_getnearbystopshandlertests_getnearbystopshandlertests_handle_returnsnearbystops",
-      "community": 84,
+      "community": 85,
       "norm_label": ".handle_returnsnearbystops()"
     },
     {
@@ -6957,7 +7002,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Stops/GetNearbyStopsHandlerTests.cs",
       "source_location": "L36",
       "id": "stops_getnearbystopshandlertests_getnearbystopshandlertests_handle_nonearbystops_returnsemptylist",
-      "community": 84,
+      "community": 85,
       "norm_label": ".handle_nonearbystops_returnsemptylist()"
     },
     {
@@ -6966,7 +7011,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Stops/GetPredictedArrivalsHandlerTests.cs",
       "source_location": "L1",
       "id": "tests_sofiatransport_application_tests_stops_getpredictedarrivalshandlertests_cs",
-      "community": 85,
+      "community": 86,
       "norm_label": "getpredictedarrivalshandlertests.cs"
     },
     {
@@ -6975,7 +7020,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Stops/GetPredictedArrivalsHandlerTests.cs",
       "source_location": "L11",
       "id": "stops_getpredictedarrivalshandlertests_getpredictedarrivalshandlertests",
-      "community": 85,
+      "community": 86,
       "norm_label": "getpredictedarrivalshandlertests"
     },
     {
@@ -6984,7 +7029,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Stops/GetPredictedArrivalsHandlerTests.cs",
       "source_location": "L13",
       "id": "stops_getpredictedarrivalshandlertests_getpredictedarrivalshandlertests_handle_returnspredictedarrivals",
-      "community": 85,
+      "community": 86,
       "norm_label": ".handle_returnspredictedarrivals()"
     },
     {
@@ -6993,7 +7038,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Stops/GetPredictedArrivalsHandlerTests.cs",
       "source_location": "L53",
       "id": "stops_getpredictedarrivalshandlertests_getpredictedarrivalshandlertests_handle_noupcomingstoptimes_returnsemptylist",
-      "community": 85,
+      "community": 86,
       "norm_label": ".handle_noupcomingstoptimes_returnsemptylist()"
     },
     {
@@ -7047,7 +7092,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Stops/GetStopsHandlerTests.cs",
       "source_location": "L1",
       "id": "tests_sofiatransport_application_tests_stops_getstopshandlertests_cs",
-      "community": 97,
+      "community": 98,
       "norm_label": "getstopshandlertests.cs"
     },
     {
@@ -7056,7 +7101,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Stops/GetStopsHandlerTests.cs",
       "source_location": "L10",
       "id": "stops_getstopshandlertests_getstopshandlertests",
-      "community": 97,
+      "community": 98,
       "norm_label": "getstopshandlertests"
     },
     {
@@ -7065,7 +7110,7 @@
       "source_file": "tests/SofiaTransport.Application.Tests/Stops/GetStopsHandlerTests.cs",
       "source_location": "L12",
       "id": "stops_getstopshandlertests_getstopshandlertests_handle_returnsallstops",
-      "community": 97,
+      "community": 98,
       "norm_label": ".handle_returnsallstops()"
     },
     {
@@ -7731,7 +7776,7 @@
       "source_file": "tests/SofiaTransport.Domain.Tests/obj/Debug/net10.0/SofiaTransport.Domain.Tests.AssemblyInfo.cs",
       "source_location": "L1",
       "id": "tests_sofiatransport_domain_tests_obj_debug_net10_0_sofiatransport_domain_tests_assemblyinfo_cs",
-      "community": 168,
+      "community": 170,
       "norm_label": "sofiatransport.domain.tests.assemblyinfo.cs"
     },
     {
@@ -7740,7 +7785,7 @@
       "source_file": "tests/SofiaTransport.Domain.Tests/obj/Debug/net10.0/SofiaTransport.Domain.Tests.GlobalUsings.g.cs",
       "source_location": "L1",
       "id": "tests_sofiatransport_domain_tests_obj_debug_net10_0_sofiatransport_domain_tests_globalusings_g_cs",
-      "community": 169,
+      "community": 171,
       "norm_label": "sofiatransport.domain.tests.globalusings.g.cs"
     },
     {
@@ -8054,7 +8099,7 @@
       "file_type": "rationale",
       "source_file": "ml/predict.py",
       "source_location": "L59",
-      "community": 170,
+      "community": 172,
       "norm_label": "validate that a model file path is within model_dir (prevent path traversal).",
       "id": "ml_predict_rationale_59"
     },
@@ -8063,7 +8108,7 @@
       "file_type": "rationale",
       "source_file": "ml/predict.py",
       "source_location": "L68",
-      "community": 171,
+      "community": 173,
       "norm_label": "find the latest versioned model file in model_dir.      strategy:     1. read mo",
       "id": "ml_predict_rationale_68"
     },
@@ -8072,7 +8117,7 @@
       "file_type": "rationale",
       "source_file": "ml/predict.py",
       "source_location": "L115",
-      "community": 172,
+      "community": 174,
       "norm_label": "load the latest model and metadata into module-level globals.",
       "id": "ml_predict_rationale_115"
     },
@@ -8081,7 +8126,7 @@
       "file_type": "rationale",
       "source_file": "ml/predict.py",
       "source_location": "L153",
-      "community": 173,
+      "community": 175,
       "norm_label": "get or create a threaded connection pool.",
       "id": "ml_predict_rationale_153"
     },
@@ -8090,7 +8135,7 @@
       "file_type": "rationale",
       "source_file": "ml/predict.py",
       "source_location": "L171",
-      "community": 174,
+      "community": 176,
       "norm_label": "query postgresql for the 7-day rolling average delay for a route+hour.      retu",
       "id": "ml_predict_rationale_171"
     },
@@ -8099,7 +8144,7 @@
       "file_type": "rationale",
       "source_file": "ml/train.py",
       "source_location": "L272",
-      "community": 175,
+      "community": 177,
       "norm_label": "remove old .joblib model files, keeping the *keep* most recent.",
       "id": "ml_train_rationale_272"
     }
@@ -8265,7 +8310,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "backend/SofiaTransport.Api/Controllers/AnalyticsController.cs",
-      "source_location": "L33",
+      "source_location": "L34",
       "weight": 1.0,
       "_src": "controllers_analyticscontroller_analyticscontroller",
       "_tgt": "controllers_analyticscontroller_analyticscontroller_getreliabilityranking",
@@ -8277,7 +8322,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "backend/SofiaTransport.Api/Controllers/AnalyticsController.cs",
-      "source_location": "L41",
+      "source_location": "L43",
       "weight": 1.0,
       "_src": "controllers_analyticscontroller_analyticscontroller",
       "_tgt": "controllers_analyticscontroller_analyticscontroller_getpeakhours",
@@ -8361,7 +8406,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "backend/SofiaTransport.Api/Controllers/PredictionsController.cs",
-      "source_location": "L42",
+      "source_location": "L43",
       "weight": 1.0,
       "_src": "controllers_predictionscontroller_predictionscontroller",
       "_tgt": "controllers_predictionscontroller_predictionscontroller_predicttraveltime",
@@ -8397,7 +8442,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "backend/SofiaTransport.Api/Controllers/RoutesController.cs",
-      "source_location": "L27",
+      "source_location": "L28",
       "weight": 1.0,
       "_src": "controllers_routescontroller_routescontroller",
       "_tgt": "controllers_routescontroller_routescontroller_getallshapes",
@@ -8409,7 +8454,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "backend/SofiaTransport.Api/Controllers/RoutesController.cs",
-      "source_location": "L35",
+      "source_location": "L36",
       "weight": 1.0,
       "_src": "controllers_routescontroller_routescontroller",
       "_tgt": "controllers_routescontroller_routescontroller_getbyid",
@@ -8421,7 +8466,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "backend/SofiaTransport.Api/Controllers/RoutesController.cs",
-      "source_location": "L44",
+      "source_location": "L46",
       "weight": 1.0,
       "_src": "controllers_routescontroller_routescontroller",
       "_tgt": "controllers_routescontroller_routescontroller_getshape",
@@ -8433,7 +8478,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "backend/SofiaTransport.Api/Controllers/RoutesController.cs",
-      "source_location": "L53",
+      "source_location": "L55",
       "weight": 1.0,
       "_src": "controllers_routescontroller_routescontroller",
       "_tgt": "controllers_routescontroller_routescontroller_getreliability",
@@ -8445,7 +8490,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "backend/SofiaTransport.Api/Controllers/RoutesController.cs",
-      "source_location": "L62",
+      "source_location": "L64",
       "weight": 1.0,
       "_src": "controllers_routescontroller_routescontroller",
       "_tgt": "controllers_routescontroller_routescontroller_getreliabilityhistory",
@@ -8457,7 +8502,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "backend/SofiaTransport.Api/Controllers/RoutesController.cs",
-      "source_location": "L70",
+      "source_location": "L73",
       "weight": 1.0,
       "_src": "controllers_routescontroller_routescontroller",
       "_tgt": "controllers_routescontroller_routescontroller_getdelaypattern",
@@ -8505,7 +8550,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "backend/SofiaTransport.Api/Controllers/StopsController.cs",
-      "source_location": "L33",
+      "source_location": "L34",
       "weight": 1.0,
       "_src": "controllers_stopscontroller_stopscontroller",
       "_tgt": "controllers_stopscontroller_stopscontroller_getbyid",
@@ -8517,7 +8562,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "backend/SofiaTransport.Api/Controllers/StopsController.cs",
-      "source_location": "L42",
+      "source_location": "L44",
       "weight": 1.0,
       "_src": "controllers_stopscontroller_stopscontroller",
       "_tgt": "controllers_stopscontroller_stopscontroller_getcongestion",
@@ -8529,7 +8574,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "backend/SofiaTransport.Api/Controllers/StopsController.cs",
-      "source_location": "L50",
+      "source_location": "L53",
       "weight": 1.0,
       "_src": "controllers_stopscontroller_stopscontroller",
       "_tgt": "controllers_stopscontroller_stopscontroller_getpredictedarrivals",
@@ -11349,7 +11394,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/SofiaTransport.Infrastructure/DependencyInjection/InfrastructureServiceRegistration.cs",
-      "source_location": "L18",
+      "source_location": "L19",
       "weight": 1.0,
       "_src": "backend_sofiatransport_infrastructure_dependencyinjection_infrastructureserviceregistration_cs",
       "_tgt": "dependencyinjection_infrastructureserviceregistration_infrastructureserviceregistration",
@@ -11361,7 +11406,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "backend/SofiaTransport.Infrastructure/DependencyInjection/InfrastructureServiceRegistration.cs",
-      "source_location": "L20",
+      "source_location": "L21",
       "weight": 1.0,
       "_src": "dependencyinjection_infrastructureserviceregistration_infrastructureserviceregistration",
       "_tgt": "dependencyinjection_infrastructureserviceregistration_infrastructureserviceregistration_addinfrastructure",
@@ -13761,12 +13806,12 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/App.tsx",
-      "source_location": "L27",
+      "source_location": "L29",
       "weight": 1.0,
       "_src": "frontend_src_app_tsx",
-      "_tgt": "src_app_darkmoderoot",
+      "_tgt": "src_app_usedarkmodeclass",
       "source": "frontend_src_app_tsx",
-      "target": "src_app_darkmoderoot",
+      "target": "src_app_usedarkmodeclass",
       "confidence_score": 1.0
     },
     {
@@ -13780,6 +13825,30 @@
       "source": "frontend_src_app_tsx",
       "target": "frontend_src_main_tsx",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/AnimatedStat.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_src": "frontend_src_components_animatedstat_tsx",
+      "_tgt": "components_animatedstat_animatedstat",
+      "source": "frontend_src_components_animatedstat_tsx",
+      "target": "components_animatedstat_animatedstat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/components/AnimatedStat.tsx",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_src": "components_animatedstat_animatedstat",
+      "_tgt": "hooks_usecountup_usecountup",
+      "source": "components_animatedstat_animatedstat",
+      "target": "hooks_usecountup_usecountup"
     },
     {
       "relation": "contains",
@@ -13845,7 +13914,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/PredictPanel.tsx",
-      "source_location": "L15",
+      "source_location": "L16",
       "weight": 1.0,
       "_src": "frontend_src_components_predictpanel_tsx",
       "_tgt": "components_predictpanel_predictpanel",
@@ -14031,6 +14100,18 @@
       "_tgt": "hooks_useauth_uselogout",
       "source": "frontend_src_hooks_useauth_ts",
       "target": "hooks_useauth_uselogout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/hooks/useCountUp.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_src": "frontend_src_hooks_usecountup_ts",
+      "_tgt": "hooks_usecountup_usecountup",
+      "source": "frontend_src_hooks_usecountup_ts",
+      "target": "hooks_usecountup_usecountup",
       "confidence_score": 1.0
     },
     {

@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { Map, LayoutDashboard, Bus, MapPin, TrendingUp, User, LogOut, X } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 import { useLogout } from '../hooks/useAuth';
+import { Button } from './ui/button';
 
 const navItems = [
   { to: '/map', label: 'Live Map', icon: Map },
@@ -28,13 +29,15 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           <p className="text-xs text-slate-500">Sofia Transport Intelligence</p>
         </div>
         {/* Close button — visible only on mobile/tablet */}
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={onClose}
-          className="lg:hidden flex items-center justify-center w-8 h-8 rounded-md text-slate-500 hover:bg-slate-100"
+          className="lg:hidden"
           aria-label="Close menu"
         >
           <X className="w-5 h-5" />
-        </button>
+        </Button>
       </div>
       <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
         {navItems.map(({ to, label, icon: Icon }) => (

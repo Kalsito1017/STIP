@@ -24,6 +24,7 @@ public class StopsController : ControllerBase
 
     [HttpGet("nearby")]
     [ProducesResponseType(typeof(IReadOnlyList<StopDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IReadOnlyList<StopDto>>> GetNearby([FromQuery] double lat, [FromQuery] double lon, [FromQuery] double radiusKm = 1.0)
     {
         var stops = await _mediator.Send(new GetNearbyStopsQuery(lat, lon, radiusKm));
@@ -32,6 +33,7 @@ public class StopsController : ControllerBase
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(StopDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<StopDto>> GetById(string id)
     {
@@ -41,6 +43,7 @@ public class StopsController : ControllerBase
 
     [HttpGet("{id}/congestion")]
     [ProducesResponseType(typeof(IReadOnlyList<StopCongestionDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IReadOnlyList<StopCongestionDto>>> GetCongestion(string id, [FromQuery] DateTime? date)
     {
         var congestion = await _mediator.Send(new GetStopCongestionQuery(id, date));
@@ -49,6 +52,7 @@ public class StopsController : ControllerBase
 
     [HttpGet("{id}/predicted-arrivals")]
     [ProducesResponseType(typeof(IReadOnlyList<PredictedArrivalDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IReadOnlyList<PredictedArrivalDto>>> GetPredictedArrivals(string id)
     {
         var arrivals = await _mediator.Send(new GetPredictedArrivalsQuery(id));

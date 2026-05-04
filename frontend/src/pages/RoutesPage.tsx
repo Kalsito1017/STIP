@@ -3,14 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useRoutes } from '../hooks/useRoutes';
 import { ErrorAlert } from '../components/ErrorAlert';
 import { SkeletonCard } from '../components/Skeleton';
+import { RouteBadge } from '../components/RouteBadge';
+import { Input } from '../components/ui/input';
+import { TransitTypeBadgeClass, TransitTypeName } from '../constants/transit';
 
-const typeLabels: Record<number, string> = { 0: 'Tram', 1: 'Metro', 3: 'Bus', 11: 'Trolley' };
-const typeColors: Record<number, string> = {
-  0: 'bg-amber-100 text-amber-800',
-  1: 'bg-blue-100 text-blue-800',
-  3: 'bg-green-100 text-green-800',
-  11: 'bg-purple-100 text-purple-800',
-};
+const typeLabels = TransitTypeName;
+const typeColors = TransitTypeBadgeClass;
 
 interface Route {
   routeId: string;
@@ -63,13 +61,13 @@ export function RoutesPage() {
       <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Routes</h1>
 
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-        <input
+        <Input
           type="text"
           placeholder="Search routes\u2026"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 text-sm border border-slate-300 rounded-md px-3 py-1.5 bg-white"
           aria-label="Search routes by name"
+          className="flex-1"
         />
         <select
           value={typeFilter ?? ''}
@@ -98,9 +96,7 @@ export function RoutesPage() {
             >
               <div className="flex items-center justify-between mb-1 gap-2">
                 <span className="font-bold text-base sm:text-lg text-slate-900 truncate">{r.shortName}</span>
-                <span className={`text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${typeColors[r.type] ?? 'bg-slate-100 text-slate-700'}`}>
-                  {typeLabels[r.type] ?? 'Unknown'}
-                </span>
+                <RouteBadge type={r.type} />
               </div>
               <p className="text-xs sm:text-sm text-slate-500 line-clamp-2">{r.longName ?? '\u2014'}</p>
             </button>

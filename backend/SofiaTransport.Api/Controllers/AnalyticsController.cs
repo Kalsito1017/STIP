@@ -24,6 +24,7 @@ public class AnalyticsController : ControllerBase
 
     [HttpGet("heatmap/delays")]
     [ProducesResponseType(typeof(IReadOnlyList<HeatmapPointDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IReadOnlyList<HeatmapPointDto>>> GetDelayHeatmap([FromQuery] DateTime? from, [FromQuery] DateTime? to)
     {
         var heatmap = await _mediator.Send(new GetDelayHeatmapQuery(from, to));
@@ -32,6 +33,7 @@ public class AnalyticsController : ControllerBase
 
     [HttpGet("reliability/ranking")]
     [ProducesResponseType(typeof(IReadOnlyList<ReliabilityRankingDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IReadOnlyList<ReliabilityRankingDto>>> GetReliabilityRanking([FromQuery] int top = 10, [FromQuery] bool best = true)
     {
         var ranking = await _mediator.Send(new GetReliabilityRankingQuery(top, best));

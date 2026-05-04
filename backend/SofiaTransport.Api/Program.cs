@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using Serilog;
 using SofiaTransport.Api.DependencyInjection;
 using SofiaTransport.Api.Middleware;
@@ -37,6 +38,10 @@ try
             }
             catch (Exception ex) when (i < 9)
             {
+                // Tables already exist from schema.sql initdb — migration is not required
+                if (ex is PostgresException { SqlState: "42P07" } || (ex.InnerException is PostgresException { SqlState: "42P07" }))
+                    break;
+
                 var delay = TimeSpan.FromSeconds(Math.Pow(2, i));
                 Log.Warning(ex, "Migration attempt {Attempt} failed, retrying in {Delay}s", i + 1, delay.TotalSeconds);
                 await Task.Delay(delay);

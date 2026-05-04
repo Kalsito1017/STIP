@@ -1,13 +1,17 @@
-import { useState, type FormEvent } from 'react';
+import { useState, useRef, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { UserPlus, Mail, Lock, User } from 'lucide-react';
+import { UserPlus, Mail, Lock, User, MailCheck, ArrowRight, Pencil } from 'lucide-react';
 import { useRegister } from '../hooks/useAuth';
+import { Input } from '../components/ui/input';
+import { Button } from '../components/ui/button';
+import { Card, CardContent } from '../components/ui/card';
 import type { AxiosError } from 'axios';
 
 export function RegisterPage() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const emailInputRef = useRef<HTMLInputElement>(null);
   const { mutate, isPending, error } = useRegister();
 
   const handleSubmit = (e: FormEvent) => {
@@ -17,9 +21,18 @@ export function RegisterPage() {
 
   const serverError =
     error instanceof Error
-      ? ((error as AxiosError<{ message?: string }>).response?.data?.message
+      ? ((error as AxiosError<{ error?: string; details?: string[] }>).response?.data?.details?.join?.(', ')
+        ?? (error as AxiosError<{ error?: string }>).response?.data?.error
         ?? (error as AxiosError).message)
       : null;
+
+  const isEmailTaken = serverError?.toLowerCase().includes('already exists');
+
+  const handleTryAnother = () => {
+    setEmail('');
+    setPassword('');
+    emailInputRef.current?.focus();
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 sm:p-6">
@@ -29,88 +42,134 @@ export function RegisterPage() {
           <p className="text-xs sm:text-sm text-slate-500 mt-1">Sofia Transport Intelligence</p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-4 sm:p-6">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="fullName" className="block text-sm font-medium text-slate-700 mb-1">
-                Full Name
-              </label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  id="fullName"
-                  type="text"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  required
-                  autoComplete="name"
-                  placeholder="Ivan Ivanov"
-                  className="w-full pl-10 pr-3 py-2 sm:py-2.5 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                />
+        <Card>
+          <CardContent className="p-4 sm:p-6">
+          {isEmailTaken ? (
+            <div className="space-y-4">
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 flex items-center justify-center rounded-full bg-amber-100 text-amber-600 flex-shrink-0">
+                    <MailCheck className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-amber-900">
+                      Account already exists
+                    </p>
+                    <p className="text-sm text-amber-700 mt-0.5 truncate">
+                      {email}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <Link
+                  to={`/login?email=${encodeURIComponent(email)}`}
+                  className="w-full"
+                >
+                  <Button className="w-full">
+                    Log in instead
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleTryAnother}
+                >
+                  <Pencil className="w-4 h-4" />
+                  Try another email
+                </Button>
               </div>
             </div>
-
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">
-                Email
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  autoComplete="email"
-                  placeholder="you@example.com"
-                  className="w-full pl-10 pr-3 py-2 sm:py-2.5 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                />
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="fullName" className="block text-sm font-medium text-slate-700 mb-1">
+                  Full Name
+                </label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 z-10" />
+                  <Input
+                    id="fullName"
+                    type="text"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    required
+                    autoComplete="name"
+                    placeholder="Ivan Ivanov"
+                    className="pl-10"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1">
-                Password
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  autoComplete="new-password"
-                  placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
-                  className="w-full pl-10 pr-3 py-2 sm:py-2.5 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                />
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">
+                  Email
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 z-10" />
+                  <Input
+                    ref={emailInputRef}
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    autoComplete="email"
+                    placeholder="you@example.com"
+                    className="pl-10"
+                  />
+                </div>
               </div>
-            </div>
 
-            {serverError && (
-              <p className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-md px-3 py-2">
-                {serverError}
-              </p>
-            )}
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1">
+                  Password
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 z-10" />
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    autoComplete="new-password"
+                    placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
+                    className="pl-10"
+                  />
+                </div>
+              </div>
 
-            <button
-              type="submit"
-              disabled={isPending}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-md font-medium text-sm transition-colors"
-            >
-              <UserPlus className="w-4 h-4" />
-              {isPending ? 'Creating account...' : 'Create Account'}
-            </button>
-          </form>
+              {serverError && !isEmailTaken && (
+                <p className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-md px-3 py-2">
+                  {serverError}
+                </p>
+              )}
 
+              <Button
+                type="submit"
+                disabled={isPending}
+                className="w-full"
+              >
+                <UserPlus className="w-4 h-4" />
+                {isPending ? 'Creating account...' : 'Create Account'}
+              </Button>
+            </form>
+          )}
+          </CardContent>
+        </Card>
+
+        {!isEmailTaken && (
           <p className="mt-5 text-center text-sm text-slate-500">
             Already have an account?{' '}
             <Link to="/login" className="text-blue-600 hover:text-blue-800 font-medium">
               Sign in
             </Link>
           </p>
-        </div>
+        )}
       </div>
     </div>
   );

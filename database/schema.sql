@@ -58,6 +58,14 @@ CREATE INDEX IF NOT EXISTS idx_vehicles_route_id ON vehicles(route_id, recorded_
 CREATE INDEX IF NOT EXISTS idx_vehicles_trip_id ON vehicles(trip_id);
 CREATE INDEX IF NOT EXISTS idx_vehicles_location ON vehicles USING GIST(location);
 
+-- Immutable helper: EXTRACT(HOUR FROM timestamptz) is STABLE (timezone-dependent).
+-- Wrapping it as an IMMUTABLE function allows use in index expressions.
+CREATE OR REPLACE FUNCTION hour_of_day(TIMESTAMPTZ)
+RETURNS INTEGER
+IMMUTABLE PARALLEL SAFE
+AS $$ SELECT EXTRACT(HOUR FROM $1 AT TIME ZONE 'UTC')::INTEGER $$
+LANGUAGE SQL;
+
 -- Delay Logs (analytics)
 -- delay_seconds is calculated by the application (GtfsPollingService) and may be NULL when delay cannot be determined
 CREATE TABLE IF NOT EXISTS delay_logs (
@@ -76,7 +84,7 @@ CREATE INDEX IF NOT EXISTS idx_delay_logs_route ON delay_logs(route_id, recorded
 CREATE INDEX IF NOT EXISTS idx_delay_logs_stop  ON delay_logs(stop_id, recorded_at DESC);
 CREATE INDEX IF NOT EXISTS idx_delay_logs_recorded_at ON delay_logs(recorded_at DESC);
 CREATE INDEX IF NOT EXISTS idx_delay_logs_vehicle ON delay_logs(vehicle_id, recorded_at DESC);
-CREATE INDEX IF NOT EXISTS idx_delay_logs_route_hour ON delay_logs(route_id, EXTRACT(HOUR FROM scheduled_arrival), recorded_at DESC) WHERE delay_seconds IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_delay_logs_route_hour ON delay_logs(route_id, hour_of_day(scheduled_arrival), recorded_at DESC) WHERE delay_seconds IS NOT NULL;
 
 -- Reliability Scores
 CREATE TABLE IF NOT EXISTS reliability_scores (

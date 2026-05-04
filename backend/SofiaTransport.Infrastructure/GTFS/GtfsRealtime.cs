@@ -19,10 +19,10 @@ public sealed class FeedMessage
                 var sub = new CodedInputStream(bytes.ToByteArray());
                 msg.Entity.Add(FeedEntity.Parse(sub));
             }
-            else input.SkipLastField();
-        }
+        else if (!ProtobufHelpers.TrySkipField(input)) break;
+    }
 
-        return msg;
+    return msg;
     }
 }
 
@@ -53,7 +53,10 @@ public sealed class FeedEntity
                     var b8 = input.ReadBytes();
                     entity.Vehicle = VehiclePosition.Parse(new CodedInputStream(b8.ToByteArray()));
                     break;
-                default: input.SkipLastField(); break;
+                default:
+                    if (!ProtobufHelpers.TrySkipField(input))
+                        return entity;
+                    break;
             }
         }
         return entity;
@@ -85,7 +88,10 @@ public sealed class VehiclePosition
                     var b8 = input.ReadBytes();
                     vp.Vehicle = VehicleDescriptor.Parse(new CodedInputStream(b8.ToByteArray()));
                     break;
-                default: input.SkipLastField(); break;
+                default:
+                    if (!ProtobufHelpers.TrySkipField(input))
+                        return vp;
+                    break;
             }
         }
         return vp;
@@ -112,7 +118,10 @@ public sealed class TripDescriptor
                 case 3: td.StartDate = input.ReadString(); break;
                 case 4: td.ScheduleRelationship = (int)input.ReadUInt64(); break;
                 case 5: td.RouteId = input.ReadString(); break;
-                default: input.SkipLastField(); break;
+                default:
+                    if (!ProtobufHelpers.TrySkipField(input))
+                        return td;
+                    break;
             }
         }
         return td;
@@ -129,7 +138,7 @@ public sealed class VehicleDescriptor
         while (input.ReadTag() is uint tag)
         {
             if (WireFormat.GetTagFieldNumber(tag) == 1) vd.Id = input.ReadString();
-            else input.SkipLastField();
+            else if (!ProtobufHelpers.TrySkipField(input)) return vd;
         }
         return vd;
     }
@@ -153,7 +162,10 @@ public sealed class Position
                 case 2: pos.Longitude = input.ReadFloat(); break;
                 case 3: pos.Bearing = input.ReadFloat(); break;
                 case 6: pos.Speed = input.ReadFloat(); break;
-                default: input.SkipLastField(); break;
+                default:
+                    if (!ProtobufHelpers.TrySkipField(input))
+                        return pos;
+                    break;
             }
         }
         return pos;
@@ -187,7 +199,10 @@ public sealed class TripUpdate
                     var b3 = input.ReadBytes();
                     tu.StopTimeUpdates.Add(StopTimeEventUpdate.Parse(new CodedInputStream(b3.ToByteArray())));
                     break;
-                default: input.SkipLastField(); break;
+                default:
+                    if (!ProtobufHelpers.TrySkipField(input))
+                        return tu;
+                    break;
             }
         }
         return tu;
@@ -220,7 +235,10 @@ public sealed class StopTimeEventUpdate
                     stu.Departure = StopTimeEvent.Parse(new CodedInputStream(b13.ToByteArray()));
                     break;
                 case 21: stu.ScheduleRelationship = (int)input.ReadUInt64(); break;
-                default: input.SkipLastField(); break;
+                default:
+                    if (!ProtobufHelpers.TrySkipField(input))
+                        return stu;
+                    break;
             }
         }
         return stu;
@@ -243,7 +261,10 @@ public sealed class StopTimeEvent
                 case 1: ste.Delay = (int)input.ReadInt64(); break;
                 case 2: ste.Time = input.ReadInt64(); break;
                 case 3: ste.Uncertainty = (int)input.ReadUInt32(); break;
-                default: input.SkipLastField(); break;
+                default:
+                    if (!ProtobufHelpers.TrySkipField(input))
+                        return ste;
+                    break;
             }
         }
         return ste;
@@ -293,7 +314,10 @@ public sealed class Alert
                 case 22:
                     alert.Severity = (int)input.ReadUInt64();
                     break;
-                default: input.SkipLastField(); break;
+                default:
+                    if (!ProtobufHelpers.TrySkipField(input))
+                        return alert;
+                    break;
             }
         }
         return alert;
@@ -314,7 +338,10 @@ public sealed class TimeRange
             {
                 case 1: tr.Start = (long)input.ReadUInt64(); break;
                 case 2: tr.End = (long)input.ReadUInt64(); break;
-                default: input.SkipLastField(); break;
+                default:
+                    if (!ProtobufHelpers.TrySkipField(input))
+                        return tr;
+                    break;
             }
         }
         return tr;
@@ -344,7 +371,10 @@ public sealed class EntitySelector
                     es.Trip = TripDescriptor.Parse(new CodedInputStream(b4.ToByteArray()));
                     break;
                 case 5: es.StopId = input.ReadString(); break;
-                default: input.SkipLastField(); break;
+                default:
+                    if (!ProtobufHelpers.TrySkipField(input))
+                        return es;
+                    break;
             }
         }
         return es;
@@ -370,14 +400,38 @@ public sealed class TranslatedText
                     {
                         if (WireFormat.GetTagFieldNumber(subTag) == 2)
                             tt.Text = sub.ReadString();
-                        else if (WireFormat.GetTagFieldNumber(subTag) == 1)
-                            tt.Language = sub.ReadString();
-                        else sub.SkipLastField();
+                    else if (WireFormat.GetTagFieldNumber(subTag) == 1)
+                        tt.Language = sub.ReadString();
+                    else if (!ProtobufHelpers.TrySkipField(sub))
+                        break;
                     }
-                    break;
-                default: input.SkipLastField(); break;
-            }
+                break;
+            default:
+                if (!ProtobufHelpers.TrySkipField(input))
+                    return tt;
+                break;
         }
-        return tt;
+    }
+    return tt;
+    }
+}
+
+internal static class ProtobufHelpers
+{
+    public static bool TrySkipField(CodedInputStream input)
+    {
+        try
+        {
+            input.SkipLastField();
+            return true;
+        }
+        catch (InvalidOperationException)
+        {
+            return false;
+        }
+        catch (InvalidProtocolBufferException)
+        {
+            return false;
+        }
     }
 }

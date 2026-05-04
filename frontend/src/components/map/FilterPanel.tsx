@@ -1,4 +1,5 @@
 import { Sun, Moon } from 'lucide-react';
+import { Button } from '../ui/button';
 
 interface RouteOption {
   routeId: string;
@@ -40,14 +41,15 @@ export function FilterPanel({
           </option>
         ))}
       </select>
-      <button
+      <Button
+        variant="outline"
+        size="icon"
         onClick={onToggleDarkMode}
-        className="text-sm border border-slate-300 rounded-md px-3 py-1.5 bg-white hover:bg-slate-50 flex-shrink-0"
         aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
         title="Toggle dark mode"
       >
         {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-      </button>
+      </Button>
     </div>
   );
 }

@@ -18,6 +18,7 @@ public class RoutesController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<RouteDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IReadOnlyList<RouteDto>>> GetAll([FromQuery] TransitType? type)
     {
         var routes = await _mediator.Send(new GetRoutesQuery(type));
@@ -34,6 +35,7 @@ public class RoutesController : ControllerBase
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(RouteDetailDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<RouteDetailDto>> GetById(string id)
     {
@@ -61,6 +63,7 @@ public class RoutesController : ControllerBase
 
     [HttpGet("{id}/reliability-history")]
     [ProducesResponseType(typeof(IReadOnlyList<ReliabilityHistoryDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IReadOnlyList<ReliabilityHistoryDto>>> GetReliabilityHistory(string id, [FromQuery] DateTime? from, [FromQuery] DateTime? to)
     {
         var history = await _mediator.Send(new GetRouteReliabilityHistoryQuery(id, from, to));
@@ -69,6 +72,7 @@ public class RoutesController : ControllerBase
 
     [HttpGet("{id}/delay-pattern")]
     [ProducesResponseType(typeof(IReadOnlyList<DelayPatternDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IReadOnlyList<DelayPatternDto>>> GetDelayPattern(string id, [FromQuery] DateTime? date)
     {
         var pattern = await _mediator.Send(new GetRouteDelayPatternQuery(id, date));

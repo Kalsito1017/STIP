@@ -15,6 +15,7 @@ import { StopLayer } from '../components/map/StopLayer';
 import { VehicleLayer } from '../components/map/VehicleLayer';
 import { DelayHeatmapLayer } from '../components/map/DelayHeatmapLayer';
 import { FilterPanel } from '../components/map/FilterPanel';
+import { Card } from '../components/ui/card';
 import type { StopFeatureCollection } from '../types/map';
 
 const SOFIA_CENTER: L.LatLngTuple = [42.6977, 23.3219];
@@ -116,7 +117,7 @@ export function LiveMapPage() {
           vehicleCount={displayVehicles.length}
         />
       </div>
-      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-sm" style={{ height: 'calc(100vh - 200px)' }}>
+      <Card className="overflow-hidden" style={{ height: 'calc(100vh - 200px)' }}>
         <MapContainer
           center={SOFIA_CENTER}
           zoom={12}
@@ -143,7 +144,7 @@ export function LiveMapPage() {
           {heatmap && heatmap.length > 0 && <DelayHeatmapLayer points={heatmap} />}
           <VehicleLayer vehicles={displayVehicles} routeNames={routeNames} />
         </MapContainer>
-      </div>
+      </Card>
     </div>
   );
 }

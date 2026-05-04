@@ -5,11 +5,12 @@ import { useRouteDelayPattern } from '../hooks/useDelays';
 import { PredictPanel } from '../components/PredictPanel';
 import { ErrorAlert } from '../components/ErrorAlert';
 import { Skeleton, SkeletonCard, SkeletonChart } from '../components/Skeleton';
+import { RouteBadge } from '../components/RouteBadge';
+import { Button } from '../components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
-
-const typeLabels: Record<number, string> = { 0: 'Tram', 1: 'Metro', 3: 'Bus', 11: 'Trolley' };
 
 export function RouteDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -30,7 +31,9 @@ export function RouteDetailPage() {
             <Skeleton className="h-16" />
             <Skeleton className="h-16" />
             <Skeleton className="h-16" />
+            </div>
           </div>
+          </Card>
         </div>
         <SkeletonCard />
       </div>
@@ -45,16 +48,20 @@ export function RouteDetailPage() {
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-800">
+      <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
         <ArrowLeft className="w-4 h-4" /> Back
-      </button>
+      </Button>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-lg p-4 sm:p-6 shadow-sm">
+        <div className="lg:col-span-2">
+          <Card className="p-4 sm:p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
             <div className="min-w-0">
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 truncate">{route.shortName}</h1>
-              <p className="text-sm text-slate-500 truncate">{route.longName ?? typeLabels[route.type] ?? 'Route'}</p>
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl sm:text-2xl font-bold text-slate-900 truncate">{route.shortName}</h1>
+                <RouteBadge type={route.type} />
+              </div>
+              <p className="text-sm text-slate-500 truncate">{route.longName ?? 'Route'}</p>
             </div>
             {score !== null && (
               <div className="text-center flex-shrink-0">
@@ -85,10 +92,13 @@ export function RouteDetailPage() {
         <PredictPanel routeId={id} />
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-5 shadow-sm">
-        <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-4">
-          <Clock className="w-4 h-4" /> Delay by Hour
-        </h3>
+      <Card className="p-4 sm:p-5">
+        <CardHeader className="p-0 mb-4">
+          <CardTitle className="flex items-center gap-2">
+            <Clock className="w-4 h-4" /> Delay by Hour
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
         {dpError ? (
           <ErrorAlert message={dpErr.message} onRetry={() => refetchDp()} />
         ) : delayPattern?.length ? (
@@ -104,7 +114,8 @@ export function RouteDetailPage() {
         ) : (
           <p className="text-slate-400 text-sm">No delay pattern data available</p>
         )}
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

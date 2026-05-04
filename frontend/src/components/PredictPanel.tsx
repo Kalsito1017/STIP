@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Zap, Loader2 } from 'lucide-react';
 import { useDelayPrediction } from '../hooks/usePrediction';
 import { useStops } from '../hooks/useStops';
+import type { AxiosError } from 'axios';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
@@ -137,7 +138,9 @@ export function PredictPanel({ routeId, stopId: initialStopId, stopSequence = 1 
 
       {prediction.error && (
         <p className="text-red-600 text-xs mt-3 bg-red-50 border border-red-200 rounded-md p-2">
-          {prediction.error.message}
+          {(prediction.error as AxiosError<{ error?: string; details?: string[] }>).response?.data?.details?.join?.(', ')
+            ?? (prediction.error as AxiosError<{ error?: string }>).response?.data?.error
+            ?? prediction.error.message}
         </p>
       )}
 

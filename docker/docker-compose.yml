@@ -7,7 +7,7 @@ services:
       POSTGRES_USER: stip_app
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:15432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ../database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
@@ -22,7 +22,7 @@ services:
     image: redis:7-alpine
     restart: unless-stopped
     ports:
-      - "127.0.0.1:6379:6379"
+      - "127.0.0.1:16379:6379"
     volumes:
       - redis_data:/data
       - ../docker/redis.conf:/usr/local/etc/redis/redis.conf
@@ -52,7 +52,7 @@ services:
       Jwt__Issuer: STIP
       Jwt__Audience: STIP
     ports:
-      - "5000:5000"
+      - "5001:5000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -95,7 +95,7 @@ services:
       DB_CONNECTION_STRING: Host=postgres;Database=sofia_transport;Username=stip_app;Password=${DB_PASSWORD}
       ML_INTERNAL_SECRET: ${ML_INTERNAL_SECRET:-}
     ports:
-      - "127.0.0.1:8000:8000"
+      - "127.0.0.1:8001:8000"
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 10s

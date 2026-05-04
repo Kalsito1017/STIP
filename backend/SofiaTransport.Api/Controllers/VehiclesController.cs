@@ -16,6 +16,7 @@ public class VehiclesController : ControllerBase
 
     [HttpGet("live")]
     [ProducesResponseType(typeof(IReadOnlyList<VehicleDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IReadOnlyList<VehicleDto>>> GetLive([FromQuery] string? routeId)
     {
         var vehicles = await _mediator.Send(new GetLiveVehiclesQuery(routeId));

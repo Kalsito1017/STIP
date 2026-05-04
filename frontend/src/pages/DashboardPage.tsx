@@ -8,6 +8,7 @@ import { useLiveVehicles } from '../hooks/useVehicles';
 import { useReliabilityRanking, usePeakHours } from '../hooks/useDelays';
 import { useAppStore } from '../store/useAppStore';
 import { useMemo } from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
@@ -99,8 +100,11 @@ export function DashboardPage() {
           <AlertBanner />
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-            <div className="bg-white rounded-lg border border-slate-200 p-4 sm:p-5 shadow-sm">
-              <h3 className="text-sm font-semibold text-slate-700 mb-4">Peak Hour Delays</h3>
+            <Card className="p-4 sm:p-5">
+              <CardHeader className="p-0 mb-4">
+                <CardTitle>Peak Hour Delays</CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
               {peakHours?.length ? (
                 <ResponsiveContainer width="100%" height={250}>
                   <BarChart data={peakHours}>
@@ -114,10 +118,14 @@ export function DashboardPage() {
               ) : (
                 <p className="text-slate-400 text-sm">No peak hour data available</p>
               )}
-            </div>
+              </CardContent>
+            </Card>
 
-            <div className="bg-white rounded-lg border border-slate-200 p-4 sm:p-5 shadow-sm">
-              <h3 className="text-sm font-semibold text-slate-700 mb-4">Reliability Ranking (Top 10)</h3>
+            <Card className="p-4 sm:p-5">
+              <CardHeader className="p-0 mb-4">
+                <CardTitle>Reliability Ranking (Top 10)</CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
               {ranking?.length ? (
                 <div className="space-y-2 max-h-[250px] overflow-y-auto">
                   {ranking.slice(0, 10).map((r: { routeId: string; shortName: string; score: number; onTimePct: number }, i: number) => (
@@ -138,7 +146,8 @@ export function DashboardPage() {
               ) : (
                 <p className="text-slate-400 text-sm">No ranking data available</p>
               )}
-            </div>
+              </CardContent>
+            </Card>
           </div>
 
           <TripUpdatesList />
