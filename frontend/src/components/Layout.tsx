@@ -8,6 +8,7 @@ import { ErrorBoundary } from './ErrorBoundary';
 import { Button } from './ui/button';
 import { useAppStore } from '../store/useAppStore';
 import { SkeletonPageCard } from './Skeleton';
+import { MobileTabBar } from './MobileTabBar';
 import { useTranslation } from 'react-i18next';
 
 const PAGE_TITLE_KEYS: Record<string, string> = {
@@ -100,7 +101,7 @@ export function Layout() {
             )}
           </div>
         </header>
-        <main className="p-4 sm:p-6">
+        <main className="p-4 sm:p-6 pb-20 lg:pb-6">
           <ErrorBoundary>
             <Suspense fallback={<SkeletonPageCard />}>
               <AnimatePresence mode="wait">
@@ -118,6 +119,8 @@ export function Layout() {
           </ErrorBoundary>
         </main>
       </div>
+
+      <MobileTabBar />
     </div>
   );
 }

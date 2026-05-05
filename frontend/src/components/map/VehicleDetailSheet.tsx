@@ -39,7 +39,7 @@ export function VehicleDetailSheet({ routeNames }: Props) {
           animate={{ y: 0 }}
           exit={{ y: '100%' }}
           transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-          className="absolute bottom-0 left-0 right-0 z-[1100] pointer-events-auto"
+          className="absolute bottom-0 left-0 right-0 z-[1100] pointer-events-auto pb-20 lg:pb-2"
         >
           <div
             className="mx-2 sm:mx-4 mb-2 sm:mb-4 bg-card border border-border rounded-2xl shadow-2xl overflow-hidden"

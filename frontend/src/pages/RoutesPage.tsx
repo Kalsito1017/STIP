@@ -1,10 +1,14 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Bus } from 'lucide-react';
+import { motion } from 'motion/react';
 import { useRoutes } from '../hooks/useRoutes';
 import { ErrorAlert } from '../components/ErrorAlert';
 import { SkeletonCard } from '../components/Skeleton';
 import { RouteBadge } from '../components/RouteBadge';
 import { Input } from '../components/ui/input';
+import { EmptyState } from '../components/EmptyState';
+import { TransitTypeRouteColor } from '../constants/transit';
 import { useTranslation } from 'react-i18next';
 
 interface Route {
@@ -44,7 +48,7 @@ export function RoutesPage() {
 
   if (isLoading) return (
     <div className="space-y-4">
-      <h1 className="text-xl sm:text-2xl font-bold text-slate-900">{t('title')}</h1>
+      <h1 className="text-xl sm:text-2xl font-bold text-foreground">{t('title')}</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
         {Array.from({ length: 9 }).map((_, i) => (
           <SkeletonCard key={i} />
@@ -57,7 +61,7 @@ export function RoutesPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl sm:text-2xl font-bold text-slate-900">{t('title')}</h1>
+      <h1 className="text-xl sm:text-2xl font-bold text-foreground">{t('title')}</h1>
 
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
         <Input
@@ -71,7 +75,7 @@ export function RoutesPage() {
         <select
           value={typeFilter ?? ''}
           onChange={(e) => setTypeFilter(e.target.value ? Number(e.target.value) : null)}
-          className="text-sm border border-slate-300 rounded-md px-3 py-1.5 bg-white"
+          className="text-sm border border-input rounded-md px-3 py-1.5 bg-card text-foreground"
           aria-label={t('filter_type')}
         >
           <option value="">{t('all_types')}</option>
@@ -82,25 +86,32 @@ export function RoutesPage() {
         </select>
       </div>
 
-      <p className="text-xs text-slate-500">{t('routes_found', { count: filtered.length })}</p>
+      <p className="text-xs text-muted-foreground">{t('routes_found', { count: filtered.length })}</p>
 
       {filtered.length === 0 ? (
-        <p className="text-slate-500">{t('no_match')}</p>
+        <EmptyState icon={Bus} title={t('no_match')} />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
-          {filtered.map((r) => (
-            <button
-              key={r.routeId}
-              onClick={() => navigate(`/routes/${r.routeId}`)}
-              className="bg-white border border-slate-200 rounded-lg p-3 sm:p-4 text-left hover:border-blue-300 hover:shadow-sm transition-all"
-            >
-              <div className="flex items-center justify-between mb-1 gap-2">
-                <span className="font-bold text-base sm:text-lg text-slate-900 truncate">{r.shortName}</span>
-                <RouteBadge type={r.type} />
-              </div>
-              <p className="text-xs sm:text-sm text-slate-500 line-clamp-2">{r.longName ?? '\u2014'}</p>
-            </button>
-          ))}
+          {filtered.map((r, i) => {
+            const accentColor = TransitTypeRouteColor[r.type] ?? '#64748b';
+            return (
+              <motion.button
+                key={r.routeId}
+                onClick={() => navigate(`/routes/${r.routeId}`)}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.02, duration: 0.2 }}
+                className="bg-card border border-border rounded-lg p-3 sm:p-4 text-left hover:shadow-md hover:-translate-y-0.5 transition-all"
+                style={{ borderLeftWidth: '4px', borderLeftColor: accentColor }}
+              >
+                <div className="flex items-center justify-between mb-1 gap-2">
+                  <span className="font-bold text-base sm:text-lg text-foreground truncate">{r.shortName}</span>
+                  <RouteBadge type={r.type} />
+                </div>
+                <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{r.longName ?? '\u2014'}</p>
+              </motion.button>
+            );
+          })}
         </div>
       )}
     </div>

@@ -26,11 +26,11 @@ export function TripUpdatesList() {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg border border-slate-200 p-4 sm:p-5 shadow-sm">
-        <h3 className="text-sm font-semibold text-slate-700 mb-4">{t('trip_updates')}</h3>
+      <div className="bg-card rounded-lg border border-border p-4 sm:p-5 shadow-sm">
+        <h3 className="text-sm font-semibold text-foreground mb-4">{t('trip_updates')}</h3>
         <div className="space-y-3">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="border-b border-slate-100 pb-2 last:border-0 space-y-1.5">
+            <div key={i} className="border-b border-border pb-2 last:border-0 space-y-1.5">
               <div className="flex items-center gap-2">
                 <Skeleton className="h-3 w-14" />
                 <Skeleton className="h-3 w-16" />
@@ -48,9 +48,9 @@ export function TripUpdatesList() {
 
   if (tripUpdates.length === 0) {
     return (
-      <div className="bg-white rounded-lg border border-slate-200 p-4 sm:p-5 shadow-sm">
-        <h3 className="text-sm font-semibold text-slate-700 mb-2">{t('trip_updates')}</h3>
-        <p className="text-slate-400 text-sm">{t('no_trip_updates')}</p>
+      <div className="bg-card rounded-lg border border-border p-4 sm:p-5 shadow-sm">
+        <h3 className="text-sm font-semibold text-foreground mb-2">{t('trip_updates')}</h3>
+        <p className="text-muted-foreground text-sm">{t('no_trip_updates')}</p>
       </div>
     );
   }
@@ -63,23 +63,23 @@ export function TripUpdatesList() {
   };
 
   return (
-    <div className="bg-white rounded-lg border border-slate-200 p-4 sm:p-5 shadow-sm">
-      <h3 className="text-sm font-semibold text-slate-700 mb-4">
-        {t('trip_updates')} <span className="text-slate-400 font-normal">({tripUpdates.length})</span>
+    <div className="bg-card rounded-lg border border-border p-4 sm:p-5 shadow-sm">
+      <h3 className="text-sm font-semibold text-foreground mb-4">
+        {t('trip_updates')} <span className="text-muted-foreground font-normal">({tripUpdates.length})</span>
       </h3>
       <div className="space-y-3 max-h-[300px] overflow-y-auto">
         {tripUpdates.slice(0, 20).map((tu) => (
-          <div key={tu.tripId} className="border-b border-slate-100 pb-2 last:border-0">
+          <div key={tu.tripId} className="border-b border-border pb-2 last:border-0">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-medium text-slate-800 text-sm">
+                <span className="font-medium text-foreground text-sm">
                   {tu.routeId ?? '\u2014'}
                 </span>
-                <span className="text-xs text-slate-400">
+                <span className="text-xs text-muted-foreground">
                   {relationshipLabels[tu.scheduleRelationship] ?? '\u2014'}
                 </span>
               </div>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-muted-foreground">
                 {t('trip')} {tu.tripId.slice(-6)}
               </span>
             </div>
@@ -87,7 +87,7 @@ export function TripUpdatesList() {
               <div className="mt-1 pl-3 space-y-0.5">
                 {tu.stopTimeUpdates.slice(0, 3).map((stu, idx) => (
                   <div key={idx} className="flex items-center gap-2 text-xs flex-wrap">
-                    <span className="text-slate-500">
+                    <span className="text-muted-foreground">
                       {t('stop')} {stu.stopSequence ?? stu.stopId ?? '?'}
                     </span>
                     <span className={`font-mono ${delayColor(stu.arrivalDelay)}`}>
@@ -96,7 +96,7 @@ export function TripUpdatesList() {
                   </div>
                 ))}
                 {tu.stopTimeUpdates.length > 3 && (
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs text-muted-foreground">
                     {t('more_stops', { count: tu.stopTimeUpdates.length - 3 })}
                   </span>
                 )}

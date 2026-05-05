@@ -4,6 +4,7 @@ import { Sun, Moon, User, LogOut, LogIn } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 import { useLogout } from '../hooks/useAuth';
 import { SearchBar } from './SearchBar';
+import { MobileTabBar } from './MobileTabBar';
 import { Button } from './ui/button';
 
 export function MapLayout() {
@@ -90,6 +91,8 @@ export function MapLayout() {
           </div>
         </div>
       </div>
+
+      <MobileTabBar />
     </div>
   );
 }

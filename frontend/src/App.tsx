@@ -51,7 +51,17 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Toaster richColors position="top-right" />
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            style: {
+              borderRadius: 'var(--radius-lg)',
+              border: '1px solid hsl(var(--border))',
+              background: 'hsl(var(--card))',
+              color: 'hsl(var(--foreground))',
+            },
+          }}
+        />
         <Routes>
           <Route element={<MapLayout />}>
             <Route index element={<LiveMapPage />} />

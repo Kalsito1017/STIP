@@ -68,6 +68,14 @@ export function VehicleLayer({ vehicles, routeNames }: Props) {
         const currentPos = existingMarker.getLatLng();
         if (currentPos.distanceTo(pos) > 0.5) {
           existingMarker.setLatLng(pos);
+          const el = existingMarker.getElement();
+          if (el) {
+            const inner = el.querySelector('div');
+            if (inner) {
+              inner.classList.add('animate-marker-pulse');
+              setTimeout(() => inner.classList.remove('animate-marker-pulse'), 600);
+            }
+          }
         }
         existingMarker.setTooltipContent(getTooltip(v, color, routeNames));
       } else {

@@ -2,7 +2,10 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStops } from '../hooks/useStops';
 import { SkeletonCard, SkeletonTable } from '../components/Skeleton';
-import { MapPin, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { MapPin, ArrowUpDown, ArrowUp, ArrowDown, Map } from 'lucide-react';
+import { useAppStore } from '../store/useAppStore';
+import { motion } from 'motion/react';
+import { EmptyState } from '../components/EmptyState';
 import { useTranslation } from 'react-i18next';
 
 interface Stop {
@@ -10,22 +13,24 @@ interface Stop {
   stopName: string;
   lat: number;
   lon: number;
+  routeCount?: number;
 }
 
 type SortKey = 'name' | 'id';
 type SortDir = 'asc' | 'desc';
 
 function SortIcon({ active, dir }: { active: boolean; dir: SortDir }) {
-  if (!active) return <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />;
+  if (!active) return <ArrowUpDown className="w-3.5 h-3.5 text-muted-foreground" />;
   return dir === 'asc'
-    ? <ArrowUp className="w-3.5 h-3.5 text-blue-600" />
-    : <ArrowDown className="w-3.5 h-3.5 text-blue-600" />;
+    ? <ArrowUp className="w-3.5 h-3.5 text-primary" />
+    : <ArrowDown className="w-3.5 h-3.5 text-primary" />;
 }
 
 export function StopsPage() {
   const { t } = useTranslation('stops');
   const { data: stops, isLoading } = useStops();
   const navigate = useNavigate();
+  const setFlyToTarget = useAppStore((s) => s.setFlyToTarget);
   const [search, setSearch] = useState('');
   const [sortKey, setSortKey] = useState<SortKey>('name');
   const [sortDir, setSortDir] = useState<SortDir>('asc');
@@ -58,7 +63,7 @@ export function StopsPage() {
 
   if (isLoading) return (
     <div className="space-y-4">
-      <h1 className="text-xl sm:text-2xl font-bold text-slate-900">{t('title')}</h1>
+      <h1 className="text-xl sm:text-2xl font-bold text-foreground">{t('title')}</h1>
       <div className="sm:hidden space-y-2">
         {Array.from({ length: 5 }).map((_, i) => (
           <SkeletonCard key={i} />
@@ -70,16 +75,9 @@ export function StopsPage() {
     </div>
   );
 
-  const handleRowKeyDown = (e: React.KeyboardEvent, stopId: string) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      navigate(`/stops/${stopId}`);
-    }
-  };
-
   return (
     <div className="space-y-4">
-      <h1 className="text-xl sm:text-2xl font-bold text-slate-900">{t('title')}</h1>
+      <h1 className="text-xl sm:text-2xl font-bold text-foreground">{t('title')}</h1>
 
       <div className="flex items-center gap-3">
         <input
@@ -87,43 +85,51 @@ export function StopsPage() {
           placeholder={t('search')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 text-sm border border-slate-300 rounded-md px-3 py-1.5 bg-white"
+          className="flex-1 text-sm border border-input rounded-md px-3 py-1.5 bg-card text-foreground placeholder:text-muted-foreground"
           aria-label={t('search_aria')}
         />
       </div>
 
-      <p className="text-xs text-slate-500">{t('stops_found', { count: filtered.length })}</p>
+      <p className="text-xs text-muted-foreground">{t('stops_found', { count: filtered.length })}</p>
 
       {filtered.length === 0 ? (
-        <p className="text-slate-500">{t('no_match')}</p>
+        <EmptyState icon={MapPin} title={t('no_match')} />
       ) : (
         <>
           <div className="sm:hidden space-y-2">
-            {filtered.map((s) => (
-              <button
+            {filtered.map((s, i) => (
+              <motion.button
                 key={s.stopId}
                 onClick={() => navigate(`/stops/${s.stopId}`)}
-                className="w-full bg-white border border-slate-200 rounded-lg p-3 text-left hover:border-blue-300 hover:shadow-sm transition-all"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.01, duration: 0.15 }}
+                className="w-full bg-card border border-border rounded-lg p-3 text-left hover:shadow-md hover:-translate-y-0.5 transition-all"
               >
                 <div className="flex items-center gap-2 mb-1">
-                  <MapPin className="w-4 h-4 text-slate-400 flex-shrink-0" />
-                  <span className="font-medium text-slate-800 truncate">{s.stopName}</span>
+                  <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
+                  <span className="font-medium text-foreground truncate">{s.stopName}</span>
                 </div>
-                <div className="flex items-center justify-between text-xs text-slate-500">
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span className="font-mono">{s.stopId}</span>
-                  <span className="font-mono">{s.lat?.toFixed(4) ?? '\u2014'}, {s.lon?.toFixed(4) ?? '\u2014'}</span>
+                  <div className="flex items-center gap-2">
+                    {s.routeCount != null && (
+                      <span className="text-xs">{s.routeCount} routes</span>
+                    )}
+                    <span className="font-mono">{s.lat?.toFixed(4) ?? '\u2014'}, {s.lon?.toFixed(4) ?? '\u2014'}</span>
+                  </div>
                 </div>
-              </button>
+              </motion.button>
             ))}
           </div>
 
-          <div className="hidden sm:block bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden">
+          <div className="hidden sm:block bg-card border border-border rounded-lg shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-slate-200 bg-slate-50">
+                  <tr className="border-b border-border bg-muted/50">
                     <th
-                      className="text-left p-3 font-medium text-slate-600 cursor-pointer hover:text-slate-900 select-none"
+                      className="text-left p-3 font-medium text-muted-foreground cursor-pointer hover:text-foreground select-none"
                       onClick={() => handleSort('name')}
                       aria-sort={sortKey === 'name' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
                     >
@@ -133,7 +139,7 @@ export function StopsPage() {
                       </div>
                     </th>
                     <th
-                      className="text-left p-3 font-medium text-slate-600 cursor-pointer hover:text-slate-900 select-none"
+                      className="text-left p-3 font-medium text-muted-foreground cursor-pointer hover:text-foreground select-none"
                       onClick={() => handleSort('id')}
                       aria-sort={sortKey === 'id' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
                     >
@@ -142,7 +148,8 @@ export function StopsPage() {
                         <SortIcon active={sortKey === 'id'} dir={sortDir} />
                       </div>
                     </th>
-                    <th className="text-right p-3 font-medium text-slate-600">{t('coordinates')}</th>
+                    <th className="text-left p-3 font-medium text-muted-foreground">{t('coordinates')}</th>
+                    <th className="p-3 w-10" />
                   </tr>
                 </thead>
                 <tbody>
@@ -153,18 +160,37 @@ export function StopsPage() {
                       role="button"
                       aria-label={t('view_details', { name: s.stopName })}
                       onClick={() => navigate(`/stops/${s.stopId}`)}
-                      onKeyDown={(e) => handleRowKeyDown(e, s.stopId)}
-                      className="border-b border-slate-100 hover:bg-blue-50 cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-400"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          navigate(`/stops/${s.stopId}`);
+                        }
+                      }}
+                      className="border-b border-border hover:bg-accent cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-ring"
                     >
                       <td className="p-3">
                         <div className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4 text-slate-400 flex-shrink-0" />
-                          <span className="font-medium text-slate-800">{s.stopName}</span>
+                          <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
+                          <span className="font-medium text-foreground">{s.stopName}</span>
                         </div>
                       </td>
-                      <td className="p-3 text-slate-500 font-mono text-xs">{s.stopId}</td>
-                      <td className="p-3 text-right text-slate-500 font-mono text-xs">
+                      <td className="p-3 text-muted-foreground font-mono text-xs">{s.stopId}</td>
+                      <td className="p-3 text-muted-foreground font-mono text-xs">
                         {s.lat?.toFixed(4) ?? '\u2014'}, {s.lon?.toFixed(4) ?? '\u2014'}
+                      </td>
+                      <td className="p-3">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setFlyToTarget({ lat: s.lat, lon: s.lon, zoom: 17 });
+                            navigate('/');
+                          }}
+                          className="p-1.5 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
+                          aria-label={`View ${s.stopName} on map`}
+                          title="View on map"
+                        >
+                          <Map className="w-4 h-4" />
+                        </button>
                       </td>
                     </tr>
                   ))}

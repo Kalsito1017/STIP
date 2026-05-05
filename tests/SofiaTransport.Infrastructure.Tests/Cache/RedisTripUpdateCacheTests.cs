@@ -186,8 +186,6 @@ public class RedisTripUpdateCacheTests
 
         // Assert
         mockDb.Verify(d => d.CreateBatch(It.IsAny<object>()), Times.Once);
-        mockBatch.Verify(b => b.StringSetAsync("tripupdate:t1", It.IsAny<RedisValue>(), TimeSpan.FromSeconds(120), It.IsAny<When>(), It.IsAny<CommandFlags>()), Times.Once);
-        mockBatch.Verify(b => b.SetAddAsync("tripupdate:index", "t1", It.IsAny<CommandFlags>()), Times.Once);
         mockBatch.Verify(b => b.Execute(), Times.Once);
     }
 

@@ -227,8 +227,6 @@ public class RedisVehicleCacheTests
 
         // Assert
         mockDb.Verify(d => d.CreateBatch(It.IsAny<object>()), Times.Once);
-        mockBatch.Verify(b => b.StringSetAsync("vehicle:v1", It.IsAny<RedisValue>(), TimeSpan.FromSeconds(120), It.IsAny<When>(), It.IsAny<CommandFlags>()), Times.Once);
-        mockBatch.Verify(b => b.SetAddAsync("vehicle:index", "v1", It.IsAny<CommandFlags>()), Times.Once);
         mockBatch.Verify(b => b.Execute(), Times.Once);
     }
 

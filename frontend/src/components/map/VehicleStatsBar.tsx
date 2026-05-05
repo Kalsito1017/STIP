@@ -54,7 +54,7 @@ export function VehicleStatsBar({ vehicles }: Props) {
   if (total === 0) return null;
 
   return (
-    <div className="absolute bottom-6 left-3 sm:left-4 z-[1000] pointer-events-none">
+    <div className="absolute bottom-20 lg:bottom-6 left-3 sm:left-4 z-[1000] pointer-events-none">
       <div className="flex flex-wrap gap-1.5">
         {typeCounts.map((tc) => (
           <div

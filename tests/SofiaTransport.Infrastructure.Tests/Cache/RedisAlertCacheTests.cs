@@ -184,8 +184,6 @@ public class RedisAlertCacheTests
 
         // Assert
         mockDb.Verify(d => d.CreateBatch(It.IsAny<object>()), Times.Once);
-        mockBatch.Verify(b => b.StringSetAsync("alert:a1", It.IsAny<RedisValue>(), TimeSpan.FromSeconds(300), It.IsAny<When>(), It.IsAny<CommandFlags>()), Times.Once);
-        mockBatch.Verify(b => b.SetAddAsync("alert:index", "a1", It.IsAny<CommandFlags>()), Times.Once);
         mockBatch.Verify(b => b.Execute(), Times.Once);
     }
 

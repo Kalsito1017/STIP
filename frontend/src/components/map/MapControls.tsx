@@ -33,7 +33,7 @@ export function MapControls({
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="absolute bottom-6 right-3 sm:right-4 z-[1000] pointer-events-auto flex flex-col gap-2">
+    <div className="absolute bottom-20 lg:bottom-6 right-3 sm:right-4 z-[1000] pointer-events-auto flex flex-col gap-2">
       <AnimatePresence>
         {expanded && (
           <motion.div
