@@ -14,47 +14,11 @@ import {
 import stipLogo from '../assets/StipLogo.jpg';
 import { useCountUp } from '../hooks/useCountUp';
 import { RouteLines } from '../components/RouteLines';
+import { useTranslation } from 'react-i18next';
 
 const COUNT_UP_DURATION = 1500;
 const COUNT_UP_STAGGER = 200;
 const INTERSECTION_THRESHOLD = 0.3;
-
-const statsConfig = [
-  { label: 'Routes', value: 160, suffix: '+' },
-  { label: 'Stops', value: 3500, suffix: '+' },
-  { label: 'Daily positions', value: 500000, suffix: '+' },
-  { label: 'Accuracy', value: 99, suffix: '%' },
-];
-
-const problemFacts = [
-  { icon: Clock, text: 'Peak-hour delays average 8–12 minutes on Sofia\u2019s busiest routes.' },
-  { icon: Route, text: 'Route 204 runs consistently late between 17:00\u201319:00 every weekday.' },
-  { icon: MapPin, text: 'Over 180,000 daily trips have no real-time arrival visibility.' },
-];
-
-const pipelineSteps = [
-  {
-    step: '01',
-    icon: Satellite,
-    title: 'Capture',
-    description: 'GTFS live data streams every 15 seconds \u2014 vehicle positions, trip updates, and service alerts flow into PostgreSQL+PostGIS.',
-    accent: 'blue',
-  },
-  {
-    step: '02',
-    icon: BrainCircuit,
-    title: 'Analyze',
-    description: 'XGBoost models train on historical delay patterns. Spatial heatmaps, peak-hour breakdowns, and route reliability scoring run continuously.',
-    accent: 'cyan',
-  },
-  {
-    step: '03',
-    icon: BarChart3,
-    title: 'Predict',
-    description: 'Real-time arrival forecasts surface on your dashboard. Per-route, per-stop, per-hour predictions \u2014 with confidence intervals.',
-    accent: 'emerald',
-  },
-];
 
 function AnimatedDarkStat({
   label,
@@ -102,9 +66,47 @@ function AnimatedDarkStat({
 }
 
 export function LandingPage() {
+  const { t } = useTranslation('landing');
+
+  const statsConfig = [
+    { label: t('stats_routes'), value: 160, suffix: '+' },
+    { label: t('stats_stops'), value: 3500, suffix: '+' },
+    { label: t('stats_daily_positions'), value: 500000, suffix: '+' },
+    { label: t('stats_accuracy'), value: 99, suffix: '%' },
+  ];
+
+  const problemFacts = [
+    { icon: Clock, text: t('problem_peak_delays') },
+    { icon: Route, text: t('problem_route_204') },
+    { icon: MapPin, text: t('problem_no_visibility') },
+  ];
+
+  const pipelineSteps = [
+    {
+      step: '01',
+      icon: Satellite,
+      title: t('pipeline_capture'),
+      description: t('pipeline_capture_desc'),
+      accent: 'blue',
+    },
+    {
+      step: '02',
+      icon: BrainCircuit,
+      title: t('pipeline_analyze'),
+      description: t('pipeline_analyze_desc'),
+      accent: 'cyan',
+    },
+    {
+      step: '03',
+      icon: BarChart3,
+      title: t('pipeline_predict'),
+      description: t('pipeline_predict_desc'),
+      accent: 'emerald',
+    },
+  ];
+
   return (
     <div className="bg-slate-950 text-slate-100">
-      {/* Hero */}
       <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-20 text-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950" />
         <RouteLines />
@@ -120,17 +122,15 @@ export function LandingPage() {
           />
 
           <h1 className="text-4xl sm:text-6xl font-bold tracking-tight">
-            <span className="text-white">See what happens</span>
+            <span className="text-white">{t('hero_title_1')}</span>
             <br />
             <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-              before it happens.
+              {t('hero_title_2')}
             </span>
           </h1>
 
           <p className="mt-5 sm:mt-6 text-base sm:text-lg text-slate-400 max-w-lg mx-auto leading-relaxed">
-            Real-time transport intelligence for Sofia. Live tracking, delay
-            prediction, and reliability scoring &mdash; powered by machine
-            learning.
+            {t('hero_subtitle')}
           </p>
 
           <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -138,21 +138,21 @@ export function LandingPage() {
               to="/login"
               className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium text-sm transition-all shadow-lg shadow-blue-600/25 hover:shadow-blue-500/30"
             >
-              Get Started
+              {t('get_started')}
               <ArrowRight className="w-4 h-4" />
             </Link>
             <a
               href="#how-it-works"
               className="inline-flex items-center gap-2 px-6 py-3 border border-slate-700 text-slate-300 hover:text-white hover:border-slate-600 rounded-lg font-medium text-sm transition-colors"
             >
-              How it works
+              {t('how_it_works')}
             </a>
           </div>
         </div>
 
         <a
           href="#challenge"
-          aria-label="Scroll to learn more"
+          aria-label={t('scroll_to_learn', { ns: 'map' })}
           className="absolute bottom-8 motion-safe:animate-bounce text-slate-600 hover:text-slate-400 transition-colors"
         >
           <svg width="20" height="12" viewBox="0 0 20 12" fill="none" aria-hidden="true">
@@ -161,7 +161,6 @@ export function LandingPage() {
         </a>
       </section>
 
-      {/* Stats Bar */}
       <section className="py-16 sm:py-20 px-4 border-t border-slate-800">
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-10">
@@ -178,15 +177,14 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Challenge */}
       <section id="challenge" className="py-16 sm:py-24 px-4 bg-slate-900/50">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-xs font-medium uppercase tracking-widest text-blue-400 mb-3">
-              The Challenge
+              {t('the_challenge')}
             </p>
             <h2 className="text-2xl sm:text-3xl font-bold text-white">
-              Sofia moves 24/7. Not everything runs on time.
+              {t('challenge_title')}
             </h2>
           </div>
 
@@ -206,22 +204,20 @@ export function LandingPage() {
 
           <div className="mt-10 text-center">
             <p className="text-slate-500 text-sm max-w-lg mx-auto">
-              Without real-time intelligence, over a million daily trips are left
-              guessing. STIP changes that.
+              {t('challenge_footer')}
             </p>
           </div>
         </div>
       </section>
 
-      {/* How It Works */}
       <section id="how-it-works" className="py-16 sm:py-24 px-4">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
             <p className="text-xs font-medium uppercase tracking-widest text-blue-400 mb-3">
-              How It Works
+              {t('how_it_works_section')}
             </p>
             <h2 className="text-2xl sm:text-3xl font-bold text-white">
-              From raw data to real-time predictions
+              {t('how_title')}
             </h2>
           </div>
 
@@ -256,7 +252,6 @@ export function LandingPage() {
             })}
           </div>
 
-          {/* Connecting line between steps (visible on sm+) */}
           <div className="hidden sm:flex items-center justify-center gap-0 mt-[-24px] translate-y-6">
             {[0, 1].map((i) => (
               <div key={i} className="w-20 h-px bg-gradient-to-r from-blue-500/30 via-cyan-500/40 to-emerald-500/30" />
@@ -265,11 +260,10 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Trust Bar */}
       <section className="py-12 px-4 border-t border-slate-800">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-4">
-            Powered by
+            {t('powered_by')}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
             <span className="inline-flex items-center gap-2 text-sm text-slate-400">
@@ -290,32 +284,31 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Footer CTA */}
       <section className="py-20 sm:py-28 px-4 bg-gradient-to-b from-slate-950 to-slate-900">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-2xl sm:text-4xl font-bold text-white">
-            Ready to see Sofia
+            {t('footer_title_1')}
             <br />
             <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-              differently?
+              {t('footer_title_2')}
             </span>
           </h2>
           <p className="mt-4 text-slate-400 max-w-md mx-auto">
-            Track every vehicle. Predict every delay. Score every route.
+            {t('footer_subtitle')}
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               to="/login"
               className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium text-sm transition-all shadow-lg shadow-blue-600/25 hover:shadow-blue-500/30"
             >
-              Get Started
+              {t('get_started')}
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               to="/register"
               className="inline-flex items-center gap-2 px-6 py-3 border border-slate-700 text-slate-300 hover:text-white hover:border-slate-600 rounded-lg font-medium text-sm transition-colors"
             >
-              Create an Account
+              {t('create_account')}
             </Link>
           </div>
         </div>

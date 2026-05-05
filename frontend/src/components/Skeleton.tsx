@@ -54,3 +54,34 @@ export function SkeletonChart({ height = 250 }: { height?: number }) {
     </div>
   );
 }
+
+export function SkeletonRankingList({ rows = 5 }: { rows?: number }) {
+  return (
+    <div className="space-y-2">
+      {Array.from({ length: rows }).map((_, i) => (
+        <div key={i} className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm">
+          <Skeleton className="w-5 sm:w-6 h-3 flex-shrink-0" />
+          <Skeleton className="w-14 sm:w-16 h-3 flex-shrink-0" />
+          <div className="flex-1 bg-slate-200 rounded-full h-2 animate-pulse" />
+          <Skeleton className="w-10 sm:w-12 h-3 flex-shrink-0" />
+          <Skeleton className="w-14 sm:w-16 h-3 flex-shrink-0" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function SkeletonPageCard() {
+  return (
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex items-center gap-3">
+        <Skeleton className="h-8 w-8 rounded-md" />
+        <Skeleton className="h-6 w-40" />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+        <Skeleton className="h-48 lg:col-span-2" />
+        <Skeleton className="h-48" />
+      </div>
+    </div>
+  );
+}

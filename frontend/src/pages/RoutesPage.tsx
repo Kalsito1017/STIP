@@ -5,9 +5,7 @@ import { ErrorAlert } from '../components/ErrorAlert';
 import { SkeletonCard } from '../components/Skeleton';
 import { RouteBadge } from '../components/RouteBadge';
 import { Input } from '../components/ui/input';
-import { TransitTypeName } from '../constants/transit';
-
-const typeLabels = TransitTypeName;
+import { useTranslation } from 'react-i18next';
 
 interface Route {
   routeId: string;
@@ -17,6 +15,8 @@ interface Route {
 }
 
 export function RoutesPage() {
+  const { t } = useTranslation('routes');
+  const { t: tTransit } = useTranslation('transit');
   const { data: routes, isLoading, isError, error, refetch } = useRoutes();
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -44,7 +44,7 @@ export function RoutesPage() {
 
   if (isLoading) return (
     <div className="space-y-4">
-      <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Routes</h1>
+      <h1 className="text-xl sm:text-2xl font-bold text-slate-900">{t('title')}</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
         {Array.from({ length: 9 }).map((_, i) => (
           <SkeletonCard key={i} />
@@ -57,34 +57,35 @@ export function RoutesPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Routes</h1>
+      <h1 className="text-xl sm:text-2xl font-bold text-slate-900">{t('title')}</h1>
 
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
         <Input
           type="text"
-          placeholder="Search routes\u2026"
+          placeholder={t('search')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          aria-label="Search routes by name"
+          aria-label={t('search_aria')}
           className="flex-1"
         />
         <select
           value={typeFilter ?? ''}
           onChange={(e) => setTypeFilter(e.target.value ? Number(e.target.value) : null)}
           className="text-sm border border-slate-300 rounded-md px-3 py-1.5 bg-white"
-          aria-label="Filter routes by transport type"
+          aria-label={t('filter_type')}
         >
-          <option value="">All types</option>
-          {Object.entries(typeLabels).map(([value, label]) => (
-            <option key={value} value={value}>{label}</option>
-          ))}
+          <option value="">{t('all_types')}</option>
+          <option value="0">{tTransit('tram')}</option>
+          <option value="1">{tTransit('metro')}</option>
+          <option value="3">{tTransit('bus')}</option>
+          <option value="11">{tTransit('trolley')}</option>
         </select>
       </div>
 
-      <p className="text-xs text-slate-500">{filtered.length} routes found</p>
+      <p className="text-xs text-slate-500">{t('routes_found', { count: filtered.length })}</p>
 
       {filtered.length === 0 ? (
-        <p className="text-slate-500">No routes match your search</p>
+        <p className="text-slate-500">{t('no_match')}</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
           {filtered.map((r) => (

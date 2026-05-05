@@ -1,35 +1,39 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, Suspense } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
 import { clsx } from 'clsx';
 import { Menu, Wifi, WifiOff } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 import { ErrorBoundary } from './ErrorBoundary';
 import { Button } from './ui/button';
 import { useAppStore } from '../store/useAppStore';
+import { SkeletonPageCard } from './Skeleton';
+import { useTranslation } from 'react-i18next';
 
-const pageTitles: Record<string, string> = {
-  '/map': 'Live Map',
-  '/dashboard': 'Dashboard',
-  '/routes': 'Routes',
-  '/stops': 'Stops',
-  '/analytics': 'Analytics',
+const PAGE_TITLE_KEYS: Record<string, string> = {
+  '/dashboard': 'layout.dashboard',
+  '/routes': 'layout.routes',
+  '/stops': 'layout.stops',
+  '/analytics': 'layout.analytics',
 };
 
-function getPageTitle(pathname: string): string {
-  if (pageTitles[pathname]) return pageTitles[pathname];
-  if (pathname.startsWith('/routes/')) return 'Route Detail';
-  if (pathname.startsWith('/stops/')) return 'Stop Detail';
-  return 'STIP';
-}
-
 export function Layout() {
+  const { t } = useTranslation();
   const location = useLocation();
   const user = useAppStore((s) => s.user);
   const connectionState = useAppStore((s) => s.connectionState);
-  const pageTitle = getPageTitle(location.pathname);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Close sidebar on route change (mobile)
+  const getPageTitle = (pathname: string): string => {
+    if (PAGE_TITLE_KEYS[pathname]) return t(PAGE_TITLE_KEYS[pathname]);
+    if (pathname.startsWith('/routes/')) return t('layout.route_detail');
+    if (pathname.startsWith('/stops/')) return t('layout.stop_detail');
+    if (pathname.startsWith('/settings')) return t('layout.settings');
+    return t('common.appName');
+  };
+
+  const pageTitle = getPageTitle(location.pathname);
+
   useEffect(() => {
     setSidebarOpen(false);
   }, [location.pathname]);
@@ -37,14 +41,13 @@ export function Layout() {
   const handleClose = useCallback(() => setSidebarOpen(false), []);
 
   const connectionLabel =
-    connectionState === 'connected' ? 'Live' :
-    connectionState === 'reconnecting' ? 'Reconnecting...' : 'Offline';
+    connectionState === 'connected' ? t('layout.connected') :
+    connectionState === 'reconnecting' ? t('layout.reconnecting') : t('layout.disconnected');
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-background">
       <Sidebar open={sidebarOpen} onClose={handleClose} />
 
-      {/* Mobile/tablet sidebar backdrop */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-20 bg-black/50 lg:hidden"
@@ -54,18 +57,18 @@ export function Layout() {
       )}
 
       <div className="lg:ml-56">
-        <header className="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
+        <header className="bg-card border-b border-border px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setSidebarOpen(true)}
               className="lg:hidden"
-              aria-label="Open menu"
+              aria-label={t('layout.open_menu')}
             >
               <Menu className="w-5 h-5" />
             </Button>
-            <h1 className="text-base sm:text-lg font-semibold text-slate-900 truncate">
+            <h1 className="text-base sm:text-lg font-semibold text-foreground truncate">
               {pageTitle}
             </h1>
           </div>
@@ -86,12 +89,12 @@ export function Layout() {
               </span>
             </div>
             {user && (
-              <span className="text-xs sm:text-sm text-slate-500 flex-shrink-0 hidden sm:inline">
+              <span className="text-xs sm:text-sm text-muted-foreground flex-shrink-0 hidden sm:inline">
                 {user.fullName}
               </span>
             )}
             {user && (
-              <span className="text-xs text-slate-500 flex-shrink-0 sm:hidden">
+              <span className="text-xs text-muted-foreground flex-shrink-0 sm:hidden">
                 {user.fullName.split(' ')[0]}
               </span>
             )}
@@ -99,7 +102,19 @@ export function Layout() {
         </header>
         <main className="p-4 sm:p-6">
           <ErrorBoundary>
-            <Outlet />
+            <Suspense fallback={<SkeletonPageCard />}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={location.pathname}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
+                >
+                  <Outlet />
+                </motion.div>
+              </AnimatePresence>
+            </Suspense>
           </ErrorBoundary>
         </main>
       </div>

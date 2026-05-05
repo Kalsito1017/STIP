@@ -1,5 +1,6 @@
 using System.Net.Http;
 using Google.Protobuf;
+using Microsoft.Extensions.Logging;
 using SofiaTransport.Application.Common.Interfaces;
 using SofiaTransport.Domain.Entities;
 
@@ -8,8 +9,13 @@ namespace SofiaTransport.Infrastructure.GTFS;
 public class TripUpdateFeedClient : ITripUpdateFeedClient
 {
     private readonly HttpClient _httpClient;
+    private readonly ILogger<TripUpdateFeedClient> _logger;
 
-    public TripUpdateFeedClient(HttpClient httpClient) => _httpClient = httpClient;
+    public TripUpdateFeedClient(HttpClient httpClient, ILogger<TripUpdateFeedClient> logger)
+    {
+        _httpClient = httpClient;
+        _logger = logger;
+    }
 
     public async Task<IReadOnlyList<TripUpdate>> FetchTripUpdatesAsync(CancellationToken ct)
     {
@@ -17,7 +23,17 @@ public class TripUpdateFeedClient : ITripUpdateFeedClient
         response.EnsureSuccessStatusCode();
 
         var data = await response.Content.ReadAsByteArrayAsync(ct);
+        _logger.LogDebug("Fetched {Bytes} bytes from trip-updates feed", data.Length);
+
         var feed = TransitRealtime.FeedMessage.ParseFrom(data);
+
+        if (feed.ParseErrors.Count > 0)
+        {
+            _logger.LogWarning(
+                "Skipped {SkippedCount} malformed entities in trip-updates feed: {Errors}",
+                feed.ParseErrors.Count,
+                string.Join("; ", feed.ParseErrors));
+        }
 
         return feed.Entity
             .Where(e => e.TripUpdate is not null)

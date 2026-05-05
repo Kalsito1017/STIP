@@ -1,4 +1,5 @@
 import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface ErrorAlertProps {
   message: string;
@@ -7,9 +8,10 @@ interface ErrorAlertProps {
 }
 
 export function ErrorAlert({ message, onRetry, className = '' }: ErrorAlertProps) {
+  const { t } = useTranslation();
   const displayMessage = message && message !== 'Error'
     ? message
-    : 'Something went wrong. Please try again.';
+    : t('errors.something_wrong');
 
   return (
     <div className={`bg-red-50 border border-red-200 rounded-lg p-4 sm:p-5 shadow-sm ${className}`}>
@@ -23,7 +25,7 @@ export function ErrorAlert({ message, onRetry, className = '' }: ErrorAlertProps
               className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-red-700 bg-red-100 hover:bg-red-200 px-3 py-1.5 rounded-md transition-colors"
             >
               <RefreshCw className="w-4 h-4" />
-              Retry
+              {t('errors.try_again')}
             </button>
           )}
         </div>

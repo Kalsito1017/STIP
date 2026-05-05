@@ -34,10 +34,3 @@ export interface StopFeatureCollection {
   type: 'FeatureCollection';
   features: StopFeature[];
 }
-
-export const ROUTE_TYPE_COLORS: Record<string, string> = {
-  Bus: '#2563eb',
-  Tram: '#dc2626',
-  Trolley: '#7c3aed',
-  Metro: '#059669',
-};

@@ -50,7 +50,7 @@ try
     app.UseAuthorization();
     app.MapControllers();
     app.MapGet("/health", () => Results.Ok(new { status = "ok", timestamp = DateTime.UtcNow }));
-    app.MapHub<VehicleHub>(VehicleHub.HubPath).RequireAuthorization();
+    app.MapHub<VehicleHub>(VehicleHub.HubPath);
 
     app.Run();
 }

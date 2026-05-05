@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SofiaTransport.Application.Vehicles;
 
@@ -7,7 +6,6 @@ namespace SofiaTransport.Api.Controllers;
 
 [ApiController]
 [Route("api/vehicles")]
-[Authorize]
 public class VehiclesController : ControllerBase
 {
     private readonly IMediator _mediator;

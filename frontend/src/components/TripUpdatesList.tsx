@@ -1,11 +1,6 @@
 import { useAppStore } from '../store/useAppStore';
-
-const relationshipLabels: Record<number, string> = {
-  0: 'Scheduled',
-  1: 'Added',
-  2: 'Unscheduled',
-  3: 'Canceled',
-};
+import { Skeleton } from '../components/Skeleton';
+import { useTranslation } from 'react-i18next';
 
 function formatDelay(seconds: number | null): string {
   if (seconds === null || seconds === undefined) return '\u2014';
@@ -23,21 +18,54 @@ function delayColor(seconds: number | null): string {
 }
 
 export function TripUpdatesList() {
+  const { t } = useTranslation('dashboard');
   const tripUpdates = useAppStore((s) => s.tripUpdates);
+  const connectionState = useAppStore((s) => s.connectionState);
 
-  if (tripUpdates.length === 0) {
+  const loading = tripUpdates.length === 0 && connectionState !== 'connected';
+
+  if (loading) {
     return (
       <div className="bg-white rounded-lg border border-slate-200 p-4 sm:p-5 shadow-sm">
-        <h3 className="text-sm font-semibold text-slate-700 mb-2">Trip Updates</h3>
-        <p className="text-slate-400 text-sm">No trip update data available</p>
+        <h3 className="text-sm font-semibold text-slate-700 mb-4">{t('trip_updates')}</h3>
+        <div className="space-y-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="border-b border-slate-100 pb-2 last:border-0 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <Skeleton className="h-3 w-14" />
+                <Skeleton className="h-3 w-16" />
+              </div>
+              <div className="flex items-center gap-2 pl-3">
+                <Skeleton className="h-2.5 w-20" />
+                <Skeleton className="h-2.5 w-16" />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
 
+  if (tripUpdates.length === 0) {
+    return (
+      <div className="bg-white rounded-lg border border-slate-200 p-4 sm:p-5 shadow-sm">
+        <h3 className="text-sm font-semibold text-slate-700 mb-2">{t('trip_updates')}</h3>
+        <p className="text-slate-400 text-sm">{t('no_trip_updates')}</p>
+      </div>
+    );
+  }
+
+  const relationshipLabels: Record<number, string> = {
+    0: t('scheduled'),
+    1: t('added'),
+    2: t('unscheduled'),
+    3: t('canceled'),
+  };
+
   return (
     <div className="bg-white rounded-lg border border-slate-200 p-4 sm:p-5 shadow-sm">
       <h3 className="text-sm font-semibold text-slate-700 mb-4">
-        Trip Updates <span className="text-slate-400 font-normal">({tripUpdates.length})</span>
+        {t('trip_updates')} <span className="text-slate-400 font-normal">({tripUpdates.length})</span>
       </h3>
       <div className="space-y-3 max-h-[300px] overflow-y-auto">
         {tripUpdates.slice(0, 20).map((tu) => (
@@ -48,11 +76,11 @@ export function TripUpdatesList() {
                   {tu.routeId ?? '\u2014'}
                 </span>
                 <span className="text-xs text-slate-400">
-                  {relationshipLabels[tu.scheduleRelationship] ?? 'Unknown'}
+                  {relationshipLabels[tu.scheduleRelationship] ?? '\u2014'}
                 </span>
               </div>
               <span className="text-xs text-slate-400">
-                Trip {tu.tripId.slice(-6)}
+                {t('trip')} {tu.tripId.slice(-6)}
               </span>
             </div>
             {tu.stopTimeUpdates.length > 0 && (
@@ -60,7 +88,7 @@ export function TripUpdatesList() {
                 {tu.stopTimeUpdates.slice(0, 3).map((stu, idx) => (
                   <div key={idx} className="flex items-center gap-2 text-xs flex-wrap">
                     <span className="text-slate-500">
-                      Stop {stu.stopSequence ?? stu.stopId ?? '?'}
+                      {t('stop')} {stu.stopSequence ?? stu.stopId ?? '?'}
                     </span>
                     <span className={`font-mono ${delayColor(stu.arrivalDelay)}`}>
                       {formatDelay(stu.arrivalDelay)}
@@ -69,7 +97,7 @@ export function TripUpdatesList() {
                 ))}
                 {tu.stopTimeUpdates.length > 3 && (
                   <span className="text-xs text-slate-400">
-                    +{tu.stopTimeUpdates.length - 3} more stops
+                    {t('more_stops', { count: tu.stopTimeUpdates.length - 3 })}
                   </span>
                 )}
               </div>

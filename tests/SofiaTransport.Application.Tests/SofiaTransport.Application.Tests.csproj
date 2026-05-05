@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\SofiaTransport.Application\SofiaTransport.Application.csproj" />
+    <ProjectReference Include="..\..\backend\SofiaTransport.Application\SofiaTransport.Application.csproj" />
   </ItemGroup>
 
 </Project>

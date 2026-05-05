@@ -1,11 +1,13 @@
 import { useDelayHeatmap, useReliabilityRanking, usePeakHours } from '../hooks/useDelays';
 import { ErrorAlert } from '../components/ErrorAlert';
-import { SkeletonChart } from '../components/Skeleton';
+import { SkeletonChart, SkeletonRankingList } from '../components/Skeleton';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
+import { useTranslation } from 'react-i18next';
 
 export function AnalyticsPage() {
+  const { t } = useTranslation('analytics');
   const { data: heatmap, isLoading: heatmapLoading, isError: heatmapError, error: heatmapErr, refetch: refetchHeatmap } = useDelayHeatmap();
   const { data: bestRanking, isLoading: bestLoading, isError: bestError, error: bestErr, refetch: refetchBest } = useReliabilityRanking(5, true);
   const { data: worstRanking, isLoading: worstLoading, isError: worstError, error: worstErr, refetch: refetchWorst } = useReliabilityRanking(5, false);
@@ -16,21 +18,17 @@ export function AnalyticsPage() {
 
   if (isLoading) return (
     <div className="space-y-4 sm:space-y-6">
-      <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Analytics</h1>
+      <h1 className="text-xl sm:text-2xl font-bold text-slate-900">{t('title')}</h1>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <SkeletonChart height={250} />
         <div className="space-y-3 sm:space-y-4">
-          <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-5 shadow-sm space-y-3">
-            <div className="h-4 w-24 bg-slate-200 rounded animate-pulse" />
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="h-3 w-full bg-slate-200 rounded animate-pulse" />
-            ))}
+          <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-5 shadow-sm">
+            <div className="h-4 w-24 bg-slate-200 rounded animate-pulse mb-3" />
+            <SkeletonRankingList rows={5} />
           </div>
-          <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-5 shadow-sm space-y-3">
-            <div className="h-4 w-24 bg-slate-200 rounded animate-pulse" />
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="h-3 w-full bg-slate-200 rounded animate-pulse" />
-            ))}
+          <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-5 shadow-sm">
+            <div className="h-4 w-24 bg-slate-200 rounded animate-pulse mb-3" />
+            <SkeletonRankingList rows={5} />
           </div>
         </div>
       </div>
@@ -44,20 +42,24 @@ export function AnalyticsPage() {
     if (peakError) refetchPeak();
   };
 
+  const avgDelay = heatmap?.length
+    ? Math.round(heatmap.reduce((s: number, p: { avgDelaySeconds: number }) => s + p.avgDelaySeconds, 0) / heatmap.length)
+    : 0;
+
   return (
     <div className="space-y-4 sm:space-y-6">
-      <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Analytics</h1>
+      <h1 className="text-xl sm:text-2xl font-bold text-slate-900">{t('title')}</h1>
 
       {hasAnyError && (
         <ErrorAlert
-          message="Some analytics data could not be loaded"
+          message={t('error_loading')}
           onRetry={retryAll}
         />
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-5 shadow-sm">
-          <h3 className="text-sm font-semibold text-slate-700 mb-4">System-Wide Peak Hours</h3>
+          <h3 className="text-sm font-semibold text-slate-700 mb-4">{t('system_peak_hours')}</h3>
           {peakError ? (
             <ErrorAlert message={peakErr.message} onRetry={() => refetchPeak()} />
           ) : peakHours?.length ? (
@@ -71,13 +73,13 @@ export function AnalyticsPage() {
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <p className="text-slate-400 text-sm">No data</p>
+            <p className="text-slate-400 text-sm">{t('no_data', { ns: 'common' })}</p>
           )}
         </div>
 
         <div className="space-y-3 sm:space-y-4">
           <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-5 shadow-sm">
-            <h3 className="text-sm font-semibold text-green-700 mb-3">Best Routes</h3>
+            <h3 className="text-sm font-semibold text-green-700 mb-3">{t('best_routes')}</h3>
             {bestError ? (
               <ErrorAlert message={bestErr.message} onRetry={() => refetchBest()} />
             ) : bestRanking?.length ? (
@@ -91,12 +93,12 @@ export function AnalyticsPage() {
                 ))}
               </div>
             ) : (
-              <p className="text-slate-400 text-sm">No data</p>
+              <p className="text-slate-400 text-sm">{t('no_data', { ns: 'common' })}</p>
             )}
           </div>
 
           <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-5 shadow-sm">
-            <h3 className="text-sm font-semibold text-red-700 mb-3">Worst Routes</h3>
+            <h3 className="text-sm font-semibold text-red-700 mb-3">{t('worst_routes')}</h3>
             {worstError ? (
               <ErrorAlert message={worstErr.message} onRetry={() => refetchWorst()} />
             ) : worstRanking?.length ? (
@@ -110,21 +112,21 @@ export function AnalyticsPage() {
                 ))}
               </div>
             ) : (
-              <p className="text-slate-400 text-sm">No data</p>
+              <p className="text-slate-400 text-sm">{t('no_data', { ns: 'common' })}</p>
             )}
           </div>
         </div>
       </div>
 
       <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-5 shadow-sm">
-        <h3 className="text-sm font-semibold text-slate-700 mb-2 sm:mb-4">Delay Heatmap Data</h3>
+        <h3 className="text-sm font-semibold text-slate-700 mb-2 sm:mb-4">{t('delay_heatmap')}</h3>
         {heatmapError ? (
           <ErrorAlert message={heatmapErr.message} onRetry={() => refetchHeatmap()} />
         ) : (
           <p className="text-sm text-slate-400">
             {heatmap?.length
-              ? `${heatmap.length} data points with avg delay ${Math.round(heatmap.reduce((s: number, p: { avgDelaySeconds: number }) => s + p.avgDelaySeconds, 0) / heatmap.length)}s`
-              : 'No heatmap data available'}
+              ? t('data_points', { count: heatmap.length, avg: avgDelay })
+              : t('no_heatmap_data')}
           </p>
         )}
       </div>

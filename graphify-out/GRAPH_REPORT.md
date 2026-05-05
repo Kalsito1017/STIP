@@ -1,12 +1,12 @@
-# Graph Report - STIP  (2026-05-04)
+# Graph Report - STIP  (2026-05-05)
 
 ## Corpus Check
-- 242 files · ~58,668 words
+- 275 files · ~70,303 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 948 nodes · 824 edges · 107 communities detected
-- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.8)
+- 1097 nodes · 1054 edges · 115 communities detected
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -71,13 +71,13 @@
 - [[_COMMUNITY_Community 58|Community 58]]
 - [[_COMMUNITY_Community 59|Community 59]]
 - [[_COMMUNITY_Community 60|Community 60]]
+- [[_COMMUNITY_Community 61|Community 61]]
+- [[_COMMUNITY_Community 62|Community 62]]
 - [[_COMMUNITY_Community 63|Community 63]]
 - [[_COMMUNITY_Community 64|Community 64]]
 - [[_COMMUNITY_Community 65|Community 65]]
 - [[_COMMUNITY_Community 66|Community 66]]
 - [[_COMMUNITY_Community 67|Community 67]]
-- [[_COMMUNITY_Community 68|Community 68]]
-- [[_COMMUNITY_Community 69|Community 69]]
 - [[_COMMUNITY_Community 70|Community 70]]
 - [[_COMMUNITY_Community 71|Community 71]]
 - [[_COMMUNITY_Community 72|Community 72]]
@@ -85,14 +85,14 @@
 - [[_COMMUNITY_Community 74|Community 74]]
 - [[_COMMUNITY_Community 75|Community 75]]
 - [[_COMMUNITY_Community 76|Community 76]]
+- [[_COMMUNITY_Community 77|Community 77]]
+- [[_COMMUNITY_Community 78|Community 78]]
+- [[_COMMUNITY_Community 79|Community 79]]
+- [[_COMMUNITY_Community 80|Community 80]]
 - [[_COMMUNITY_Community 81|Community 81]]
 - [[_COMMUNITY_Community 82|Community 82]]
 - [[_COMMUNITY_Community 83|Community 83]]
-- [[_COMMUNITY_Community 84|Community 84]]
 - [[_COMMUNITY_Community 85|Community 85]]
-- [[_COMMUNITY_Community 86|Community 86]]
-- [[_COMMUNITY_Community 87|Community 87]]
-- [[_COMMUNITY_Community 88|Community 88]]
 - [[_COMMUNITY_Community 89|Community 89]]
 - [[_COMMUNITY_Community 90|Community 90]]
 - [[_COMMUNITY_Community 91|Community 91]]
@@ -100,35 +100,43 @@
 - [[_COMMUNITY_Community 93|Community 93]]
 - [[_COMMUNITY_Community 94|Community 94]]
 - [[_COMMUNITY_Community 95|Community 95]]
+- [[_COMMUNITY_Community 96|Community 96]]
+- [[_COMMUNITY_Community 97|Community 97]]
+- [[_COMMUNITY_Community 98|Community 98]]
+- [[_COMMUNITY_Community 99|Community 99]]
+- [[_COMMUNITY_Community 100|Community 100]]
+- [[_COMMUNITY_Community 101|Community 101]]
 - [[_COMMUNITY_Community 102|Community 102]]
 - [[_COMMUNITY_Community 103|Community 103]]
-- [[_COMMUNITY_Community 104|Community 104]]
-- [[_COMMUNITY_Community 105|Community 105]]
-- [[_COMMUNITY_Community 106|Community 106]]
-- [[_COMMUNITY_Community 107|Community 107]]
-- [[_COMMUNITY_Community 108|Community 108]]
-- [[_COMMUNITY_Community 109|Community 109]]
-- [[_COMMUNITY_Community 110|Community 110]]
-- [[_COMMUNITY_Community 111|Community 111]]
-- [[_COMMUNITY_Community 182|Community 182]]
-- [[_COMMUNITY_Community 183|Community 183]]
-- [[_COMMUNITY_Community 184|Community 184]]
-- [[_COMMUNITY_Community 185|Community 185]]
-- [[_COMMUNITY_Community 186|Community 186]]
-- [[_COMMUNITY_Community 187|Community 187]]
-- [[_COMMUNITY_Community 188|Community 188]]
+- [[_COMMUNITY_Community 116|Community 116]]
+- [[_COMMUNITY_Community 117|Community 117]]
+- [[_COMMUNITY_Community 118|Community 118]]
+- [[_COMMUNITY_Community 119|Community 119]]
+- [[_COMMUNITY_Community 120|Community 120]]
+- [[_COMMUNITY_Community 121|Community 121]]
+- [[_COMMUNITY_Community 122|Community 122]]
+- [[_COMMUNITY_Community 123|Community 123]]
+- [[_COMMUNITY_Community 124|Community 124]]
+- [[_COMMUNITY_Community 125|Community 125]]
+- [[_COMMUNITY_Community 217|Community 217]]
+- [[_COMMUNITY_Community 218|Community 218]]
+- [[_COMMUNITY_Community 219|Community 219]]
+- [[_COMMUNITY_Community 220|Community 220]]
+- [[_COMMUNITY_Community 221|Community 221]]
+- [[_COMMUNITY_Community 222|Community 222]]
+- [[_COMMUNITY_Community 223|Community 223]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `CoordinatesEdgeCasesTests` - 17 edges
-2. `DelayLogRepository` - 12 edges
-3. `ReliabilityScoreRepository` - 12 edges
-4. `RouteRepository` - 11 edges
-5. `RoutesControllerTests` - 11 edges
-6. `StopRepository` - 10 edges
-7. `VehicleRepository` - 10 edges
-8. `RoutesController` - 9 edges
-9. `AnalyticsControllerTests` - 9 edges
-10. `StopsControllerTests` - 9 edges
+1. `RouteRepositoryTests` - 18 edges
+2. `CoordinatesEdgeCasesTests` - 17 edges
+3. `ReliabilityScoreRepositoryTests` - 15 edges
+4. `DelayLogRepositoryTests` - 14 edges
+5. `VehicleRepositoryTests` - 14 edges
+6. `DelayLogRepository` - 12 edges
+7. `ReliabilityScoreRepository` - 12 edges
+8. `StopRepositoryTests` - 12 edges
+9. `RouteRepository` - 11 edges
+10. `RoutesControllerTests` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `get_connection_params()` --calls--> `_get_db_pool()`  [INFERRED]
@@ -137,10 +145,10 @@
   frontend/src/components/AnimatedStat.tsx → frontend/src/hooks/useCountUp.ts
 - `clsx()` --calls--> `cn()`  [INFERRED]
   frontend/src/components/Layout.tsx → frontend/src/lib/utils.ts
-- `PredictPanel()` --calls--> `useDelayPrediction()`  [INFERRED]
-  frontend/src/components/PredictPanel.tsx → frontend/src/hooks/usePrediction.ts
-- `PredictPanel()` --calls--> `useStops()`  [INFERRED]
-  frontend/src/components/PredictPanel.tsx → frontend/src/hooks/useStops.ts
+- `useCountUp()` --calls--> `AnimatedDarkStat()`  [INFERRED]
+  frontend/src/hooks/useCountUp.ts → frontend/src/pages/LandingPage.tsx
+- `useAllRouteShapes()` --calls--> `FitBoundsOnShapes()`  [INFERRED]
+  frontend/src/hooks/useRouteShapes.ts → frontend/src/pages/LiveMapPage.tsx
 
 ## Communities
 
@@ -177,591 +185,641 @@ Cohesion: 0.1
 Nodes (9): Migration, InitialCreate, SofiaTransport.Infrastructure.Persistence.Migrations, AddPerformanceIndicesAndSeedData, SofiaTransport.Infrastructure.Persistence.Migrations, AddUsers, SofiaTransport.Infrastructure.Persistence.Migrations, AddShapes (+1 more)
 
 ### Community 8 - "Community 8"
+Cohesion: 0.2
+Nodes (1): RouteRepositoryTests
+
+### Community 9 - "Community 9"
 Cohesion: 0.11
 Nodes (1): CoordinatesEdgeCasesTests
 
-### Community 9 - "Community 9"
+### Community 10 - "Community 10"
+Cohesion: 0.29
+Nodes (1): ReliabilityScoreRepositoryTests
+
+### Community 11 - "Community 11"
+Cohesion: 0.33
+Nodes (1): DelayLogRepositoryTests
+
+### Community 12 - "Community 12"
+Cohesion: 0.32
+Nodes (1): VehicleRepositoryTests
+
+### Community 13 - "Community 13"
 Cohesion: 0.15
 Nodes (2): IDelayLogRepository, DelayLogRepository
 
-### Community 10 - "Community 10"
+### Community 14 - "Community 14"
 Cohesion: 0.15
 Nodes (2): IReliabilityScoreRepository, ReliabilityScoreRepository
 
-### Community 11 - "Community 11"
+### Community 15 - "Community 15"
+Cohesion: 0.36
+Nodes (1): StopRepositoryTests
+
+### Community 16 - "Community 16"
 Cohesion: 0.17
 Nodes (2): IRouteRepository, RouteRepository
 
-### Community 12 - "Community 12"
+### Community 17 - "Community 17"
 Cohesion: 0.17
 Nodes (1): RoutesControllerTests
 
-### Community 13 - "Community 13"
+### Community 18 - "Community 18"
+Cohesion: 0.3
+Nodes (1): UserRepositoryTests
+
+### Community 19 - "Community 19"
 Cohesion: 0.18
 Nodes (2): IStopRepository, StopRepository
 
-### Community 14 - "Community 14"
+### Community 20 - "Community 20"
 Cohesion: 0.18
 Nodes (2): IVehicleRepository, VehicleRepository
 
-### Community 15 - "Community 15"
+### Community 21 - "Community 21"
+Cohesion: 0.33
+Nodes (1): StopTimeRepositoryTests
+
+### Community 22 - "Community 22"
 Cohesion: 0.2
 Nodes (1): AnalyticsControllerTests
 
-### Community 16 - "Community 16"
+### Community 23 - "Community 23"
 Cohesion: 0.2
 Nodes (1): StopsControllerTests
 
-### Community 17 - "Community 17"
+### Community 24 - "Community 24"
 Cohesion: 0.2
 Nodes (1): DelayLogEdgeCasesTests
 
-### Community 18 - "Community 18"
+### Community 25 - "Community 25"
 Cohesion: 0.31
 Nodes (2): RedisVehicleCache, IVehicleCache
 
-### Community 19 - "Community 19"
+### Community 26 - "Community 26"
 Cohesion: 0.36
 Nodes (2): BackgroundService, GtfsPollingService
 
-### Community 20 - "Community 20"
+### Community 27 - "Community 27"
 Cohesion: 0.22
 Nodes (1): VehicleTests
 
-### Community 21 - "Community 21"
+### Community 28 - "Community 28"
 Cohesion: 0.25
 Nodes (1): IRepository
 
-### Community 22 - "Community 22"
+### Community 29 - "Community 29"
 Cohesion: 0.32
 Nodes (2): RedisAlertCache, IAlertCache
 
-### Community 23 - "Community 23"
+### Community 30 - "Community 30"
 Cohesion: 0.32
 Nodes (2): RedisTripUpdateCache, ITripUpdateCache
 
-### Community 24 - "Community 24"
+### Community 31 - "Community 31"
 Cohesion: 0.25
 Nodes (1): DelayLogTests
 
-### Community 25 - "Community 25"
+### Community 32 - "Community 32"
 Cohesion: 0.25
 Nodes (1): RouteTests
 
-### Community 26 - "Community 26"
+### Community 33 - "Community 33"
 Cohesion: 0.25
 Nodes (1): StopTimeTests
 
-### Community 27 - "Community 27"
+### Community 34 - "Community 34"
 Cohesion: 0.25
 Nodes (1): CoordinatesExtendedTests
 
-### Community 28 - "Community 28"
+### Community 35 - "Community 35"
 Cohesion: 0.25
 Nodes (1): CoordinatesTests
 
-### Community 29 - "Community 29"
+### Community 36 - "Community 36"
+Cohesion: 0.43
+Nodes (1): ShapeRepositoryTests
+
+### Community 37 - "Community 37"
 Cohesion: 0.33
 Nodes (3): RateLimitEntry, RateLimitingMiddleware, RateLimitingMiddlewareExtensions
 
-### Community 30 - "Community 30"
+### Community 38 - "Community 38"
 Cohesion: 0.29
 Nodes (1): IVehicleCache
 
-### Community 31 - "Community 31"
+### Community 39 - "Community 39"
 Cohesion: 0.29
 Nodes (2): IUserRepository, UserRepository
 
-### Community 32 - "Community 32"
+### Community 40 - "Community 40"
 Cohesion: 0.33
 Nodes (2): IRealtimeBroadcaster, RealtimeBroadcaster
 
-### Community 33 - "Community 33"
+### Community 41 - "Community 41"
 Cohesion: 0.29
 Nodes (2): Hub, VehicleHub
 
-### Community 34 - "Community 34"
+### Community 42 - "Community 42"
 Cohesion: 0.29
 Nodes (3): IJob, DelayAggregationJob, MlRetrainTriggerJob
 
-### Community 35 - "Community 35"
-Cohesion: 0.29
-Nodes (3): PredictPanel(), useDelayPrediction(), useStops()
-
-### Community 36 - "Community 36"
+### Community 43 - "Community 43"
 Cohesion: 0.29
 Nodes (2): useAllRouteShapes(), FitBoundsOnShapes()
 
-### Community 37 - "Community 37"
+### Community 44 - "Community 44"
 Cohesion: 0.29
 Nodes (1): StopTests
 
-### Community 38 - "Community 38"
+### Community 45 - "Community 45"
 Cohesion: 0.29
 Nodes (1): TripTests
 
-### Community 39 - "Community 39"
+### Community 46 - "Community 46"
 Cohesion: 0.33
 Nodes (1): IAlertCache
 
-### Community 40 - "Community 40"
+### Community 47 - "Community 47"
 Cohesion: 0.33
 Nodes (1): ITripUpdateCache
 
-### Community 41 - "Community 41"
+### Community 48 - "Community 48"
 Cohesion: 0.33
 Nodes (1): IUserRepository
 
-### Community 42 - "Community 42"
+### Community 49 - "Community 49"
 Cohesion: 0.33
 Nodes (2): IMLService, MLService
 
-### Community 43 - "Community 43"
+### Community 50 - "Community 50"
 Cohesion: 0.33
 Nodes (2): IStopTimeRepository, StopTimeRepository
 
-### Community 44 - "Community 44"
+### Community 51 - "Community 51"
 Cohesion: 0.33
 Nodes (3): AnimatedStat(), useCountUp(), AnimatedDarkStat()
 
-### Community 45 - "Community 45"
+### Community 52 - "Community 52"
 Cohesion: 0.33
 Nodes (1): PredictionsControllerTests
 
-### Community 46 - "Community 46"
+### Community 53 - "Community 53"
 Cohesion: 0.33
 Nodes (1): GetDelayHeatmapHandlerTests
 
-### Community 47 - "Community 47"
+### Community 54 - "Community 54"
 Cohesion: 0.33
 Nodes (1): GetReliabilityRankingHandlerTests
 
-### Community 48 - "Community 48"
+### Community 55 - "Community 55"
 Cohesion: 0.33
 Nodes (1): GetRouteDelayPatternHandlerTests
 
-### Community 49 - "Community 49"
+### Community 56 - "Community 56"
 Cohesion: 0.33
 Nodes (1): GetRouteDetailHandlerTests
 
-### Community 50 - "Community 50"
+### Community 57 - "Community 57"
 Cohesion: 0.33
 Nodes (2): DelayBucketTests, TransitTypeTests
 
-### Community 51 - "Community 51"
+### Community 58 - "Community 58"
 Cohesion: 0.4
 Nodes (2): ExceptionHandlingMiddleware, ExceptionHandlingMiddlewareExtensions
 
-### Community 52 - "Community 52"
+### Community 59 - "Community 59"
 Cohesion: 0.4
 Nodes (2): SecurityHeadersMiddleware, SecurityHeadersMiddlewareExtensions
 
-### Community 53 - "Community 53"
+### Community 60 - "Community 60"
 Cohesion: 0.4
 Nodes (1): IMLService
 
-### Community 54 - "Community 54"
+### Community 61 - "Community 61"
 Cohesion: 0.4
 Nodes (1): IStopTimeRepository
 
-### Community 55 - "Community 55"
+### Community 62 - "Community 62"
 Cohesion: 0.5
 Nodes (2): AlertFeedClient, IAlertFeedClient
 
-### Community 56 - "Community 56"
+### Community 63 - "Community 63"
 Cohesion: 0.5
 Nodes (2): GtfsFeedClient, IGtfsFeedClient
 
-### Community 57 - "Community 57"
+### Community 64 - "Community 64"
 Cohesion: 0.5
 Nodes (2): TripUpdateFeedClient, ITripUpdateFeedClient
 
-### Community 58 - "Community 58"
+### Community 65 - "Community 65"
 Cohesion: 0.4
 Nodes (3): SofiaTransport.Infrastructure.Persistence.Migrations, TransportDbContextModelSnapshot, ModelSnapshot
 
-### Community 59 - "Community 59"
+### Community 66 - "Community 66"
 Cohesion: 0.4
 Nodes (2): IShapeRepository, ShapeRepository
 
-### Community 60 - "Community 60"
+### Community 67 - "Community 67"
 Cohesion: 0.5
 Nodes (2): IVehicleBroadcaster, VehicleBroadcaster
 
-### Community 63 - "Community 63"
+### Community 70 - "Community 70"
 Cohesion: 0.4
 Nodes (2): clsx(), cn()
 
-### Community 64 - "Community 64"
+### Community 71 - "Community 71"
 Cohesion: 0.4
 Nodes (1): ExceptionHandlingMiddlewareTests
 
-### Community 65 - "Community 65"
+### Community 72 - "Community 72"
 Cohesion: 0.4
 Nodes (1): GetPeakHoursHandlerTests
 
-### Community 66 - "Community 66"
+### Community 73 - "Community 73"
 Cohesion: 0.4
 Nodes (1): GetRouteReliabilityHistoryHandlerTests
 
-### Community 67 - "Community 67"
+### Community 74 - "Community 74"
 Cohesion: 0.4
 Nodes (1): GetStopCongestionHandlerTests
 
-### Community 68 - "Community 68"
+### Community 75 - "Community 75"
 Cohesion: 0.4
 Nodes (1): GetLiveVehiclesHandlerTests
 
-### Community 69 - "Community 69"
+### Community 76 - "Community 76"
 Cohesion: 0.4
 Nodes (1): ReliabilityScoreTests
 
-### Community 70 - "Community 70"
+### Community 77 - "Community 77"
 Cohesion: 0.5
 Nodes (2): ValidationBehavior, IPipelineBehavior
 
-### Community 71 - "Community 71"
+### Community 78 - "Community 78"
 Cohesion: 0.5
 Nodes (1): IShapeRepository
 
-### Community 72 - "Community 72"
+### Community 79 - "Community 79"
 Cohesion: 0.5
 Nodes (2): DbContext, TransportDbContext
 
-### Community 73 - "Community 73"
+### Community 80 - "Community 80"
 Cohesion: 0.5
 Nodes (2): InitialCreate, SofiaTransport.Infrastructure.Persistence.Migrations
 
-### Community 74 - "Community 74"
+### Community 81 - "Community 81"
 Cohesion: 0.5
 Nodes (2): AddPerformanceIndicesAndSeedData, SofiaTransport.Infrastructure.Persistence.Migrations
 
-### Community 75 - "Community 75"
+### Community 82 - "Community 82"
 Cohesion: 0.5
 Nodes (2): AddUsers, SofiaTransport.Infrastructure.Persistence.Migrations
 
-### Community 76 - "Community 76"
+### Community 83 - "Community 83"
 Cohesion: 0.5
 Nodes (2): AddShapes, SofiaTransport.Infrastructure.Persistence.Migrations
 
-### Community 81 - "Community 81"
+### Community 85 - "Community 85"
+Cohesion: 0.67
+Nodes (2): createTestQueryClient(), renderWithProviders()
+
+### Community 89 - "Community 89"
 Cohesion: 0.5
 Nodes (1): VehiclesControllerTests
 
-### Community 82 - "Community 82"
+### Community 90 - "Community 90"
 Cohesion: 0.5
 Nodes (1): SecurityHeadersMiddlewareTests
 
-### Community 83 - "Community 83"
+### Community 91 - "Community 91"
 Cohesion: 0.5
 Nodes (1): GetSystemOverviewHandlerTests
 
-### Community 84 - "Community 84"
+### Community 92 - "Community 92"
 Cohesion: 0.5
 Nodes (1): PredictDelayHandlerTests
 
-### Community 85 - "Community 85"
+### Community 93 - "Community 93"
 Cohesion: 0.5
 Nodes (1): PredictTravelTimeHandlerTests
 
-### Community 86 - "Community 86"
+### Community 94 - "Community 94"
 Cohesion: 0.5
 Nodes (1): GetRoutesHandlerTests
 
-### Community 87 - "Community 87"
+### Community 95 - "Community 95"
 Cohesion: 0.5
 Nodes (1): GetNearbyStopsHandlerTests
 
-### Community 88 - "Community 88"
+### Community 96 - "Community 96"
 Cohesion: 0.5
 Nodes (1): GetPredictedArrivalsHandlerTests
 
-### Community 89 - "Community 89"
+### Community 97 - "Community 97"
 Cohesion: 0.67
 Nodes (1): ApiServiceRegistration
 
-### Community 90 - "Community 90"
+### Community 98 - "Community 98"
 Cohesion: 0.67
 Nodes (1): IAlertFeedClient
 
-### Community 91 - "Community 91"
+### Community 99 - "Community 99"
 Cohesion: 0.67
 Nodes (1): IGtfsFeedClient
 
-### Community 92 - "Community 92"
+### Community 100 - "Community 100"
 Cohesion: 0.67
 Nodes (1): ITripUpdateFeedClient
 
-### Community 93 - "Community 93"
+### Community 101 - "Community 101"
 Cohesion: 0.67
 Nodes (1): ReliabilityScore
 
-### Community 94 - "Community 94"
+### Community 102 - "Community 102"
 Cohesion: 0.67
 Nodes (2): StopTimeUpdate, TripUpdate
 
-### Community 95 - "Community 95"
+### Community 103 - "Community 103"
 Cohesion: 0.67
 Nodes (1): InfrastructureServiceRegistration
 
-### Community 102 - "Community 102"
+### Community 116 - "Community 116"
 Cohesion: 0.67
 Nodes (1): GetStopsHandlerTests
 
-### Community 103 - "Community 103"
+### Community 117 - "Community 117"
 Cohesion: 1.0
 Nodes (1): DelayLog
 
-### Community 104 - "Community 104"
+### Community 118 - "Community 118"
 Cohesion: 1.0
 Nodes (1): Route
 
-### Community 105 - "Community 105"
+### Community 119 - "Community 119"
 Cohesion: 1.0
 Nodes (1): ServiceAlert
 
-### Community 106 - "Community 106"
+### Community 120 - "Community 120"
 Cohesion: 1.0
 Nodes (1): Shape
 
-### Community 107 - "Community 107"
+### Community 121 - "Community 121"
 Cohesion: 1.0
 Nodes (1): Stop
 
-### Community 108 - "Community 108"
+### Community 122 - "Community 122"
 Cohesion: 1.0
 Nodes (1): StopTime
 
-### Community 109 - "Community 109"
+### Community 123 - "Community 123"
 Cohesion: 1.0
 Nodes (1): Trip
 
-### Community 110 - "Community 110"
+### Community 124 - "Community 124"
 Cohesion: 1.0
 Nodes (1): User
 
-### Community 111 - "Community 111"
+### Community 125 - "Community 125"
 Cohesion: 1.0
 Nodes (1): Vehicle
 
-### Community 182 - "Community 182"
+### Community 217 - "Community 217"
 Cohesion: 1.0
 Nodes (1): Remove old .joblib model files, keeping the *keep* most recent.
 
-### Community 183 - "Community 183"
+### Community 218 - "Community 218"
 Cohesion: 1.0
 Nodes (1): Validate that a model file path is within MODEL_DIR (prevent path traversal).
 
-### Community 184 - "Community 184"
+### Community 219 - "Community 219"
 Cohesion: 1.0
 Nodes (1): Find the latest versioned model file in MODEL_DIR.      Strategy:     1. Read mo
 
-### Community 185 - "Community 185"
+### Community 220 - "Community 220"
 Cohesion: 1.0
 Nodes (1): Load the latest model and metadata into module-level globals.
 
-### Community 186 - "Community 186"
+### Community 221 - "Community 221"
 Cohesion: 1.0
 Nodes (1): Get or create a threaded connection pool.
 
-### Community 187 - "Community 187"
+### Community 222 - "Community 222"
 Cohesion: 1.0
 Nodes (1): Query PostgreSQL for the 7-day rolling average delay for a route+hour.      Retu
 
-### Community 188 - "Community 188"
+### Community 223 - "Community 223"
 Cohesion: 1.0
 Nodes (1): Remove old .joblib model files, keeping the *keep* most recent.
 
 ## Knowledge Gaps
 - **46 isolated node(s):** `RateLimitEntry`, `DelayLog`, `Route`, `ServiceAlert`, `Shape` (+41 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `Community 8`** (18 nodes): `CoordinatesEdgeCasesTests.cs`, `CoordinatesEdgeCasesTests`, `.Constructor_ExactlyAtLatBoundary_Works()`, `.Constructor_ExactlyAtLonBoundary_Works()`, `.Constructor_ExactlyOnLowerLatBoundary_Works()`, `.Constructor_ExactlyOnLowerLonBoundary_Works()`, `.Constructor_ExactlyOnUpperLatBoundary_Works()`, `.Constructor_ExactlyOnUpperLonBoundary_Works()`, `.Constructor_JustBelowLatBoundary_Throws()`, `.Constructor_JustBelowLonBoundary_Throws()`, `.Equality_SameValues_DifferentInstances_AreEqual()`, `.InequalityOperator_DifferentCoordinates_ReturnsTrue()`, `.InequalityOperator_SameCoordinates_ReturnsFalse()`, `.Lat_VariousValidValues_Work()`, `.LatExceptionMessage_ContainsParamName()`, `.Lon_VariousValidValues_Work()`, `.LonExceptionMessage_ContainsParamName()`, `.ToString_Returns6DecimalPlaces()`
+- **Thin community `Community 8`** (19 nodes): `RouteRepositoryTests`, `.AddAsync_AddsRoute_AndReturnsIt()`, `.CreateDbContext()`, `.DeleteAsync_DeletesRoute()`, `.GetAllAsync_WhenNoRoutes_ReturnsEmptyList()`, `.GetAllAsync_WhenRoutesExist_ReturnsAllRoutes()`, `.GetByIdAsync_WhenRouteDoesNotExist_ReturnsNull()`, `.GetByIdAsync_WhenRouteExists_ReturnsRoute()`, `.GetByIdsAsync_WhenAllIdsMatch_ReturnsMatchingRoutes()`, `.GetByIdsAsync_WhenEmptyList_ReturnsEmptyArray()`, `.GetByIdsAsync_WhenSomeIdsDoNotMatch_ReturnsOnlyMatching()`, `.GetByShortNameAsync_WhenRouteDoesNotExist_ReturnsNull()`, `.GetByShortNameAsync_WhenRouteExists_ReturnsRoute()`, `.GetByTypeAsync_WhenMatchingRoutes_ReturnsFilteredRoutes()`, `.GetByTypeAsync_WhenNoMatchingRoutes_ReturnsEmptyList()`, `.GetCountAsync_WhenNoRoutes_ReturnsZero()`, `.GetCountAsync_WhenRoutesExist_ReturnsCorrectCount()`, `.UpdateAsync_UpdatesExistingRoute()`, `RouteRepositoryTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 9`** (13 nodes): `DelayLogRepository.cs`, `IDelayLogRepository`, `DelayLogRepository`, `.AddAsync()`, `.DeleteAsync()`, `.GetAllAsync()`, `.GetByDateAsync()`, `.GetByIdAsync()`, `.GetByRouteAsync()`, `.GetByStopAsync()`, `.GetCountAsync()`, `.GetForHeatmapAsync()`, `.UpdateAsync()`
+- **Thin community `Community 9`** (18 nodes): `CoordinatesEdgeCasesTests.cs`, `CoordinatesEdgeCasesTests`, `.Constructor_ExactlyAtLatBoundary_Works()`, `.Constructor_ExactlyAtLonBoundary_Works()`, `.Constructor_ExactlyOnLowerLatBoundary_Works()`, `.Constructor_ExactlyOnLowerLonBoundary_Works()`, `.Constructor_ExactlyOnUpperLatBoundary_Works()`, `.Constructor_ExactlyOnUpperLonBoundary_Works()`, `.Constructor_JustBelowLatBoundary_Throws()`, `.Constructor_JustBelowLonBoundary_Throws()`, `.Equality_SameValues_DifferentInstances_AreEqual()`, `.InequalityOperator_DifferentCoordinates_ReturnsTrue()`, `.InequalityOperator_SameCoordinates_ReturnsFalse()`, `.Lat_VariousValidValues_Work()`, `.LatExceptionMessage_ContainsParamName()`, `.Lon_VariousValidValues_Work()`, `.LonExceptionMessage_ContainsParamName()`, `.ToString_Returns6DecimalPlaces()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 10`** (13 nodes): `ReliabilityScoreRepository.cs`, `IReliabilityScoreRepository`, `ReliabilityScoreRepository`, `.AddAsync()`, `.DeleteAsync()`, `.GetAllAsync()`, `.GetByIdAsync()`, `.GetByRouteAndDateAsync()`, `.GetByRouteAsync()`, `.GetCountAsync()`, `.GetLatestByRouteAsync()`, `.GetRankingAsync()`, `.UpdateAsync()`
+- **Thin community `Community 10`** (16 nodes): `ReliabilityScoreRepositoryTests`, `.AddAsync_AddsScore_AndReturnsIt()`, `.CreateDbContext()`, `.CreateScore()`, `.GetAllAsync_WhenNoScores_ReturnsEmptyList()`, `.GetAllAsync_WhenScoresExist_ReturnsAllScores()`, `.GetByRouteAndDateAsync_WhenScoreDoesNotExist_ReturnsNull()`, `.GetByRouteAndDateAsync_WhenScoreExists_ReturnsScore()`, `.GetByRouteAsync_WhenNoMatchingRoute_ReturnsEmptyList()`, `.GetByRouteAsync_WithDateFilter_ReturnsFilteredScores()`, `.GetByRouteAsync_WithoutDateFilter_ReturnsAllScoresForRoute()`, `.GetLatestByRouteAsync_ReturnsMostRecentScore()`, `.GetLatestByRouteAsync_WhenNoScoreExists_ReturnsNull()`, `.GetRankingAsync_WithBestFalse_ReturnsWorstScores()`, `.GetRankingAsync_WithBestTrue_ReturnsTopScores()`, `ReliabilityScoreRepositoryTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 11`** (12 nodes): `RouteRepository.cs`, `IRouteRepository`, `RouteRepository`, `.AddAsync()`, `.DeleteAsync()`, `.GetAllAsync()`, `.GetByIdAsync()`, `.GetByIdsAsync()`, `.GetByShortNameAsync()`, `.GetByTypeAsync()`, `.GetCountAsync()`, `.UpdateAsync()`
+- **Thin community `Community 11`** (15 nodes): `DelayLogRepositoryTests`, `.AddAsync_AddsLog_AndReturnsIt()`, `.CreateDbContext()`, `.CreateDelayLog()`, `.GetAllAsync_WhenLogsExist_ReturnsAllLogs()`, `.GetAllAsync_WhenNoLogs_ReturnsEmptyList()`, `.GetByDateAsync_ReturnsLogsForSpecifiedDate()`, `.GetByDateAsync_WhenNoLogsForDate_ReturnsEmptyList()`, `.GetByRouteAsync_WhenDateRangeOutOfBounds_ReturnsEmptyList()`, `.GetByRouteAsync_WithDateRange_ReturnsFilteredLogs()`, `.GetByStopAsync_WhenNoMatchingStop_ReturnsEmptyList()`, `.GetByStopAsync_WithDateRange_ReturnsFilteredLogs()`, `.GetForHeatmapAsync_WhenNoMatchingLogs_ReturnsEmptyList()`, `.GetForHeatmapAsync_WithDateRange_ReturnsFilteredLogs()`, `DelayLogRepositoryTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 12`** (12 nodes): `RoutesControllerTests`, `.GetAll_ReturnsOk()`, `.GetAll_WithTypeFilter_PassesType()`, `.GetById_ReturnsNotFound_WhenRouteIsNull()`, `.GetById_ReturnsOk_WhenRouteExists()`, `.GetDelayPattern_PassesDateParam()`, `.GetDelayPattern_ReturnsOk()`, `.GetReliability_ReturnsNotFound_WhenRouteIsNull()`, `.GetReliability_ReturnsOk_WhenRouteExists()`, `.GetReliabilityHistory_PassesDateParams()`, `.GetReliabilityHistory_ReturnsOk()`, `RoutesControllerTests.cs`
+- **Thin community `Community 12`** (15 nodes): `VehicleRepositoryTests`, `.AddAsync_AddsVehicle_AndReturnsIt()`, `.CreateDbContext()`, `.CreateVehicle()`, `.GetAllAsync_WhenNoVehicles_ReturnsEmptyList()`, `.GetAllAsync_WhenVehiclesExist_ReturnsAllVehicles()`, `.GetByIdAsync_WhenVehicleDoesNotExist_ReturnsNull()`, `.GetByIdAsync_WhenVehicleExists_ReturnsVehicle()`, `.GetByRouteAsync_ExcludesStaleVehicles()`, `.GetByRouteAsync_ReturnsFilteredVehicles()`, `.GetByRouteAsync_WhenNoMatchingRoute_ReturnsEmptyList()`, `.GetCountAsync_WhenVehiclesExist_ReturnsCorrectCount()`, `.GetLiveAsync_ReturnsOnlyRecentVehicles()`, `.GetLiveAsync_WhenNoRecentVehicles_ReturnsEmptyList()`, `VehicleRepositoryTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 13`** (11 nodes): `StopRepository.cs`, `IStopRepository`, `StopRepository`, `.AddAsync()`, `.DeleteAsync()`, `.GetAllAsync()`, `.GetByIdAsync()`, `.GetByIdsAsync()`, `.GetCountAsync()`, `.GetNearbyAsync()`, `.UpdateAsync()`
+- **Thin community `Community 13`** (13 nodes): `DelayLogRepository.cs`, `IDelayLogRepository`, `DelayLogRepository`, `.AddAsync()`, `.DeleteAsync()`, `.GetAllAsync()`, `.GetByDateAsync()`, `.GetByIdAsync()`, `.GetByRouteAsync()`, `.GetByStopAsync()`, `.GetCountAsync()`, `.GetForHeatmapAsync()`, `.UpdateAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 14`** (11 nodes): `VehicleRepository.cs`, `IVehicleRepository`, `VehicleRepository`, `.AddAsync()`, `.DeleteAsync()`, `.GetAllAsync()`, `.GetByIdAsync()`, `.GetByRouteAsync()`, `.GetCountAsync()`, `.GetLiveAsync()`, `.UpdateAsync()`
+- **Thin community `Community 14`** (13 nodes): `ReliabilityScoreRepository.cs`, `IReliabilityScoreRepository`, `ReliabilityScoreRepository`, `.AddAsync()`, `.DeleteAsync()`, `.GetAllAsync()`, `.GetByIdAsync()`, `.GetByRouteAndDateAsync()`, `.GetByRouteAsync()`, `.GetCountAsync()`, `.GetLatestByRouteAsync()`, `.GetRankingAsync()`, `.UpdateAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 15`** (10 nodes): `AnalyticsControllerTests`, `.GetDelayHeatmap_PassesFromAndToQueryParams()`, `.GetDelayHeatmap_ReturnsOkWithHeatmapData()`, `.GetOverview_ReturnsOkWithOverview()`, `.GetPeakHours_ReturnsOkWithData()`, `.GetPeakHours_WithoutDateParam_PassesNull()`, `.GetReliabilityRanking_CustomParams_Top5BestFalse()`, `.GetReliabilityRanking_DefaultParams_Top10BestTrue()`, `.GetReliabilityRanking_ReturnsOkWithRankings()`, `AnalyticsControllerTests.cs`
+- **Thin community `Community 15`** (13 nodes): `StopRepositoryTests`, `.AddAsync_AddsStop_AndReturnsIt()`, `.CreateDbContext()`, `.CreateStop()`, `.GetAllAsync_WhenNoStops_ReturnsEmptyList()`, `.GetAllAsync_WhenStopsExist_ReturnsAllStops()`, `.GetByIdAsync_WhenStopDoesNotExist_ReturnsNull()`, `.GetByIdAsync_WhenStopExists_ReturnsStop()`, `.GetByIdsAsync_WhenAllIdsMatch_ReturnsMatchingStops()`, `.GetByIdsAsync_WhenEmptyList_ReturnsEmptyArray()`, `.GetByIdsAsync_WhenSomeIdsDoNotMatch_ReturnsOnlyMatching()`, `.GetCountAsync_WhenStopsExist_ReturnsCorrectCount()`, `StopRepositoryTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 16`** (10 nodes): `StopsControllerTests`, `.GetAll_ReturnsOk()`, `.GetById_ReturnsNotFound_WhenStopIsNull()`, `.GetById_ReturnsOk_WhenStopExists()`, `.GetCongestion_PassesDateParam()`, `.GetCongestion_ReturnsOk()`, `.GetNearby_PassesQueryParams()`, `.GetNearby_ReturnsOk()`, `.GetPredictedArrivals_ReturnsOk()`, `StopsControllerTests.cs`
+- **Thin community `Community 16`** (12 nodes): `RouteRepository.cs`, `IRouteRepository`, `RouteRepository`, `.AddAsync()`, `.DeleteAsync()`, `.GetAllAsync()`, `.GetByIdAsync()`, `.GetByIdsAsync()`, `.GetByShortNameAsync()`, `.GetByTypeAsync()`, `.GetCountAsync()`, `.UpdateAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 17`** (10 nodes): `DelayLogEdgeCasesTests`, `.DelaySeconds_CanBeExtreme()`, `.DelaySeconds_CanBeNegative_EarlyArrival()`, `.DelaySeconds_CanBeVeryLarge_HoursOfDelay()`, `.NullStopId_Allowed()`, `.NullTripId_Allowed()`, `.NullVehicleId_Allowed()`, `.RecordedAt_CanBeSetToUtcNow()`, `.RecordedAt_DefaultValue_IsDefaultDateTime()`, `DelayLogEdgeCasesTests.cs`
+- **Thin community `Community 17`** (12 nodes): `RoutesControllerTests`, `.GetAll_ReturnsOk()`, `.GetAll_WithTypeFilter_PassesType()`, `.GetById_ReturnsNotFound_WhenRouteIsNull()`, `.GetById_ReturnsOk_WhenRouteExists()`, `.GetDelayPattern_PassesDateParam()`, `.GetDelayPattern_ReturnsOk()`, `.GetReliability_ReturnsNotFound_WhenRouteIsNull()`, `.GetReliability_ReturnsOk_WhenRouteExists()`, `.GetReliabilityHistory_PassesDateParams()`, `.GetReliabilityHistory_ReturnsOk()`, `RoutesControllerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 18`** (9 nodes): `RedisVehicleCache.cs`, `RedisVehicleCache`, `.Deserialize()`, `.GetAllAsync()`, `.GetAsync()`, `.GetByRouteAsync()`, `.RemoveAsync()`, `.SetAsync()`, `IVehicleCache`
+- **Thin community `Community 18`** (12 nodes): `UserRepositoryTests`, `.AddAsync_AddsUser_AndReturnsIt()`, `.CreateDbContext()`, `.DeleteAsync_WhenUserDoesNotExist_DoesNotThrow()`, `.DeleteAsync_WhenUserExists_DeletesUser()`, `.GetByEmailAsync_NormalizesEmailToLowercase()`, `.GetByEmailAsync_NormalizesEmailWithWhitespace()`, `.GetByEmailAsync_WhenUserDoesNotExist_ReturnsNull()`, `.GetByEmailAsync_WhenUserExists_ReturnsUser()`, `.GetByIdAsync_WhenUserDoesNotExist_ReturnsNull()`, `.GetByIdAsync_WhenUserExists_ReturnsUser()`, `UserRepositoryTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 19`** (9 nodes): `GtfsPollingService.cs`, `BackgroundService`, `GtfsPollingService`, `.CleanupStaleVehiclesAsync()`, `.ExecuteAsync()`, `.FindNearestStopTime()`, `.PollAlertsAsync()`, `.PollTripUpdatesAsync()`, `.PollVehiclesAsync()`
+- **Thin community `Community 19`** (11 nodes): `StopRepository.cs`, `IStopRepository`, `StopRepository`, `.AddAsync()`, `.DeleteAsync()`, `.GetAllAsync()`, `.GetByIdAsync()`, `.GetByIdsAsync()`, `.GetCountAsync()`, `.GetNearbyAsync()`, `.UpdateAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 20`** (9 nodes): `VehicleTests`, `.Bearing_CanBeNegative()`, `.Bearing_CanExceed360()`, `.Constructor_DefaultValues_AreSetCorrectly()`, `.Properties_CanBeSetAndGet()`, `.RouteId_CanBeNull()`, `.Speed_CanBeZero()`, `.TripId_CanBeNull()`, `VehicleTests.cs`
+- **Thin community `Community 20`** (11 nodes): `VehicleRepository.cs`, `IVehicleRepository`, `VehicleRepository`, `.AddAsync()`, `.DeleteAsync()`, `.GetAllAsync()`, `.GetByIdAsync()`, `.GetByRouteAsync()`, `.GetCountAsync()`, `.GetLiveAsync()`, `.UpdateAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 21`** (8 nodes): `IRepository.cs`, `IRepository`, `.AddAsync()`, `.DeleteAsync()`, `.GetAllAsync()`, `.GetByIdAsync()`, `.GetCountAsync()`, `.UpdateAsync()`
+- **Thin community `Community 21`** (11 nodes): `StopTimeRepositoryTests`, `.CreateDbContext()`, `.GetByStopAndRouteAsync_ReturnsMatchingStopTimes()`, `.GetByStopAndRouteAsync_WhenNoMatch_ReturnsEmptyList()`, `.GetByTripAsync_ReturnsStopTimesOrderedBySequence()`, `.GetByTripAsync_WhenTripDoesNotExist_ReturnsEmptyList()`, `.GetUpcomingByStopAsync_ReturnsUpcomingStopTimesOrderedByArrival()`, `.GetUpcomingByStopAsync_WhenNoMatch_ReturnsEmptyList()`, `.GetUpcomingByStopAsync_WithLimit_ReturnsLimitedResults()`, `.GetUpcomingByStopAsync_WithTimeFilter_ExcludesPastTimes()`, `StopTimeRepositoryTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 22`** (8 nodes): `RedisAlertCache.cs`, `RedisAlertCache`, `.Deserialize()`, `.GetAllAsync()`, `.GetByRouteAsync()`, `.RemoveAsync()`, `.SetAsync()`, `IAlertCache`
+- **Thin community `Community 22`** (10 nodes): `AnalyticsControllerTests`, `.GetDelayHeatmap_PassesFromAndToQueryParams()`, `.GetDelayHeatmap_ReturnsOkWithHeatmapData()`, `.GetOverview_ReturnsOkWithOverview()`, `.GetPeakHours_ReturnsOkWithData()`, `.GetPeakHours_WithoutDateParam_PassesNull()`, `.GetReliabilityRanking_CustomParams_Top5BestFalse()`, `.GetReliabilityRanking_DefaultParams_Top10BestTrue()`, `.GetReliabilityRanking_ReturnsOkWithRankings()`, `AnalyticsControllerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 23`** (8 nodes): `RedisTripUpdateCache.cs`, `RedisTripUpdateCache`, `.Deserialize()`, `.GetAllAsync()`, `.GetByRouteAsync()`, `.RemoveAsync()`, `.SetAsync()`, `ITripUpdateCache`
+- **Thin community `Community 23`** (10 nodes): `StopsControllerTests`, `.GetAll_ReturnsOk()`, `.GetById_ReturnsNotFound_WhenStopIsNull()`, `.GetById_ReturnsOk_WhenStopExists()`, `.GetCongestion_PassesDateParam()`, `.GetCongestion_ReturnsOk()`, `.GetNearby_PassesQueryParams()`, `.GetNearby_ReturnsOk()`, `.GetPredictedArrivals_ReturnsOk()`, `StopsControllerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 24`** (8 nodes): `DelayLogTests`, `.Constructor_DefaultValues_AreSetCorrectly()`, `.DelaySeconds_CanBeNegative_EarlyArrival()`, `.DelaySeconds_ZeroMeansOnTime()`, `.Id_UsesLong_PrimaryKey()`, `.NullableFields_CanAllBeNull()`, `.Properties_CanBeSetAndGet()`, `DelayLogTests.cs`
+- **Thin community `Community 24`** (10 nodes): `DelayLogEdgeCasesTests`, `.DelaySeconds_CanBeExtreme()`, `.DelaySeconds_CanBeNegative_EarlyArrival()`, `.DelaySeconds_CanBeVeryLarge_HoursOfDelay()`, `.NullStopId_Allowed()`, `.NullTripId_Allowed()`, `.NullVehicleId_Allowed()`, `.RecordedAt_CanBeSetToUtcNow()`, `.RecordedAt_DefaultValue_IsDefaultDateTime()`, `DelayLogEdgeCasesTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 25`** (8 nodes): `RouteTests`, `.Constructor_DefaultValues_AreSetCorrectly()`, `.LongName_CanBeEmptyString()`, `.LongName_CanBeNull()`, `.Properties_CanBeSetAndGet()`, `.Trips_Collection_IsMutable()`, `.Type_SupportsAllTransitTypes()`, `RouteTests.cs`
+- **Thin community `Community 25`** (9 nodes): `RedisVehicleCache.cs`, `RedisVehicleCache`, `.Deserialize()`, `.GetAllAsync()`, `.GetAsync()`, `.GetByRouteAsync()`, `.RemoveAsync()`, `.SetAsync()`, `IVehicleCache`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 26`** (8 nodes): `StopTimeTests`, `.ArrivalTime_CanBeLateNight()`, `.ArrivalTime_CanExceed24Hours()`, `.Constructor_DefaultValues_AreSetCorrectly()`, `.NavigationProperties_AreIndependent()`, `.Properties_CanBeSetAndGet()`, `.StopSequence_CanBeLargeNumber()`, `StopTimeTests.cs`
+- **Thin community `Community 26`** (9 nodes): `GtfsPollingService.cs`, `BackgroundService`, `GtfsPollingService`, `.CleanupStaleVehiclesAsync()`, `.ExecuteAsync()`, `.FindNearestStopTime()`, `.PollAlertsAsync()`, `.PollTripUpdatesAsync()`, `.PollVehiclesAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 27`** (8 nodes): `CoordinatesExtendedTests.cs`, `CoordinatesExtendedTests`, `.DifferentLat_SameLon_AreNotEqual()`, `.Equality_SameTo15DecimalPlaces_AreEqual()`, `.Equality_VeryCloseButNotEqual_AreNotEqual()`, `.Equality_WithExactlySofiaCityCenter_Equal()`, `.SameLat_DifferentLon_AreNotEqual()`, `.SofiaCityCenterCoordinates_Valid()`
+- **Thin community `Community 27`** (9 nodes): `VehicleTests`, `.Bearing_CanBeNegative()`, `.Bearing_CanExceed360()`, `.Constructor_DefaultValues_AreSetCorrectly()`, `.Properties_CanBeSetAndGet()`, `.RouteId_CanBeNull()`, `.Speed_CanBeZero()`, `.TripId_CanBeNull()`, `VehicleTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 28`** (8 nodes): `CoordinatesTests.cs`, `CoordinatesTests`, `.Constructor_AtLatBoundary_Works()`, `.Constructor_InvalidCoordinates_ThrowsArgumentOutOfRange()`, `.Constructor_ValidSofiaCoordinates_CreatesInstance()`, `.Equality_DifferentCoordinates_AreNotEqual()`, `.Equality_TwoIdenticalCoordinates_AreEqual()`, `.ToString_ReturnsFormattedCoordinates()`
+- **Thin community `Community 28`** (8 nodes): `IRepository.cs`, `IRepository`, `.AddAsync()`, `.DeleteAsync()`, `.GetAllAsync()`, `.GetByIdAsync()`, `.GetCountAsync()`, `.UpdateAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 30`** (7 nodes): `IVehicleCache.cs`, `IVehicleCache`, `.GetAllAsync()`, `.GetAsync()`, `.GetByRouteAsync()`, `.RemoveAsync()`, `.SetAsync()`
+- **Thin community `Community 29`** (8 nodes): `RedisAlertCache.cs`, `RedisAlertCache`, `.Deserialize()`, `.GetAllAsync()`, `.GetByRouteAsync()`, `.RemoveAsync()`, `.SetAsync()`, `IAlertCache`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 31`** (7 nodes): `UserRepository.cs`, `IUserRepository`, `UserRepository`, `.AddAsync()`, `.DeleteAsync()`, `.GetByEmailAsync()`, `.GetByIdAsync()`
+- **Thin community `Community 30`** (8 nodes): `RedisTripUpdateCache.cs`, `RedisTripUpdateCache`, `.Deserialize()`, `.GetAllAsync()`, `.GetByRouteAsync()`, `.RemoveAsync()`, `.SetAsync()`, `ITripUpdateCache`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 32`** (7 nodes): `RealtimeBroadcaster.cs`, `IRealtimeBroadcaster`, `.BroadcastAlertAsync()`, `.BroadcastTripUpdateAsync()`, `RealtimeBroadcaster`, `.BroadcastAlertAsync()`, `.BroadcastTripUpdateAsync()`
+- **Thin community `Community 31`** (8 nodes): `DelayLogTests`, `.Constructor_DefaultValues_AreSetCorrectly()`, `.DelaySeconds_CanBeNegative_EarlyArrival()`, `.DelaySeconds_ZeroMeansOnTime()`, `.Id_UsesLong_PrimaryKey()`, `.NullableFields_CanAllBeNull()`, `.Properties_CanBeSetAndGet()`, `DelayLogTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 33`** (7 nodes): `VehicleHub.cs`, `Hub`, `VehicleHub`, `.SubscribeToAlerts()`, `.SubscribeToRoute()`, `.UnsubscribeFromAlerts()`, `.UnsubscribeFromRoute()`
+- **Thin community `Community 32`** (8 nodes): `RouteTests`, `.Constructor_DefaultValues_AreSetCorrectly()`, `.LongName_CanBeEmptyString()`, `.LongName_CanBeNull()`, `.Properties_CanBeSetAndGet()`, `.Trips_Collection_IsMutable()`, `.Type_SupportsAllTransitTypes()`, `RouteTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 36`** (7 nodes): `useRouteShapes.ts`, `LiveMapPage.tsx`, `useAllRouteShapes()`, `useRouteShape()`, `FitBoundsOnShapes()`, `formatTimeAgo()`, `stopsToGeoJSON()`
+- **Thin community `Community 33`** (8 nodes): `StopTimeTests`, `.ArrivalTime_CanBeLateNight()`, `.ArrivalTime_CanExceed24Hours()`, `.Constructor_DefaultValues_AreSetCorrectly()`, `.NavigationProperties_AreIndependent()`, `.Properties_CanBeSetAndGet()`, `.StopSequence_CanBeLargeNumber()`, `StopTimeTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 37`** (7 nodes): `StopTests`, `.Constructor_DefaultValues_AreSetCorrectly()`, `.Location_UsesCoordinatesValueObject()`, `.Properties_CanBeSetAndGet()`, `.StopId_CanContainHyphens()`, `.StopName_SupportsBulgarianCharacters()`, `StopTests.cs`
+- **Thin community `Community 34`** (8 nodes): `CoordinatesExtendedTests.cs`, `CoordinatesExtendedTests`, `.DifferentLat_SameLon_AreNotEqual()`, `.Equality_SameTo15DecimalPlaces_AreEqual()`, `.Equality_VeryCloseButNotEqual_AreNotEqual()`, `.Equality_WithExactlySofiaCityCenter_Equal()`, `.SameLat_DifferentLon_AreNotEqual()`, `.SofiaCityCenterCoordinates_Valid()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 38`** (7 nodes): `TripTests`, `.Constructor_DefaultValues_AreSetCorrectly()`, `.DirectionId_CanBeOne()`, `.DirectionId_CanBeZero()`, `.Properties_CanBeSetAndGet()`, `.StopTimes_Collection_IsMutable()`, `TripTests.cs`
+- **Thin community `Community 35`** (8 nodes): `CoordinatesTests.cs`, `CoordinatesTests`, `.Constructor_AtLatBoundary_Works()`, `.Constructor_InvalidCoordinates_ThrowsArgumentOutOfRange()`, `.Constructor_ValidSofiaCoordinates_CreatesInstance()`, `.Equality_DifferentCoordinates_AreNotEqual()`, `.Equality_TwoIdenticalCoordinates_AreEqual()`, `.ToString_ReturnsFormattedCoordinates()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 39`** (6 nodes): `IAlertCache.cs`, `IAlertCache`, `.GetAllAsync()`, `.GetByRouteAsync()`, `.RemoveAsync()`, `.SetAsync()`
+- **Thin community `Community 36`** (8 nodes): `ShapeRepositoryTests`, `.CreateDbContext()`, `.GetAllGroupedByRouteAsync_ReturnsShapesOrderedByRouteIdThenSequence()`, `.GetAllGroupedByRouteAsync_WhenNoShapes_ReturnsEmptyList()`, `.GetByRouteIdAsync_ReturnsShapesOrderedBySequence()`, `.GetByRouteIdAsync_WhenRouteDoesNotExist_ReturnsEmptyList()`, `.GetByRouteIdAsync_WhenRouteHasNoShapes_ReturnsEmptyList()`, `ShapeRepositoryTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 40`** (6 nodes): `ITripUpdateCache.cs`, `ITripUpdateCache`, `.GetAllAsync()`, `.GetByRouteAsync()`, `.RemoveAsync()`, `.SetAsync()`
+- **Thin community `Community 38`** (7 nodes): `IVehicleCache.cs`, `IVehicleCache`, `.GetAllAsync()`, `.GetAsync()`, `.GetByRouteAsync()`, `.RemoveAsync()`, `.SetAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 41`** (6 nodes): `IUserRepository.cs`, `IUserRepository`, `.AddAsync()`, `.DeleteAsync()`, `.GetByEmailAsync()`, `.GetByIdAsync()`
+- **Thin community `Community 39`** (7 nodes): `UserRepository.cs`, `IUserRepository`, `UserRepository`, `.AddAsync()`, `.DeleteAsync()`, `.GetByEmailAsync()`, `.GetByIdAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 42`** (6 nodes): `MLService.cs`, `IMLService`, `MLService`, `.PredictDelayAsync()`, `.PredictDelaysBatchAsync()`, `.PredictTravelTimeAsync()`
+- **Thin community `Community 40`** (7 nodes): `RealtimeBroadcaster.cs`, `IRealtimeBroadcaster`, `.BroadcastAlertAsync()`, `.BroadcastTripUpdateAsync()`, `RealtimeBroadcaster`, `.BroadcastAlertAsync()`, `.BroadcastTripUpdateAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 43`** (6 nodes): `StopTimeRepository.cs`, `IStopTimeRepository`, `StopTimeRepository`, `.GetByStopAndRouteAsync()`, `.GetByTripAsync()`, `.GetUpcomingByStopAsync()`
+- **Thin community `Community 41`** (7 nodes): `VehicleHub.cs`, `Hub`, `VehicleHub`, `.SubscribeToAlerts()`, `.SubscribeToRoute()`, `.UnsubscribeFromAlerts()`, `.UnsubscribeFromRoute()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 45`** (6 nodes): `PredictionsControllerTests`, `.PredictDelay_CorrectCommandIsSent_ForwardsParameters()`, `.PredictDelay_ValidRequest_ReturnsOkWithResponse()`, `.PredictTravelTime_CorrectCommandIsSent_ForwardsParameters()`, `.PredictTravelTime_ValidRequest_ReturnsOkWithResponse()`, `PredictionsControllerTests.cs`
+- **Thin community `Community 43`** (7 nodes): `useRouteShapes.ts`, `LiveMapPage.tsx`, `useAllRouteShapes()`, `useRouteShape()`, `FitBoundsOnShapes()`, `FlyToTarget()`, `stopsToGeoJSON()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 46`** (6 nodes): `GetDelayHeatmapHandlerTests`, `.Handle_LogsWithNullStopId_FilteredOut()`, `.Handle_LogsWithUnknownStop_FilteredOut()`, `.Handle_NoLogs_ReturnsEmptyList()`, `.Handle_WithLogs_ReturnsHeatmapPoints()`, `GetDelayHeatmapHandlerTests.cs`
+- **Thin community `Community 44`** (7 nodes): `StopTests`, `.Constructor_DefaultValues_AreSetCorrectly()`, `.Location_UsesCoordinatesValueObject()`, `.Properties_CanBeSetAndGet()`, `.StopId_CanContainHyphens()`, `.StopName_SupportsBulgarianCharacters()`, `StopTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 47`** (6 nodes): `GetReliabilityRankingHandlerTests`, `.Handle_BestRanking_ReturnsTopBestRoutes()`, `.Handle_EmptyRanking_ReturnsEmptyList()`, `.Handle_RouteNotInRouteDict_UsesRouteIdAsShortName()`, `.Handle_WorstRanking_ReturnsTopWorstRoutes()`, `GetReliabilityRankingHandlerTests.cs`
+- **Thin community `Community 45`** (7 nodes): `TripTests`, `.Constructor_DefaultValues_AreSetCorrectly()`, `.DirectionId_CanBeOne()`, `.DirectionId_CanBeZero()`, `.Properties_CanBeSetAndGet()`, `.StopTimes_Collection_IsMutable()`, `TripTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 48`** (6 nodes): `GetRouteDelayPatternHandlerTests`, `.Handle_MultipleHours_OrderedByHour()`, `.Handle_NoLogsForRoute_ReturnsEmptyList()`, `.Handle_SingleHour_ReturnsOneEntry()`, `.Handle_WithLogs_ReturnsHourlyDelayPattern()`, `GetRouteDelayPatternHandlerTests.cs`
+- **Thin community `Community 46`** (6 nodes): `IAlertCache.cs`, `IAlertCache`, `.GetAllAsync()`, `.GetByRouteAsync()`, `.RemoveAsync()`, `.SetAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 49`** (6 nodes): `GetRouteDetailHandlerTests`, `.Handle_MultipleScores_PicksLatestByScoreDate()`, `.Handle_RouteExistsWithoutScores_ReturnsDetailWithNullReliability()`, `.Handle_RouteExistsWithScores_ReturnsDetailWithReliability()`, `.Handle_RouteNotFound_ReturnsNull()`, `GetRouteDetailHandlerTests.cs`
+- **Thin community `Community 47`** (6 nodes): `ITripUpdateCache.cs`, `ITripUpdateCache`, `.GetAllAsync()`, `.GetByRouteAsync()`, `.RemoveAsync()`, `.SetAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 50`** (6 nodes): `DelayBucketTests`, `.DelayBucket_HasFourValues()`, `.DelayBucket_ValuesOrderCorrect()`, `TransitTypeTests`, `.TransitType_HasCorrectValues()`, `TransitTypeTests.cs`
+- **Thin community `Community 48`** (6 nodes): `IUserRepository.cs`, `IUserRepository`, `.AddAsync()`, `.DeleteAsync()`, `.GetByEmailAsync()`, `.GetByIdAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 51`** (5 nodes): `ExceptionHandlingMiddleware.cs`, `ExceptionHandlingMiddleware`, `.InvokeAsync()`, `ExceptionHandlingMiddlewareExtensions`, `.UseExceptionHandling()`
+- **Thin community `Community 49`** (6 nodes): `MLService.cs`, `IMLService`, `MLService`, `.PredictDelayAsync()`, `.PredictDelaysBatchAsync()`, `.PredictTravelTimeAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 52`** (5 nodes): `SecurityHeadersMiddleware.cs`, `SecurityHeadersMiddleware`, `.InvokeAsync()`, `SecurityHeadersMiddlewareExtensions`, `.UseSecurityHeaders()`
+- **Thin community `Community 50`** (6 nodes): `StopTimeRepository.cs`, `IStopTimeRepository`, `StopTimeRepository`, `.GetByStopAndRouteAsync()`, `.GetByTripAsync()`, `.GetUpcomingByStopAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 53`** (5 nodes): `IMLService.cs`, `IMLService`, `.PredictDelayAsync()`, `.PredictDelaysBatchAsync()`, `.PredictTravelTimeAsync()`
+- **Thin community `Community 52`** (6 nodes): `PredictionsControllerTests`, `.PredictDelay_CorrectCommandIsSent_ForwardsParameters()`, `.PredictDelay_ValidRequest_ReturnsOkWithResponse()`, `.PredictTravelTime_CorrectCommandIsSent_ForwardsParameters()`, `.PredictTravelTime_ValidRequest_ReturnsOkWithResponse()`, `PredictionsControllerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 54`** (5 nodes): `IStopTimeRepository.cs`, `IStopTimeRepository`, `.GetByStopAndRouteAsync()`, `.GetByTripAsync()`, `.GetUpcomingByStopAsync()`
+- **Thin community `Community 53`** (6 nodes): `GetDelayHeatmapHandlerTests`, `.Handle_LogsWithNullStopId_FilteredOut()`, `.Handle_LogsWithUnknownStop_FilteredOut()`, `.Handle_NoLogs_ReturnsEmptyList()`, `.Handle_WithLogs_ReturnsHeatmapPoints()`, `GetDelayHeatmapHandlerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 55`** (5 nodes): `AlertFeedClient.cs`, `AlertFeedClient`, `.FetchAlertsAsync()`, `.ParseAlert()`, `IAlertFeedClient`
+- **Thin community `Community 54`** (6 nodes): `GetReliabilityRankingHandlerTests`, `.Handle_BestRanking_ReturnsTopBestRoutes()`, `.Handle_EmptyRanking_ReturnsEmptyList()`, `.Handle_RouteNotInRouteDict_UsesRouteIdAsShortName()`, `.Handle_WorstRanking_ReturnsTopWorstRoutes()`, `GetReliabilityRankingHandlerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 56`** (5 nodes): `GtfsFeedClient.cs`, `GtfsFeedClient`, `.FetchVehiclePositionsAsync()`, `.ParseVehicle()`, `IGtfsFeedClient`
+- **Thin community `Community 55`** (6 nodes): `GetRouteDelayPatternHandlerTests`, `.Handle_MultipleHours_OrderedByHour()`, `.Handle_NoLogsForRoute_ReturnsEmptyList()`, `.Handle_SingleHour_ReturnsOneEntry()`, `.Handle_WithLogs_ReturnsHourlyDelayPattern()`, `GetRouteDelayPatternHandlerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 57`** (5 nodes): `TripUpdateFeedClient.cs`, `TripUpdateFeedClient`, `.FetchTripUpdatesAsync()`, `.ParseTripUpdate()`, `ITripUpdateFeedClient`
+- **Thin community `Community 56`** (6 nodes): `GetRouteDetailHandlerTests`, `.Handle_MultipleScores_PicksLatestByScoreDate()`, `.Handle_RouteExistsWithoutScores_ReturnsDetailWithNullReliability()`, `.Handle_RouteExistsWithScores_ReturnsDetailWithReliability()`, `.Handle_RouteNotFound_ReturnsNull()`, `GetRouteDetailHandlerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 59`** (5 nodes): `ShapeRepository.cs`, `IShapeRepository`, `ShapeRepository`, `.GetAllGroupedByRouteAsync()`, `.GetByRouteIdAsync()`
+- **Thin community `Community 57`** (6 nodes): `DelayBucketTests`, `.DelayBucket_HasFourValues()`, `.DelayBucket_ValuesOrderCorrect()`, `TransitTypeTests`, `.TransitType_HasCorrectValues()`, `TransitTypeTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 60`** (5 nodes): `VehicleBroadcaster.cs`, `IVehicleBroadcaster`, `.BroadcastAsync()`, `VehicleBroadcaster`, `.BroadcastAsync()`
+- **Thin community `Community 58`** (5 nodes): `ExceptionHandlingMiddleware.cs`, `ExceptionHandlingMiddleware`, `.InvokeAsync()`, `ExceptionHandlingMiddlewareExtensions`, `.UseExceptionHandling()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 63`** (5 nodes): `clsx()`, `getPageTitle()`, `Layout.tsx`, `utils.ts`, `cn()`
+- **Thin community `Community 59`** (5 nodes): `SecurityHeadersMiddleware.cs`, `SecurityHeadersMiddleware`, `.InvokeAsync()`, `SecurityHeadersMiddlewareExtensions`, `.UseSecurityHeaders()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 64`** (5 nodes): `ExceptionHandlingMiddlewareTests`, `.InvokeAsync_ExceptionIsCaught_Returns500WithJsonErrorBody()`, `.InvokeAsync_ExceptionIsLogged()`, `.InvokeAsync_NormalRequest_PassesThroughWithoutError()`, `ExceptionHandlingMiddlewareTests.cs`
+- **Thin community `Community 60`** (5 nodes): `IMLService.cs`, `IMLService`, `.PredictDelayAsync()`, `.PredictDelaysBatchAsync()`, `.PredictTravelTimeAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 65`** (5 nodes): `GetPeakHoursHandlerTests`, `.Handle_MultipleHours_OrderedByHour()`, `.Handle_NoLogs_ReturnsEmptyList()`, `.Handle_WithLogs_ReturnsPeakHourData()`, `GetPeakHoursHandlerTests.cs`
+- **Thin community `Community 61`** (5 nodes): `IStopTimeRepository.cs`, `IStopTimeRepository`, `.GetByStopAndRouteAsync()`, `.GetByTripAsync()`, `.GetUpcomingByStopAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 66`** (5 nodes): `GetRouteReliabilityHistoryHandlerTests`, `.Handle_DefaultDateRange_ReturnsLast30Days()`, `.Handle_NoScores_ReturnsEmptyList()`, `.Handle_ReturnsHistoryFilteredByDate()`, `GetRouteReliabilityHistoryHandlerTests.cs`
+- **Thin community `Community 62`** (5 nodes): `AlertFeedClient.cs`, `AlertFeedClient`, `.FetchAlertsAsync()`, `.ParseAlert()`, `IAlertFeedClient`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 67`** (5 nodes): `GetStopCongestionHandlerTests`, `.Handle_MultipleHours_OrderedByHour()`, `.Handle_NoLogsForStop_ReturnsEmptyList()`, `.Handle_WithLogs_ReturnsHourlyCongestion()`, `GetStopCongestionHandlerTests.cs`
+- **Thin community `Community 63`** (5 nodes): `GtfsFeedClient.cs`, `GtfsFeedClient`, `.FetchVehiclePositionsAsync()`, `.ParseVehicle()`, `IGtfsFeedClient`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 68`** (5 nodes): `GetLiveVehiclesHandlerTests.cs`, `GetLiveVehiclesHandlerTests`, `.Handle_NoRouteFilter_ReturnsAllVehicles()`, `.Handle_WithRouteFilter_ReturnsFilteredVehicles()`, `.Handle_WithUnknownRouteFilter_ReturnsEmpty()`
+- **Thin community `Community 64`** (5 nodes): `TripUpdateFeedClient.cs`, `TripUpdateFeedClient`, `.FetchTripUpdatesAsync()`, `.ParseTripUpdate()`, `ITripUpdateFeedClient`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 69`** (5 nodes): `ReliabilityScoreTests`, `.Calculate_ReturnsCorrectScore()`, `.Entity_PropertiesAreSetCorrectly()`, `.PenaltyFactor_IsFive()`, `ReliabilityScoreTests.cs`
+- **Thin community `Community 66`** (5 nodes): `ShapeRepository.cs`, `IShapeRepository`, `ShapeRepository`, `.GetAllGroupedByRouteAsync()`, `.GetByRouteIdAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 70`** (4 nodes): `ValidationBehavior.cs`, `ValidationBehavior`, `.Handle()`, `IPipelineBehavior`
+- **Thin community `Community 67`** (5 nodes): `VehicleBroadcaster.cs`, `IVehicleBroadcaster`, `.BroadcastAsync()`, `VehicleBroadcaster`, `.BroadcastAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 71`** (4 nodes): `IShapeRepository.cs`, `IShapeRepository`, `.GetAllGroupedByRouteAsync()`, `.GetByRouteIdAsync()`
+- **Thin community `Community 70`** (5 nodes): `clsx()`, `getPageTitle()`, `Layout.tsx`, `utils.ts`, `cn()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 72`** (4 nodes): `TransportDbContext.cs`, `DbContext`, `TransportDbContext`, `.OnModelCreating()`
+- **Thin community `Community 71`** (5 nodes): `ExceptionHandlingMiddlewareTests`, `.InvokeAsync_ExceptionIsCaught_Returns500WithJsonErrorBody()`, `.InvokeAsync_ExceptionIsLogged()`, `.InvokeAsync_NormalRequest_PassesThroughWithoutError()`, `ExceptionHandlingMiddlewareTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 73`** (4 nodes): `20260428101743_InitialCreate.Designer.cs`, `InitialCreate`, `.BuildTargetModel()`, `SofiaTransport.Infrastructure.Persistence.Migrations`
+- **Thin community `Community 72`** (5 nodes): `GetPeakHoursHandlerTests`, `.Handle_MultipleHours_OrderedByHour()`, `.Handle_NoLogs_ReturnsEmptyList()`, `.Handle_WithLogs_ReturnsPeakHourData()`, `GetPeakHoursHandlerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 74`** (4 nodes): `20260428120126_AddPerformanceIndicesAndSeedData.Designer.cs`, `AddPerformanceIndicesAndSeedData`, `.BuildTargetModel()`, `SofiaTransport.Infrastructure.Persistence.Migrations`
+- **Thin community `Community 73`** (5 nodes): `GetRouteReliabilityHistoryHandlerTests`, `.Handle_DefaultDateRange_ReturnsLast30Days()`, `.Handle_NoScores_ReturnsEmptyList()`, `.Handle_ReturnsHistoryFilteredByDate()`, `GetRouteReliabilityHistoryHandlerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 75`** (4 nodes): `20260428150000_AddUsers.Designer.cs`, `AddUsers`, `.BuildTargetModel()`, `SofiaTransport.Infrastructure.Persistence.Migrations`
+- **Thin community `Community 74`** (5 nodes): `GetStopCongestionHandlerTests`, `.Handle_MultipleHours_OrderedByHour()`, `.Handle_NoLogsForStop_ReturnsEmptyList()`, `.Handle_WithLogs_ReturnsHourlyCongestion()`, `GetStopCongestionHandlerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 76`** (4 nodes): `20260428194826_AddShapes.Designer.cs`, `AddShapes`, `.BuildTargetModel()`, `SofiaTransport.Infrastructure.Persistence.Migrations`
+- **Thin community `Community 75`** (5 nodes): `GetLiveVehiclesHandlerTests.cs`, `GetLiveVehiclesHandlerTests`, `.Handle_NoRouteFilter_ReturnsAllVehicles()`, `.Handle_WithRouteFilter_ReturnsFilteredVehicles()`, `.Handle_WithUnknownRouteFilter_ReturnsEmpty()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 81`** (4 nodes): `VehiclesControllerTests`, `.GetLive_PassesRouteIdFilter()`, `.GetLive_ReturnsVehiclesWithoutFilter()`, `VehiclesControllerTests.cs`
+- **Thin community `Community 76`** (5 nodes): `ReliabilityScoreTests`, `.Calculate_ReturnsCorrectScore()`, `.Entity_PropertiesAreSetCorrectly()`, `.PenaltyFactor_IsFive()`, `ReliabilityScoreTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 82`** (4 nodes): `SecurityHeadersMiddlewareTests`, `.InvokeAsync_CallsNextDelegate()`, `.InvokeAsync_SetsAllFiveSecurityHeaders()`, `SecurityHeadersMiddlewareTests.cs`
+- **Thin community `Community 77`** (4 nodes): `ValidationBehavior.cs`, `ValidationBehavior`, `.Handle()`, `IPipelineBehavior`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 83`** (4 nodes): `GetSystemOverviewHandlerTests`, `.Handle_NoVehicles_ReturnsZeroCount()`, `.Handle_ReturnsOverview()`, `GetSystemOverviewHandlerTests.cs`
+- **Thin community `Community 78`** (4 nodes): `IShapeRepository.cs`, `IShapeRepository`, `.GetAllGroupedByRouteAsync()`, `.GetByRouteIdAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 84`** (4 nodes): `PredictDelayHandlerTests`, `.Handle_DelegatesToMLService_ReturnsResponse()`, `.Handle_PassesAllParametersCorrectly()`, `PredictDelayHandlerTests.cs`
+- **Thin community `Community 79`** (4 nodes): `TransportDbContext.cs`, `DbContext`, `TransportDbContext`, `.OnModelCreating()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 85`** (4 nodes): `PredictTravelTimeHandlerTests`, `.Handle_NoMatchingTrips_ReturnsZeroPrediction()`, `.Handle_WithMatchingTrips_ReturnsHeuristicPrediction()`, `PredictTravelTimeHandlerTests.cs`
+- **Thin community `Community 80`** (4 nodes): `20260428101743_InitialCreate.Designer.cs`, `InitialCreate`, `.BuildTargetModel()`, `SofiaTransport.Infrastructure.Persistence.Migrations`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 86`** (4 nodes): `GetRoutesHandlerTests`, `.Handle_EmptyRepository_ReturnsEmptyList()`, `.Handle_ReturnsAllRoutes()`, `GetRoutesHandlerTests.cs`
+- **Thin community `Community 81`** (4 nodes): `20260428120126_AddPerformanceIndicesAndSeedData.Designer.cs`, `AddPerformanceIndicesAndSeedData`, `.BuildTargetModel()`, `SofiaTransport.Infrastructure.Persistence.Migrations`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 87`** (4 nodes): `GetNearbyStopsHandlerTests`, `.Handle_NoNearbyStops_ReturnsEmptyList()`, `.Handle_ReturnsNearbyStops()`, `GetNearbyStopsHandlerTests.cs`
+- **Thin community `Community 82`** (4 nodes): `20260428150000_AddUsers.Designer.cs`, `AddUsers`, `.BuildTargetModel()`, `SofiaTransport.Infrastructure.Persistence.Migrations`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 88`** (4 nodes): `GetPredictedArrivalsHandlerTests`, `.Handle_NoUpcomingStopTimes_ReturnsEmptyList()`, `.Handle_ReturnsPredictedArrivals()`, `GetPredictedArrivalsHandlerTests.cs`
+- **Thin community `Community 83`** (4 nodes): `20260428194826_AddShapes.Designer.cs`, `AddShapes`, `.BuildTargetModel()`, `SofiaTransport.Infrastructure.Persistence.Migrations`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 89`** (3 nodes): `ApiServiceRegistration.cs`, `ApiServiceRegistration`, `.AddApiServices()`
+- **Thin community `Community 85`** (4 nodes): `test-utils.tsx`, `createTestQueryClient()`, `renderWithProviders()`, `resetAppStore()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 90`** (3 nodes): `IAlertFeedClient.cs`, `IAlertFeedClient`, `.FetchAlertsAsync()`
+- **Thin community `Community 89`** (4 nodes): `VehiclesControllerTests`, `.GetLive_PassesRouteIdFilter()`, `.GetLive_ReturnsVehiclesWithoutFilter()`, `VehiclesControllerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 91`** (3 nodes): `IGtfsFeedClient.cs`, `IGtfsFeedClient`, `.FetchVehiclePositionsAsync()`
+- **Thin community `Community 90`** (4 nodes): `SecurityHeadersMiddlewareTests`, `.InvokeAsync_CallsNextDelegate()`, `.InvokeAsync_SetsAllFiveSecurityHeaders()`, `SecurityHeadersMiddlewareTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 92`** (3 nodes): `ITripUpdateFeedClient.cs`, `ITripUpdateFeedClient`, `.FetchTripUpdatesAsync()`
+- **Thin community `Community 91`** (4 nodes): `GetSystemOverviewHandlerTests`, `.Handle_NoVehicles_ReturnsZeroCount()`, `.Handle_ReturnsOverview()`, `GetSystemOverviewHandlerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 93`** (3 nodes): `ReliabilityScore.cs`, `ReliabilityScore`, `.Calculate()`
+- **Thin community `Community 92`** (4 nodes): `PredictDelayHandlerTests`, `.Handle_DelegatesToMLService_ReturnsResponse()`, `.Handle_PassesAllParametersCorrectly()`, `PredictDelayHandlerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 94`** (3 nodes): `TripUpdate.cs`, `StopTimeUpdate`, `TripUpdate`
+- **Thin community `Community 93`** (4 nodes): `PredictTravelTimeHandlerTests`, `.Handle_NoMatchingTrips_ReturnsZeroPrediction()`, `.Handle_WithMatchingTrips_ReturnsHeuristicPrediction()`, `PredictTravelTimeHandlerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 95`** (3 nodes): `InfrastructureServiceRegistration.cs`, `InfrastructureServiceRegistration`, `.AddInfrastructure()`
+- **Thin community `Community 94`** (4 nodes): `GetRoutesHandlerTests`, `.Handle_EmptyRepository_ReturnsEmptyList()`, `.Handle_ReturnsAllRoutes()`, `GetRoutesHandlerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 102`** (3 nodes): `GetStopsHandlerTests`, `.Handle_ReturnsAllStops()`, `GetStopsHandlerTests.cs`
+- **Thin community `Community 95`** (4 nodes): `GetNearbyStopsHandlerTests`, `.Handle_NoNearbyStops_ReturnsEmptyList()`, `.Handle_ReturnsNearbyStops()`, `GetNearbyStopsHandlerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 103`** (2 nodes): `DelayLog.cs`, `DelayLog`
+- **Thin community `Community 96`** (4 nodes): `GetPredictedArrivalsHandlerTests`, `.Handle_NoUpcomingStopTimes_ReturnsEmptyList()`, `.Handle_ReturnsPredictedArrivals()`, `GetPredictedArrivalsHandlerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 104`** (2 nodes): `Route.cs`, `Route`
+- **Thin community `Community 97`** (3 nodes): `ApiServiceRegistration.cs`, `ApiServiceRegistration`, `.AddApiServices()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 105`** (2 nodes): `ServiceAlert.cs`, `ServiceAlert`
+- **Thin community `Community 98`** (3 nodes): `IAlertFeedClient.cs`, `IAlertFeedClient`, `.FetchAlertsAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 106`** (2 nodes): `Shape.cs`, `Shape`
+- **Thin community `Community 99`** (3 nodes): `IGtfsFeedClient.cs`, `IGtfsFeedClient`, `.FetchVehiclePositionsAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 107`** (2 nodes): `Stop.cs`, `Stop`
+- **Thin community `Community 100`** (3 nodes): `ITripUpdateFeedClient.cs`, `ITripUpdateFeedClient`, `.FetchTripUpdatesAsync()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 108`** (2 nodes): `StopTime.cs`, `StopTime`
+- **Thin community `Community 101`** (3 nodes): `ReliabilityScore.cs`, `ReliabilityScore`, `.Calculate()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 109`** (2 nodes): `Trip.cs`, `Trip`
+- **Thin community `Community 102`** (3 nodes): `TripUpdate.cs`, `StopTimeUpdate`, `TripUpdate`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 110`** (2 nodes): `User.cs`, `User`
+- **Thin community `Community 103`** (3 nodes): `InfrastructureServiceRegistration.cs`, `InfrastructureServiceRegistration`, `.AddInfrastructure()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 111`** (2 nodes): `Vehicle.cs`, `Vehicle`
+- **Thin community `Community 116`** (3 nodes): `GetStopsHandlerTests`, `.Handle_ReturnsAllStops()`, `GetStopsHandlerTests.cs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 182`** (1 nodes): `Remove old .joblib model files, keeping the *keep* most recent.`
+- **Thin community `Community 117`** (2 nodes): `DelayLog.cs`, `DelayLog`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 183`** (1 nodes): `Validate that a model file path is within MODEL_DIR (prevent path traversal).`
+- **Thin community `Community 118`** (2 nodes): `Route.cs`, `Route`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 184`** (1 nodes): `Find the latest versioned model file in MODEL_DIR.      Strategy:     1. Read mo`
+- **Thin community `Community 119`** (2 nodes): `ServiceAlert.cs`, `ServiceAlert`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 185`** (1 nodes): `Load the latest model and metadata into module-level globals.`
+- **Thin community `Community 120`** (2 nodes): `Shape.cs`, `Shape`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 186`** (1 nodes): `Get or create a threaded connection pool.`
+- **Thin community `Community 121`** (2 nodes): `Stop.cs`, `Stop`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 187`** (1 nodes): `Query PostgreSQL for the 7-day rolling average delay for a route+hour.      Retu`
+- **Thin community `Community 122`** (2 nodes): `StopTime.cs`, `StopTime`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 188`** (1 nodes): `Remove old .joblib model files, keeping the *keep* most recent.`
+- **Thin community `Community 123`** (2 nodes): `Trip.cs`, `Trip`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 124`** (2 nodes): `User.cs`, `User`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 125`** (2 nodes): `Vehicle.cs`, `Vehicle`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 217`** (1 nodes): `Remove old .joblib model files, keeping the *keep* most recent.`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 218`** (1 nodes): `Validate that a model file path is within MODEL_DIR (prevent path traversal).`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 219`** (1 nodes): `Find the latest versioned model file in MODEL_DIR.      Strategy:     1. Read mo`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 220`** (1 nodes): `Load the latest model and metadata into module-level globals.`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 221`** (1 nodes): `Get or create a threaded connection pool.`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 222`** (1 nodes): `Query PostgreSQL for the 7-day rolling average delay for a route+hour.      Retu`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 223`** (1 nodes): `Remove old .joblib model files, keeping the *keep* most recent.`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions

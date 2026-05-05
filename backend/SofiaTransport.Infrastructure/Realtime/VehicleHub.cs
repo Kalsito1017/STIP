@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace SofiaTransport.Infrastructure.Realtime;
 
-[Authorize]
 public class VehicleHub : Hub
 {
     public const string HubPath = "/hubs/vehicles";

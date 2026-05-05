@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useMap } from 'react-leaflet';
 import * as L from 'leaflet';
 import type { Vehicle } from '../../store/useAppStore';
+import { useAppStore } from '../../store/useAppStore';
 import { TransitTypeRouteColor } from '../../constants/transit';
 
 const CLUSTER_RADIUS_PX = 60;
@@ -58,7 +59,6 @@ export function VehicleClusterLayer({ vehicles, routeNames }: Props) {
 
     const zoom = zoomRef.current;
 
-    // High zoom: show individual markers
     if (zoom >= 15 || vehicles.length < 20) {
       for (const v of vehicles) {
         const routeType = getRouteType(v);
@@ -83,20 +83,26 @@ export function VehicleClusterLayer({ vehicles, routeNames }: Props) {
               cursor:pointer;
               transform:rotate(${v.bearing}deg);
               transition:transform 0.4s ease;
-            ">\u{1F68C}</div>
+            ">${String.fromCodePoint(0x1F68C)}</div>
           `,
           iconSize: [26, 26],
           iconAnchor: [13, 13],
         });
 
         L.marker([v.lat, v.lon], { icon })
-          .bindPopup(`<b>${displayRoute}</b><br/>${v.speed.toFixed(1)} km/h &bull; ${v.bearing}\u00B0`)
+          .bindTooltip(`<b>${displayRoute}</b><br/>${v.speed.toFixed(0)} km/h`, {
+            direction: 'top',
+            offset: [0, -16],
+            opacity: 1,
+          })
+          .on('click', () => {
+            useAppStore.getState().setSelectedVehicle(v);
+          })
           .addTo(layer);
       }
       return;
     }
 
-    // Low zoom: cluster
     const clusters = new Map<string, ClusterGroup>();
     const cellSize = CLUSTER_RADIUS_PX * 2;
 
@@ -152,7 +158,11 @@ export function VehicleClusterLayer({ vehicles, routeNames }: Props) {
       });
 
       L.marker([avgLat, avgLon], { icon })
-        .bindPopup(`<b>${cluster.count} vehicles</b><br/>${[...cluster.routeTypes].length} route types`)
+        .bindTooltip(`<b>${cluster.count} vehicles</b>`, {
+          direction: 'top',
+          offset: [0, -10],
+          opacity: 1,
+        })
         .addTo(layer);
     }
   }, [vehicles, map, routeNames]);

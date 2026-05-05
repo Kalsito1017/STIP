@@ -1,9 +1,9 @@
-import { Bus, Clock, TrendingUp, AlertTriangle } from 'lucide-react';
+import { Bus, Clock, TrendingUp, AlertTriangle, Loader2 } from 'lucide-react';
 import { StatCard } from '../components/StatCard';
 import { AlertBanner } from '../components/AlertBanner';
 import { TripUpdatesList } from '../components/TripUpdatesList';
 import { ErrorAlert } from '../components/ErrorAlert';
-import { SkeletonCard, SkeletonChart } from '../components/Skeleton';
+import { SkeletonCard, SkeletonChart, SkeletonRankingList } from '../components/Skeleton';
 import { useLiveVehicles } from '../hooks/useVehicles';
 import { useReliabilityRanking, usePeakHours } from '../hooks/useDelays';
 import { useAppStore } from '../store/useAppStore';
@@ -12,14 +12,17 @@ import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
+import { useTranslation } from 'react-i18next';
 
 export function DashboardPage() {
-  const { data: vehicles, isLoading: vehiclesLoading, isError: vehiclesError, refetch: refetchVehicles } = useLiveVehicles();
-  const { data: ranking, isLoading: rankingLoading, isError: rankingError, refetch: refetchRanking } = useReliabilityRanking(10, true);
-  const { data: peakHours, isLoading: peakLoading, isError: peakError, refetch: refetchPeak } = usePeakHours();
+  const { t } = useTranslation('dashboard');
+  const { data: vehicles, isLoading: vehiclesLoading, isFetching: vehiclesFetching, isError: vehiclesError, refetch: refetchVehicles } = useLiveVehicles();
+  const { data: ranking, isLoading: rankingLoading, isFetching: rankingFetching, isError: rankingError, refetch: refetchRanking } = useReliabilityRanking(10, true);
+  const { data: peakHours, isLoading: peakLoading, isFetching: peakFetching, isError: peakError, refetch: refetchPeak } = usePeakHours();
   const alerts = useAppStore((s) => s.alerts);
 
   const loading = vehiclesLoading || rankingLoading || peakLoading;
+  const isBackgroundFetching = !loading && (vehiclesFetching || rankingFetching || peakFetching);
   const hasAnyError = vehiclesError || rankingError || peakError;
 
   const retryAll = () => {
@@ -35,7 +38,15 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Dashboard</h1>
+      <div className="flex items-center gap-3">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-900">{t('title')}</h1>
+        {isBackgroundFetching && (
+          <span className="inline-flex items-center gap-1 text-xs text-slate-400">
+            <Loader2 className="w-3 h-3 animate-spin" />
+            Updating
+          </span>
+        )}
+      </div>
 
       {loading ? (
         <>
@@ -47,51 +58,43 @@ export function DashboardPage() {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             <SkeletonChart height={250} />
-            <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-5 shadow-sm space-y-3">
-              <div className="h-3 w-32 bg-slate-200 rounded animate-pulse" />
-              {Array.from({ length: 10 }).map((_, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <div className="h-3 w-5 bg-slate-200 rounded animate-pulse flex-shrink-0" />
-                  <div className="h-3 w-14 bg-slate-200 rounded animate-pulse flex-shrink-0" />
-                  <div className="h-2 flex-1 bg-slate-200 rounded-full animate-pulse" />
-                  <div className="h-3 w-10 bg-slate-200 rounded animate-pulse flex-shrink-0" />
-                  <div className="h-3 w-14 bg-slate-200 rounded animate-pulse flex-shrink-0" />
-                </div>
-              ))}
+            <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-5 shadow-sm">
+              <div className="h-3 w-32 bg-slate-200 rounded animate-pulse mb-4" />
+              <SkeletonRankingList rows={10} />
             </div>
           </div>
         </>
       ) : hasAnyError ? (
         <ErrorAlert
-          message="Some dashboard data could not be loaded"
+          message={t('error_loading')}
           onRetry={retryAll}
         />
       ) : (
         <>
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <StatCard
-              title="Active Vehicles"
+              title={t('active_vehicles')}
               value={vehicles?.length ?? 0}
-              subtitle="Currently tracked"
+              subtitle={t('currently_tracked')}
               icon={Bus}
             />
             <StatCard
-              title="Avg Delay"
+              title={t('avg_delay')}
               value={`${avgDelay}s`}
-              subtitle="Across all routes"
+              subtitle={t('across_all_routes')}
               icon={Clock}
               trend={avgDelay < 120 ? 'up' : 'down'}
             />
             <StatCard
-              title="Best Route"
+              title={t('best_route')}
               value={ranking?.[0]?.shortName ?? '\u2014'}
               subtitle={`Score: ${Math.round(ranking?.[0]?.score ?? 0)}`}
               icon={TrendingUp}
             />
             <StatCard
-              title="Active Alerts"
+              title={t('active_alerts')}
               value={alerts.length}
-              subtitle={alerts.some(a => a.severity === 3) ? 'Severe active' : 'Monitoring'}
+              subtitle={alerts.some(a => a.severity === 3) ? t('severe_active') : t('monitoring')}
               icon={AlertTriangle}
               trend={alerts.length === 0 ? 'up' : 'down'}
             />
@@ -102,7 +105,7 @@ export function DashboardPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             <Card className="p-4 sm:p-5">
               <CardHeader className="p-0 mb-4">
-                <CardTitle>Peak Hour Delays</CardTitle>
+                <CardTitle>{t('peak_hour_delays')}</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
               {peakHours?.length ? (
@@ -116,14 +119,14 @@ export function DashboardPage() {
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
-                <p className="text-slate-400 text-sm">No peak hour data available</p>
+                <p className="text-slate-400 text-sm">{t('no_peak_hour_data')}</p>
               )}
               </CardContent>
             </Card>
 
             <Card className="p-4 sm:p-5">
               <CardHeader className="p-0 mb-4">
-                <CardTitle>Reliability Ranking (Top 10)</CardTitle>
+                <CardTitle>{t('reliability_ranking')}</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
               {ranking?.length ? (
@@ -144,7 +147,7 @@ export function DashboardPage() {
                   ))}
                 </div>
               ) : (
-                <p className="text-slate-400 text-sm">No ranking data available</p>
+                <p className="text-slate-400 text-sm">{t('no_ranking_data')}</p>
               )}
               </CardContent>
             </Card>

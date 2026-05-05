@@ -1,4 +1,4 @@
-import { useMemo, useRef, useEffect, useState } from 'react';
+import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import { MapContainer, TileLayer, useMap, ZoomControl } from 'react-leaflet';
 import * as L from 'leaflet';
 import { useAppStore } from '../store/useAppStore';
@@ -10,14 +10,15 @@ import { useAllRouteShapes } from '../hooks/useRouteShapes';
 import { useDelayHeatmap } from '../hooks/useHeatmap';
 import { AlertBanner } from '../components/AlertBanner';
 import { ErrorAlert } from '../components/ErrorAlert';
+import { MapLoadingOverlay } from '../components/MapLoadingOverlay';
 import { RouteShapeLayer } from '../components/map/RouteShapeLayer';
 import { StopLayer } from '../components/map/StopLayer';
 import { VehicleLayer } from '../components/map/VehicleLayer';
 import { VehicleClusterLayer } from '../components/map/VehicleClusterLayer';
 import { DelayHeatmapLayer } from '../components/map/DelayHeatmapLayer';
-import { FilterPanel } from '../components/map/FilterPanel';
-import { LocateControl } from '../components/map/LocateControl';
-import { Card } from '../components/ui/card';
+import { VehicleDetailSheet } from '../components/map/VehicleDetailSheet';
+import { MapControls } from '../components/map/MapControls';
+import { VehicleStatsBar } from '../components/map/VehicleStatsBar';
 import type { StopFeatureCollection } from '../types/map';
 
 const SOFIA_CENTER: L.LatLngTuple = [42.6977, 23.3219];
@@ -43,6 +44,20 @@ function FitBoundsOnShapes() {
   return null;
 }
 
+function FlyToTarget() {
+  const map = useMap();
+  const flyToTarget = useAppStore((s) => s.flyToTarget);
+  const setFlyToTarget = useAppStore((s) => s.setFlyToTarget);
+
+  useEffect(() => {
+    if (!flyToTarget) return;
+    map.flyTo([flyToTarget.lat, flyToTarget.lon], flyToTarget.zoom, { duration: 1 });
+    setFlyToTarget(null);
+  }, [flyToTarget, map, setFlyToTarget]);
+
+  return null;
+}
+
 function stopsToGeoJSON(stops: { stopId: string; stopName: string; lat: number; lon: number }[] | undefined): StopFeatureCollection {
   return {
     type: 'FeatureCollection',
@@ -54,30 +69,27 @@ function stopsToGeoJSON(stops: { stopId: string; stopName: string; lat: number; 
   };
 }
 
-function formatTimeAgo(isoString: string | null): string {
-  if (!isoString) return '';
-  const diff = Date.now() - new Date(isoString).getTime();
-  const seconds = Math.floor(diff / 1000);
-  if (seconds < 5) return 'Just now';
-  if (seconds < 60) return `${seconds}s ago`;
-  const minutes = Math.floor(seconds / 60);
-  return `${minutes}m ago`;
-}
-
 export function LiveMapPage() {
   useRealtime();
   const vehicles = useAppStore((s) => s.vehicles);
   const connectionState = useAppStore((s) => s.connectionState);
-  const lastUpdatedAt = useAppStore((s) => s.lastUpdatedAt);
   const darkMode = useAppStore((s) => s.darkMode);
-  const toggleDarkMode = useAppStore((s) => s.toggleDarkMode);
-  const [routeFilter, setRouteFilter] = useState('');
-  const { data: routes, isError: routesError, error: routesErr, refetch: refetchRoutes } = useRoutes();
-  const { data: stops } = useStops();
-  const { data: liveVehicles } = useLiveVehicles();
-  const { data: shapes } = useAllRouteShapes();
-  const { data: heatmap } = useDelayHeatmap();
+  const routeFilter = useAppStore((s) => s.routeFilter);
+  const { data: routes, isLoading: routesLoading, isError: routesError, error: routesErr, refetch: refetchRoutes } = useRoutes();
+  const { data: stops, isLoading: stopsLoading } = useStops();
+  const { data: liveVehicles, isLoading: vehiclesLoading } = useLiveVehicles();
+  const { data: shapes, isLoading: shapesLoading } = useAllRouteShapes();
+  const { data: heatmap, isLoading: heatmapLoading } = useDelayHeatmap();
   const [clusterMode, setClusterMode] = useState(false);
+  const [showRoutes, setShowRoutes] = useState(true);
+  const [showStops, setShowStops] = useState(true);
+  const [showHeatmap, setShowHeatmap] = useState(true);
+  const [showVehicles, setShowVehicles] = useState(true);
+  const mapRef = useRef<L.Map | null>(null);
+
+  const handleLocate = useCallback(() => {
+    mapRef.current?.locate({ setView: true, maxZoom: 16, enableHighAccuracy: true });
+  }, []);
 
   const routeNames = useMemo(() => {
     const map: Record<string, string> = {};
@@ -96,65 +108,79 @@ export function LiveMapPage() {
 
   const routeLines = shapes ?? { type: 'FeatureCollection' as const, features: [] };
 
+  const mapLoading = routesLoading || stopsLoading || vehiclesLoading || shapesLoading || heatmapLoading;
+  const loadingLayers = [
+    { label: 'Routes', loaded: !routesLoading },
+    { label: 'Stops', loaded: !stopsLoading },
+    { label: 'Vehicles', loaded: !vehiclesLoading },
+    { label: 'Route shapes', loaded: !shapesLoading },
+    { label: 'Delay heatmap', loaded: !heatmapLoading },
+  ];
+
   return (
-    <div className="space-y-3 sm:space-y-4">
-      <AlertBanner />
+    <div className="h-screen w-screen relative">
+      <MapLoadingOverlay visible={mapLoading} layers={loadingLayers} />
+
       {routesError && (
-        <ErrorAlert message={routesErr.message} onRetry={() => refetchRoutes()} />
-      )}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Live Map</h1>
-          {lastUpdatedAt && (
-            <span className="text-xs text-slate-400">
-              Updated {formatTimeAgo(lastUpdatedAt)}
-            </span>
-          )}
+        <div className="absolute top-16 left-4 right-4 z-[1000] max-w-md">
+          <ErrorAlert message={routesErr.message} onRetry={() => refetchRoutes()} />
         </div>
-        <FilterPanel
-          routes={routes}
-          routeFilter={routeFilter}
-          onRouteFilterChange={setRouteFilter}
-          darkMode={darkMode}
-          onToggleDarkMode={toggleDarkMode}
-          vehicleCount={displayVehicles.length}
-          clusterMode={clusterMode}
-          onToggleCluster={() => setClusterMode((v) => !v)}
+      )}
+
+      <MapContainer
+        ref={mapRef}
+        center={SOFIA_CENTER}
+        zoom={12}
+        style={{ width: '100%', height: '100%' }}
+        zoomControl={false}
+      >
+        <ZoomControl position="topright" />
+        <FitBoundsOnShapes />
+        <FlyToTarget />
+
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          opacity={darkMode ? 0 : 1}
         />
-      </div>
-      <Card className="overflow-hidden" style={{ height: 'calc(100vh - 200px)' }}>
-        <MapContainer
-          center={SOFIA_CENTER}
-          zoom={12}
-          style={{ width: '100%', height: '100%' }}
-          zoomControl={false}
-        >
-          <ZoomControl position="topright" />
-          <FitBoundsOnShapes />
-
+        {darkMode && (
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            opacity={darkMode ? 0 : 1}
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>, &copy; <a href="https://carto.com/">CARTO</a>'
+            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           />
-          {darkMode && (
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>, &copy; <a href="https://carto.com/">CARTO</a>'
-              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-            />
-          )}
+        )}
 
-          <RouteShapeLayer data={routeLines} />
-          <StopLayer data={stopGeojson} />
-          {heatmap && heatmap.length > 0 && <DelayHeatmapLayer points={heatmap} />}
-          {clusterMode ? (
-            <VehicleClusterLayer vehicles={displayVehicles} routeNames={routeNames} />
-          ) : (
-            <VehicleLayer vehicles={displayVehicles} routeNames={routeNames} />
-          )}
-          <LocateControl />
-        </MapContainer>
-      </Card>
+        {showRoutes && <RouteShapeLayer data={routeLines} />}
+        {showStops && <StopLayer data={stopGeojson} />}
+        {showHeatmap && heatmap && heatmap.length > 0 && <DelayHeatmapLayer points={heatmap} />}
+        {showVehicles && (clusterMode ? (
+          <VehicleClusterLayer vehicles={displayVehicles} routeNames={routeNames} />
+        ) : (
+          <VehicleLayer vehicles={displayVehicles} routeNames={routeNames} />
+        ))}
+      </MapContainer>
+
+      <div className="absolute top-14 left-3 right-3 sm:left-4 sm:right-4 z-[999] max-w-md">
+        <AlertBanner />
+      </div>
+
+      <VehicleStatsBar vehicles={displayVehicles} />
+
+      <MapControls
+        clusterMode={clusterMode}
+        onToggleCluster={() => setClusterMode((v) => !v)}
+        showRoutes={showRoutes}
+        showStops={showStops}
+        showHeatmap={showHeatmap}
+        showVehicles={showVehicles}
+        onToggleRoutes={() => setShowRoutes((v) => !v)}
+        onToggleStops={() => setShowStops((v) => !v)}
+        onToggleHeatmap={() => setShowHeatmap((v) => !v)}
+        onToggleVehicles={() => setShowVehicles((v) => !v)}
+        onLocate={handleLocate}
+      />
+
+      <VehicleDetailSheet routeNames={routeNames} />
     </div>
   );
 }

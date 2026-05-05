@@ -1,4 +1,5 @@
 import { useAppStore } from '../store/useAppStore';
+import { useTranslation } from 'react-i18next';
 
 const severityColors: Record<number, string> = {
   1: 'bg-blue-100 border-blue-400 text-blue-800',
@@ -6,23 +7,24 @@ const severityColors: Record<number, string> = {
   3: 'bg-orange-100 border-orange-400 text-orange-800',
 };
 
-const severityLabels: Record<number, string> = {
-  1: 'INFO',
-  2: 'WARNING',
-  3: 'SEVERE',
-};
-
-
 export function AlertBanner() {
+  const { t } = useTranslation('alerts');
   const alerts = useAppStore((s) => s.alerts);
 
   if (alerts.length === 0) return null;
+
+  const severityLabels: Record<number, string> = {
+    1: t('info'),
+    2: t('warning'),
+    3: t('severe'),
+  };
 
   return (
     <div className="space-y-2">
       {alerts.map((alert) => {
         const severity = alert.severity ?? 2;
         const colorClass = severityColors[severity] ?? severityColors[2];
+        const label = severityLabels[severity] ?? t('alert');
 
         return (
           <div
@@ -31,12 +33,12 @@ export function AlertBanner() {
           >
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
               <span className="text-xs font-bold px-1.5 py-0.5 rounded bg-white/60 flex-shrink-0">
-                {severityLabels[severity] ?? 'ALERT'}
+                {label}
               </span>
               <span className="font-semibold text-sm sm:text-base break-words">{alert.headerText}</span>
               {alert.informedEntities.some((e) => e.routeId) && (
                 <span className="text-xs flex-shrink-0">
-                  Routes: {[...new Set(alert.informedEntities.map((e) => e.routeId).filter(Boolean))].join(', ')}
+                  {t('routes_prefix')} {[...new Set(alert.informedEntities.map((e) => e.routeId).filter(Boolean))].join(', ')}
                 </span>
               )}
             </div>

@@ -17,7 +17,7 @@ export function useRegister() {
         fullName: response.fullName,
       });
       toast.success('Account created successfully');
-      navigate('/dashboard');
+      navigate('/');
     },
     onError: (error: Error) => {
       const msg = (error as { response?: { data?: { details?: string[]; error?: string } } }).response?.data?.details?.join?.(', ')
@@ -41,7 +41,7 @@ export function useLogin() {
         fullName: response.fullName,
       });
       toast.success('Signed in successfully');
-      navigate('/dashboard');
+      navigate('/');
     },
     onError: (error: Error) => {
       const msg = (error as { response?: { data?: { details?: string[]; error?: string } } }).response?.data?.details?.join?.(', ')
@@ -58,7 +58,7 @@ export function useLogout() {
 
   return () => {
     clearAuth();
-    navigate('/login');
+    navigate('/');
   };
 }
 

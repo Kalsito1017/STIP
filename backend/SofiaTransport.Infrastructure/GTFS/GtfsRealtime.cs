@@ -5,24 +5,34 @@ namespace TransitRealtime;
 public sealed class FeedMessage
 {
     public List<FeedEntity> Entity { get; } = new();
+    public List<string> ParseErrors { get; } = new();
 
     public static FeedMessage ParseFrom(byte[] data)
     {
         var msg = new FeedMessage();
         var input = new CodedInputStream(data);
+        var entityIndex = 0;
 
         while (input.ReadTag() is uint tag)
         {
             if (WireFormat.GetTagFieldNumber(tag) == 2)
             {
+                entityIndex++;
                 var bytes = input.ReadBytes();
                 var sub = new CodedInputStream(bytes.ToByteArray());
-                msg.Entity.Add(FeedEntity.Parse(sub));
+                try
+                {
+                    msg.Entity.Add(FeedEntity.Parse(sub));
+                }
+                catch (InvalidProtocolBufferException ex)
+                {
+                    msg.ParseErrors.Add($"Entity #{entityIndex}: {ex.Message}");
+                }
             }
-        else if (!ProtobufHelpers.TrySkipField(input)) break;
-    }
+            else if (!ProtobufHelpers.TrySkipField(input)) break;
+        }
 
-    return msg;
+        return msg;
     }
 }
 

@@ -1,5 +1,6 @@
 using System.Net.Http;
 using Google.Protobuf;
+using Microsoft.Extensions.Logging;
 using NetTopologySuite.Geometries;
 using Polly;
 using SofiaTransport.Application.Common.Interfaces;
@@ -12,8 +13,13 @@ namespace SofiaTransport.Infrastructure.GTFS;
 public class GtfsFeedClient : IGtfsFeedClient
 {
     private readonly HttpClient _httpClient;
+    private readonly ILogger<GtfsFeedClient> _logger;
 
-    public GtfsFeedClient(HttpClient httpClient) => _httpClient = httpClient;
+    public GtfsFeedClient(HttpClient httpClient, ILogger<GtfsFeedClient> logger)
+    {
+        _httpClient = httpClient;
+        _logger = logger;
+    }
 
     public async Task<IReadOnlyList<Vehicle>> FetchVehiclePositionsAsync(CancellationToken ct)
     {
@@ -21,7 +27,17 @@ public class GtfsFeedClient : IGtfsFeedClient
         response.EnsureSuccessStatusCode();
 
         var data = await response.Content.ReadAsByteArrayAsync(ct);
+        _logger.LogDebug("Fetched {Bytes} bytes from vehicle-positions feed", data.Length);
+
         var feed = TransitRealtime.FeedMessage.ParseFrom(data);
+
+        if (feed.ParseErrors.Count > 0)
+        {
+            _logger.LogWarning(
+                "Skipped {SkippedCount} malformed entities in vehicle-positions feed: {Errors}",
+                feed.ParseErrors.Count,
+                string.Join("; ", feed.ParseErrors));
+        }
 
         return feed.Entity
             .Where(e => e.Vehicle is not null)

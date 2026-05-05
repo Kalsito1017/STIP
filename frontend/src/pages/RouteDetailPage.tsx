@@ -11,14 +11,16 @@ import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
+import { useTranslation } from 'react-i18next';
 
 export function RouteDetailPage() {
+  const { t } = useTranslation('routes');
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   if (!id) return <Navigate to="/routes" replace />;
 
   const { data: route, isLoading, isError, error, refetch } = useRouteDetail(id);
-  const { data: delayPattern, isError: dpError, error: dpErr, refetch: refetchDp } = useRouteDelayPattern(id);
+  const { data: delayPattern, isLoading: dpLoading, isError: dpError, error: dpErr, refetch: refetchDp } = useRouteDelayPattern(id);
 
   if (isLoading) return (
     <div className="space-y-4 sm:space-y-6">
@@ -39,7 +41,7 @@ export function RouteDetailPage() {
     </div>
   );
   if (isError) return <ErrorAlert message={error.message} onRetry={() => refetch()} />;
-  if (!route) return <p className="text-slate-500">Route not found</p>;
+  if (!route) return <p className="text-slate-500">{t('not_found')}</p>;
 
   const score = route.latestReliability?.score ?? null;
   const scoreColor = score === null ? 'text-slate-400' : score >= 70 ? 'text-green-600' : score >= 40 ? 'text-amber-600' : 'text-red-600';
@@ -47,7 +49,7 @@ export function RouteDetailPage() {
   return (
     <div className="space-y-4 sm:space-y-6">
       <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
-        <ArrowLeft className="w-4 h-4" /> Back
+        <ArrowLeft className="w-4 h-4" /> {t('back')}
       </Button>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -59,12 +61,12 @@ export function RouteDetailPage() {
                   <h1 className="text-xl sm:text-2xl font-bold text-slate-900 truncate">{route.shortName}</h1>
                   <RouteBadge type={route.type} />
                 </div>
-                <p className="text-sm text-slate-500 truncate">{route.longName ?? 'Route'}</p>
+                <p className="text-sm text-slate-500 truncate">{route.longName ?? t('route')}</p>
               </div>
               {score !== null && (
                 <div className="text-center flex-shrink-0">
                   <div className={`text-2xl sm:text-3xl font-bold ${scoreColor}`}>{Math.round(score)}</div>
-                  <div className="text-xs text-slate-400">Reliability Score</div>
+                  <div className="text-xs text-slate-400">{t('reliability_score')}</div>
                 </div>
               )}
             </div>
@@ -73,15 +75,15 @@ export function RouteDetailPage() {
               <div className="grid grid-cols-3 gap-2 sm:gap-4 mt-4 text-sm">
                 <div className="bg-slate-50 rounded-md p-2 sm:p-3 text-center">
                   <div className="font-bold text-slate-900">{(route.latestReliability.onTimePct * 100).toFixed(1)}%</div>
-                  <div className="text-slate-500 text-xs">On-Time</div>
+                  <div className="text-slate-500 text-xs">{t('on_time')}</div>
                 </div>
                 <div className="bg-slate-50 rounded-md p-2 sm:p-3 text-center">
                   <div className="font-bold text-slate-900">{Math.round(route.latestReliability.avgDelaySeconds)}s</div>
-                  <div className="text-slate-500 text-xs">Avg Delay</div>
+                  <div className="text-slate-500 text-xs">{t('avg_delay')}</div>
                 </div>
                 <div className="bg-slate-50 rounded-md p-2 sm:p-3 text-center">
                   <div className="font-bold text-slate-900">{route.latestReliability.sampleCount}</div>
-                  <div className="text-slate-500 text-xs">Samples</div>
+                  <div className="text-slate-500 text-xs">{t('samples')}</div>
                 </div>
               </div>
             )}
@@ -94,11 +96,15 @@ export function RouteDetailPage() {
       <Card className="p-4 sm:p-5">
         <CardHeader className="p-0 mb-4">
           <CardTitle className="flex items-center gap-2">
-            <Clock className="w-4 h-4" /> Delay by Hour
+            <Clock className="w-4 h-4" /> {t('delay_by_hour')}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-        {dpError ? (
+        {dpLoading ? (
+          <div style={{ height: 250 }}>
+            <Skeleton className="h-full w-full" />
+          </div>
+        ) : dpError ? (
           <ErrorAlert message={dpErr.message} onRetry={() => refetchDp()} />
         ) : delayPattern?.length ? (
           <ResponsiveContainer width="100%" height={250}>
@@ -111,7 +117,7 @@ export function RouteDetailPage() {
             </BarChart>
           </ResponsiveContainer>
         ) : (
-          <p className="text-slate-400 text-sm">No delay pattern data available</p>
+          <p className="text-slate-400 text-sm">{t('no_delay_pattern')}</p>
         )}
         </CardContent>
       </Card>

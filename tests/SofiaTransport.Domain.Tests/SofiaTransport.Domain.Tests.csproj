@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\SofiaTransport.Domain\SofiaTransport.Domain.csproj" />
+    <ProjectReference Include="..\..\backend\SofiaTransport.Domain\SofiaTransport.Domain.csproj" />
   </ItemGroup>
 
 </Project>
