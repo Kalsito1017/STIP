@@ -4,6 +4,7 @@ import { useRoutes } from '../hooks/useRoutes';
 import { useStops } from '../hooks/useStops';
 import { useAppStore } from '../store/useAppStore';
 import { Input } from './ui/input';
+import { useTranslation } from 'react-i18next';
 
 interface SearchResult {
   type: 'route' | 'stop';
@@ -13,6 +14,7 @@ interface SearchResult {
 }
 
 export function SearchBar() {
+  const { t } = useTranslation('map');
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const { data: routes, isLoading: routesLoading } = useRoutes();
@@ -80,7 +82,7 @@ export function SearchBar() {
         <Input
           ref={inputRef}
           type="text"
-          placeholder="Search routes or stops..."
+          placeholder={t('search_placeholder')}
           value={query}
           onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
           onFocus={() => { if (results.length > 0) setOpen(true); }}
@@ -92,7 +94,7 @@ export function SearchBar() {
           {(routesLoading || stopsLoading) ? (
             <div className="flex items-center gap-2 px-3 py-3 text-sm text-slate-400">
               <Loader2 className="w-4 h-4 animate-spin" />
-              Loading routes and stops...
+              {t('loading_routes_stops')}
             </div>
           ) : results.length > 0 ? (
             results.map((r) => (
@@ -115,7 +117,7 @@ export function SearchBar() {
               </button>
             ))
           ) : (
-            <p className="px-3 py-3 text-sm text-slate-400">No results found</p>
+            <p className="px-3 py-3 text-sm text-slate-400">{t('no_results')}</p>
           )}
         </div>
       )}

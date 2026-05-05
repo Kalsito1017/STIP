@@ -55,17 +55,17 @@ export function StopDetailPage() {
               setFlyToTarget({ lat: stop.lat, lon: stop.lon, zoom: 17 });
               navigate('/');
             }}
-            title="View on map"
+            title={t('view_on_map_aria')}
           >
             <img
               src={mapThumbUrl}
-              alt={`Map of ${stop.stopName}`}
+              alt={`${t('view_on_map_aria')} ${stop.stopName}`}
               className="w-full h-full object-cover opacity-60 hover:opacity-80 transition-opacity"
             />
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="bg-card/90 backdrop-blur-sm border border-border rounded-lg px-3 py-1.5 flex items-center gap-2 text-sm font-medium text-foreground shadow-md">
                 <Map className="w-4 h-4" />
-                View on live map
+                {t('view_on_map')}
               </div>
             </div>
           </div>

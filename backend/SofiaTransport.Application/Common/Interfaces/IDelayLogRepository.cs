@@ -1,3 +1,4 @@
+using SofiaTransport.Application.Analytics;
 using SofiaTransport.Domain.Entities;
 
 namespace SofiaTransport.Application.Common.Interfaces;
@@ -8,4 +9,5 @@ public interface IDelayLogRepository : IRepository<DelayLog>
     Task<IReadOnlyList<DelayLog>> GetByStopAsync(string stopId, DateTime from, DateTime to);
     Task<IReadOnlyList<DelayLog>> GetForHeatmapAsync(DateTime from, DateTime to);
     Task<IReadOnlyList<DelayLog>> GetByDateAsync(DateTime date);
+    Task<IReadOnlyList<HeatmapPointDto>> GetHeatmapAggregatedAsync(DateTime from, DateTime to);
 }

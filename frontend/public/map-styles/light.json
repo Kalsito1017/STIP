@@ -1,0 +1,144 @@
+{
+  "version": 8,
+  "name": "STIP Light",
+  "sources": {
+    "protomaps": {
+      "type": "vector",
+      "url": "https://tiles.protomaps.com/6/{z}/{x}/{y}.pbf?tileset=protomaps-planet-v3-20241217",
+      "maxzoom": 14
+    }
+  },
+  "glyphs": "https://fonts.protomaps.com/{fontstack}/{range}/{range}.pbf",
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": { "background-color": "#f8f4f0" }
+    },
+    {
+      "id": "earth",
+      "source": "protomaps",
+      "source-layer": "land",
+      "type": "fill",
+      "paint": { "fill-color": "#e8e4df" }
+    },
+    {
+      "id": "water",
+      "source": "protomaps",
+      "source-layer": "water",
+      "type": "fill",
+      "paint": { "fill-color": "#a0c8e8" }
+    },
+    {
+      "id": "landuse",
+      "source": "protomaps",
+      "source-layer": "landuse",
+      "type": "fill",
+      "paint": {
+        "fill-color": [
+          "match", ["get", "pmap:kind"],
+          "park", "#c8e6c0",
+          "cemetery", "#d6d0c4",
+          "hospital", "#f0d0d0",
+          "school", "#d0e8f0",
+          "wood", "#c8dcc8",
+          "#e0dcd8"
+        ]
+      }
+    },
+    {
+      "id": "roads-minor",
+      "source": "protomaps",
+      "source-layer": "roads",
+      "type": "line",
+      "filter": ["==", "pmap:kind", "minor_road"],
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": 0.8
+      }
+    },
+    {
+      "id": "roads-secondary",
+      "source": "protomaps",
+      "source-layer": "roads",
+      "type": "line",
+      "filter": ["==", "pmap:kind", "medium_road"],
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": 1.5
+      }
+    },
+    {
+      "id": "roads-primary",
+      "source": "protomaps",
+      "source-layer": "roads",
+      "type": "line",
+      "filter": ["==", "pmap:kind", "major_road"],
+      "paint": {
+        "line-color": "#f0d080",
+        "line-width": 2.5
+      }
+    },
+    {
+      "id": "roads-highway",
+      "source": "protomaps",
+      "source-layer": "roads",
+      "type": "line",
+      "filter": ["==", "pmap:kind", "highway"],
+      "paint": {
+        "line-color": "#f0a040",
+        "line-width": 3.5
+      }
+    },
+    {
+      "id": "buildings",
+      "source": "protomaps",
+      "source-layer": "buildings",
+      "type": "fill",
+      "paint": { "fill-color": "#ddd8d4", "fill-opacity": 0.6 }
+    },
+    {
+      "id": "pois",
+      "source": "protomaps",
+      "source-layer": "pois",
+      "type": "symbol",
+      "layout": {
+        "text-field": "{name}",
+        "text-font": ["Open Sans Regular"],
+        "text-size": 10
+      },
+      "paint": {
+        "text-color": "#666",
+        "text-halo-color": "#fff",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "places",
+      "source": "protomaps",
+      "source-layer": "places",
+      "type": "symbol",
+      "layout": {
+        "text-field": "{name}",
+        "text-font": ["Open Sans Bold"],
+        "text-size": ["step", ["get", "pmap:rank"], 12, 2, 10, 3, 8]
+      },
+      "paint": {
+        "text-color": "#333",
+        "text-halo-color": "#fff",
+        "text-halo-width": 1.5
+      }
+    },
+    {
+      "id": "boundaries",
+      "source": "protomaps",
+      "source-layer": "boundaries",
+      "type": "line",
+      "paint": {
+        "line-color": "#9e9cab",
+        "line-width": 0.5,
+        "line-dasharray": [3, 2]
+      }
+    }
+  ]
+}

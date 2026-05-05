@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useCountUp } from '../hooks/useCountUp';
+import { getLocale } from '../lib/utils';
 
 const COUNT_UP_DURATION_MS = 1500;
 const COUNT_UP_STAGGER_MS = 200;
@@ -43,7 +44,7 @@ export function AnimatedStat({
   return (
     <div ref={ref} className="text-center">
       <div className="text-3xl sm:text-4xl font-bold text-blue-600">
-        {count.toLocaleString()}{suffix}
+        {count.toLocaleString(getLocale())}{suffix}
       </div>
       <div className="text-sm text-slate-500 mt-1">{label}</div>
     </div>

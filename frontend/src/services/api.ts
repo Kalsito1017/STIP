@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { toast } from 'sonner';
+import { useAppStore } from '../store/useAppStore';
 
 const api = axios.create({
   baseURL: '/api',
@@ -31,8 +32,8 @@ api.interceptors.response.use(
     }
 
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      useAppStore.getState().clearAuth();
+      toast.error('Session expired. Please sign in again.');
     }
     return Promise.reject(error);
   }
@@ -78,6 +79,8 @@ export const routesApi = {
 
 export const stopsApi = {
   getAll: () => api.get('/stops').then(r => r.data),
+  getNearby: (lat: number, lon: number, radiusKm: number = 0.5) =>
+    api.get('/stops/nearby', { params: { lat, lon, radiusKm } }).then(r => r.data),
   getCongestion: (id: string, date?: string) =>
     api.get(`/stops/${id}/congestion`, { params: { date } }).then(r => r.data),
 };
@@ -104,6 +107,8 @@ export const analyticsApi = {
     api.get('/analytics/reliability/ranking', { params: { top, best } }).then(r => r.data),
   getPeakHours: (date?: string) =>
     api.get('/analytics/peak-hours', { params: { date } }).then(r => r.data),
+  getStopCongestionAll: (date?: string) =>
+    api.get('/analytics/stop-congestion', { params: { date } }).then(r => r.data),
 };
 
 export interface DelayPredictionRequest {

@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Bus, TramFront, Train, Zap } from 'lucide-react';
 import type { Vehicle } from '../../store/useAppStore';
 import { TransitTypeRouteColor } from '../../constants/transit';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   vehicles: Vehicle[];
@@ -15,13 +16,6 @@ interface TypeCount {
   count: number;
 }
 
-const typeMeta: Record<number, { label: string; icon: React.ComponentType<{ className?: string; color?: string }> }> = {
-  0: { label: 'Tram', icon: TramFront },
-  1: { label: 'Metro', icon: Train },
-  3: { label: 'Bus', icon: Bus },
-  11: { label: 'Trolley', icon: Zap },
-};
-
 function getRouteType(routeId: string | null): number {
   if (!routeId) return 3;
   if (routeId.includes('-tram-')) return 0;
@@ -31,6 +25,15 @@ function getRouteType(routeId: string | null): number {
 }
 
 export function VehicleStatsBar({ vehicles }: Props) {
+  const { t: tMap } = useTranslation('map');
+  const { t: tTransit } = useTranslation('transit');
+  const typeMeta: Record<number, { label: string; icon: React.ComponentType<{ className?: string; color?: string }> }> = {
+    0: { label: tTransit('tram'), icon: TramFront },
+    1: { label: tTransit('metro'), icon: Train },
+    3: { label: tTransit('bus'), icon: Bus },
+    11: { label: tTransit('trolley'), icon: Zap },
+  };
+
   const typeCounts = useMemo((): TypeCount[] => {
     const counts = new Map<number, number>();
     for (const v of vehicles) {
@@ -42,12 +45,12 @@ export function VehicleStatsBar({ vehicles }: Props) {
       .sort((a, b) => b[1] - a[1])
       .map(([type, count]) => ({
         type,
-        label: typeMeta[type]?.label ?? 'Other',
+        label: typeMeta[type]?.label ?? '',
         icon: typeMeta[type]?.icon ?? Bus,
         color: TransitTypeRouteColor[type] ?? '#64748b',
         count,
       }));
-  }, [vehicles]);
+  }, [vehicles, tTransit]);
 
   const total = vehicles.length;
 
@@ -66,7 +69,7 @@ export function VehicleStatsBar({ vehicles }: Props) {
           </div>
         ))}
         <div className="pointer-events-auto bg-card/90 backdrop-blur-sm border border-border rounded-full px-3 py-1.5 flex items-center gap-1 shadow-lg text-xs font-medium">
-          <span className="text-muted-foreground">Total</span>
+          <span className="text-muted-foreground">{tMap('vehicles')}</span>
           <span className="text-foreground font-bold">{total}</span>
         </div>
       </div>

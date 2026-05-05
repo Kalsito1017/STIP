@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using SofiaTransport.Api.DependencyInjection;
@@ -28,8 +29,6 @@ try
     using (var scope = app.Services.CreateScope())
     {
         var db = scope.ServiceProvider.GetRequiredService<TransportDbContext>();
-        // Schema is managed by docker-entrypoint-initdb.d/schema.sql.
-        // EnsureCreated uses CREATE TABLE IF NOT EXISTS — idempotent if tables pre-exist.
         db.Database.EnsureCreated();
     }
 
@@ -49,7 +48,34 @@ try
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
-    app.MapGet("/health", () => Results.Ok(new { status = "ok", timestamp = DateTime.UtcNow }));
+    app.MapGet("/health", async (TransportDbContext db) =>
+    {
+        var checks = new Dictionary<string, object>();
+        var healthy = true;
+
+        try
+        {
+            await db.Database.ExecuteSqlRawAsync("SELECT 1");
+            checks["database"] = new { status = "healthy" };
+        }
+        catch (Exception ex)
+        {
+            healthy = false;
+            checks["database"] = new { status = "unhealthy", error = ex.Message };
+        }
+
+        var result = new
+        {
+            status = healthy ? "healthy" : "degraded",
+            timestamp = DateTime.UtcNow,
+            checks
+        };
+
+        var json = JsonSerializer.Serialize(result, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        return healthy
+            ? Results.Ok(result)
+            : Results.Content(json, "application/json", System.Text.Encoding.UTF8, statusCode: 503);
+    });
     app.MapHub<VehicleHub>(VehicleHub.HubPath);
 
     app.Run();

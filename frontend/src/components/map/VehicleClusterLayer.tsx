@@ -4,6 +4,7 @@ import * as L from 'leaflet';
 import type { Vehicle } from '../../store/useAppStore';
 import { useAppStore } from '../../store/useAppStore';
 import { TransitTypeRouteColor } from '../../constants/transit';
+import i18n from '../../i18n';
 
 const CLUSTER_RADIUS_PX = 60;
 
@@ -90,7 +91,7 @@ export function VehicleClusterLayer({ vehicles, routeNames }: Props) {
         });
 
         L.marker([v.lat, v.lon], { icon })
-          .bindTooltip(`<b>${displayRoute}</b><br/>${v.speed.toFixed(0)} km/h`, {
+          .bindTooltip(`<b>${displayRoute}</b><br/>${v.speed.toFixed(0)} ${i18n.t('common:km_h')}`, {
             direction: 'top',
             offset: [0, -16],
             opacity: 1,
@@ -158,7 +159,7 @@ export function VehicleClusterLayer({ vehicles, routeNames }: Props) {
       });
 
       L.marker([avgLat, avgLon], { icon })
-        .bindTooltip(`<b>${cluster.count} vehicles</b>`, {
+        .bindTooltip(`<b>${i18n.t('map:vehicles_count', { count: cluster.count })}</b>`, {
           direction: 'top',
           offset: [0, -10],
           opacity: 1,

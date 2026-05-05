@@ -59,7 +59,7 @@ export function DashboardPage() {
         {isBackgroundFetching && (
           <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
             <Loader2 className="w-3 h-3 animate-spin" />
-            Updating
+            {t('updating')}
           </span>
         )}
       </div>
@@ -84,7 +84,7 @@ export function DashboardPage() {
           <div ref={statsRef} className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <StatCard title={t('active_vehicles')} value={vehicles?.length ?? 0} subtitle={t('currently_tracked')} icon={Bus} iconColor="#22c55e" animate={statsInView} />
             <StatCard title={t('avg_delay')} value={`${avgDelay}s`} subtitle={t('across_all_routes')} icon={Clock} iconColor={avgDelay < 120 ? '#22c55e' : '#f59e0b'} trend={avgDelay < 120 ? 'up' : 'down'} />
-            <StatCard title={t('best_route')} value={ranking?.[0]?.shortName ?? '\u2014'} subtitle={`Score: ${Math.round(ranking?.[0]?.score ?? 0)}`} icon={TrendingUp} iconColor="#3b82f6" />
+            <StatCard title={t('best_route')} value={ranking?.[0]?.shortName ?? '\u2014'} subtitle={`${t('score')} ${Math.round(ranking?.[0]?.score ?? 0)}`} icon={TrendingUp} iconColor="#3b82f6" />
             <StatCard title={t('active_alerts')} value={alerts.length} subtitle={hasSevere ? t('severe_active') : t('monitoring')} icon={AlertTriangle} iconColor={alerts.length > 0 ? '#ef4444' : '#22c55e'} trend={alerts.length === 0 ? 'up' : 'down'} animate={statsInView} />
           </div>
 

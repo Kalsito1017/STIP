@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SofiaTransport.Application.Analytics;
 using SofiaTransport.Application.Common.Interfaces;
 using SofiaTransport.Domain.Entities;
 
@@ -27,6 +28,21 @@ public class DelayLogRepository : IDelayLogRepository
     public async Task<IReadOnlyList<DelayLog>> GetForHeatmapAsync(DateTime from, DateTime to) =>
         await _db.DelayLogs.Where(d => d.RecordedAt >= from && d.RecordedAt < to)
             .AsNoTracking().ToListAsync();
+
+    public async Task<IReadOnlyList<HeatmapPointDto>> GetHeatmapAggregatedAsync(DateTime from, DateTime to)
+    {
+        return await _db.Database.SqlQuery<HeatmapPointDto>(
+            $@"SELECT ST_Y(s.location::geometry) AS ""Lat"",
+                      ST_X(s.location::geometry) AS ""Lon"",
+                      AVG(d.delay_seconds) AS ""AvgDelaySeconds"",
+                      COUNT(*)::int AS ""SampleCount""
+               FROM delay_logs d
+               JOIN stops s ON s.stop_id = d.stop_id
+               WHERE d.recorded_at >= {from} AND d.recorded_at < {to}
+                 AND d.delay_seconds IS NOT NULL
+               GROUP BY s.stop_id, s.location"
+        ).ToListAsync();
+    }
 
     public async Task<IReadOnlyList<DelayLog>> GetByDateAsync(DateTime date) =>
         await _db.DelayLogs.Where(d => d.RecordedAt >= date && d.RecordedAt < date.AddDays(1))

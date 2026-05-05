@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useMap } from 'react-leaflet';
 import * as L from 'leaflet';
 import { LocateFixed, Crosshair } from 'lucide-react';
+import i18n from '../../i18n';
 
 export function LocateControl() {
   const map = useMap();
@@ -45,8 +46,8 @@ export function LocateControl() {
           onClick={handleLocate}
           disabled={locating}
           className="bg-white border border-slate-300 rounded-md px-2.5 py-2 shadow-sm hover:bg-slate-50 disabled:opacity-50 cursor-pointer flex items-center gap-1.5 text-sm"
-          aria-label="Locate me"
-          title="Show my location"
+          aria-label={i18n.t('map:locate_me')}
+          title={i18n.t('map:show_location')}
           style={{ pointerEvents: 'auto' }}
         >
           {locating ? (

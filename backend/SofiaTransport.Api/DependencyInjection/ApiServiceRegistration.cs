@@ -66,10 +66,14 @@ public static class ApiServiceRegistration
         services.AddCors(options =>
         {
             options.AddDefaultPolicy(policy =>
-                policy.WithOrigins("http://localhost:3000", "http://localhost:5173")
+            {
+                var origins = configuration.GetSection("Cors:Origins").Get<string[]>()
+                    ?? ["http://localhost:3000", "http://localhost:5173"];
+                policy.WithOrigins(origins)
                       .AllowAnyHeader()
                       .AllowAnyMethod()
-                      .AllowCredentials());
+                      .AllowCredentials();
+            });
         });
 
         services.AddResponseCompression(options =>

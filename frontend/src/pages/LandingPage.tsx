@@ -15,6 +15,7 @@ import stipLogo from '../assets/StipLogo.jpg';
 import { useCountUp } from '../hooks/useCountUp';
 import { RouteLines } from '../components/RouteLines';
 import { useTranslation } from 'react-i18next';
+import { getLocale } from '../lib/utils';
 
 const COUNT_UP_DURATION = 1500;
 const COUNT_UP_STAGGER = 200;
@@ -58,7 +59,7 @@ function AnimatedDarkStat({
   return (
     <div ref={ref} className="text-center">
       <div className="text-3xl sm:text-4xl font-bold text-blue-400">
-        {count.toLocaleString()}{suffix}
+        {count.toLocaleString(getLocale())}{suffix}
       </div>
       <div className="text-xs sm:text-sm text-slate-400 mt-1">{label}</div>
     </div>

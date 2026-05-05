@@ -29,9 +29,6 @@ public class VehicleBroadcaster : IVehicleBroadcaster
             recordedAt = vehicle.RecordedAt
         };
 
-        if (!string.IsNullOrEmpty(vehicle.RouteId))
-        {
-            await _hub.Clients.Group($"route:{vehicle.RouteId}").SendAsync("VehicleUpdated", payload);
-        }
+        await _hub.Clients.All.SendAsync("VehicleUpdated", payload);
     }
 }

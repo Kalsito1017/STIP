@@ -1,5 +1,6 @@
 import { Loader2 } from 'lucide-react';
 import { Skeleton } from './Skeleton';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   visible: boolean;
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export function MapLoadingOverlay({ visible, layers }: Props) {
+  const { t } = useTranslation('map');
   if (!visible) return null;
 
   return (
@@ -14,7 +16,7 @@ export function MapLoadingOverlay({ visible, layers }: Props) {
       <div className="bg-white border border-slate-200 rounded-xl shadow-lg p-6 sm:p-8 w-80 max-w-[90vw]">
         <div className="flex items-center gap-3 mb-5">
           <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />
-          <h2 className="text-base font-semibold text-slate-800">Loading map data</h2>
+          <h2 className="text-base font-semibold text-slate-800">{t('loading_map_data')}</h2>
         </div>
 
         {layers && layers.length > 0 && (

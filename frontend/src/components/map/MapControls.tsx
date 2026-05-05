@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Layers, Bus, MapPin, Thermometer, Car, Crosshair } from 'lucide-react';
+import { Layers, Bus, MapPin, Thermometer, Car, Crosshair, Radio } from 'lucide-react';
 import { Button } from '../ui/button';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   clusterMode: boolean;
@@ -10,10 +11,14 @@ interface Props {
   showStops: boolean;
   showHeatmap: boolean;
   showVehicles: boolean;
+  showCongestion: boolean;
+  showNearby: boolean;
   onToggleRoutes: () => void;
   onToggleStops: () => void;
   onToggleHeatmap: () => void;
   onToggleVehicles: () => void;
+  onToggleCongestion: () => void;
+  onToggleNearby: () => void;
   onLocate: () => void;
 }
 
@@ -24,12 +29,17 @@ export function MapControls({
   showStops,
   showHeatmap,
   showVehicles,
+  showCongestion,
+  showNearby,
   onToggleRoutes,
   onToggleStops,
   onToggleHeatmap,
   onToggleVehicles,
+  onToggleCongestion,
+  onToggleNearby,
   onLocate,
 }: Props) {
+  const { t } = useTranslation('map');
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -44,20 +54,27 @@ export function MapControls({
             className="bg-card border border-border rounded-2xl shadow-lg p-3 w-48"
           >
             <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">
-              Map Layers
+              {t('map_layers')}
             </p>
             <div className="space-y-0.5">
-              <ToggleRow icon={Car} label="Vehicles" checked={showVehicles} onChange={onToggleVehicles} />
-              <ToggleRow icon={Bus} label="Route Shapes" checked={showRoutes} onChange={onToggleRoutes} />
-              <ToggleRow icon={MapPin} label="Stops" checked={showStops} onChange={onToggleStops} />
-              <ToggleRow icon={Thermometer} label="Delay Heatmap" checked={showHeatmap} onChange={onToggleHeatmap} />
+              <ToggleRow icon={Car} label={t('vehicles')} checked={showVehicles} onChange={onToggleVehicles} />
+              <ToggleRow icon={Bus} label={t('route_shapes')} checked={showRoutes} onChange={onToggleRoutes} />
+              <ToggleRow icon={MapPin} label={t('stops_label')} checked={showStops} onChange={onToggleStops} />
+              <ToggleRow icon={Thermometer} label={t('delay_heatmap')} checked={showHeatmap} onChange={onToggleHeatmap} />
+              <ToggleRow icon={Radio} label={t('stop_congestion')} checked={showCongestion} onChange={onToggleCongestion} />
             </div>
             <div className="pt-2 mt-2 border-t border-border">
               <ToggleRow
                 icon={Layers}
-                label={clusterMode ? 'Cluster markers' : 'Individual markers'}
+                label={clusterMode ? t('cluster_markers') : t('individual_markers')}
                 checked={clusterMode}
                 onChange={onToggleCluster}
+              />
+              <ToggleRow
+                icon={MapPin}
+                label={t('nearby_stops')}
+                checked={showNearby}
+                onChange={onToggleNearby}
               />
             </div>
           </motion.div>
@@ -70,8 +87,8 @@ export function MapControls({
           size="icon"
           onClick={onLocate}
           className="bg-card shadow-lg border-border rounded-full h-10 w-10"
-          aria-label="Locate me"
-          title="Show my location"
+          aria-label={t('locate_me')}
+          title={t('show_location')}
         >
           <Crosshair className="w-4 h-4" />
         </Button>
@@ -80,8 +97,8 @@ export function MapControls({
           size="icon"
           onClick={() => setExpanded((v) => !v)}
           className={`bg-card shadow-lg border-border rounded-full h-10 w-10 ${expanded ? 'ring-2 ring-primary' : ''}`}
-          aria-label="Toggle map layers"
-          title="Map layers"
+          aria-label={t('toggle_layers')}
+          title={t('toggle_layers')}
         >
           <Layers className="w-4 h-4" />
         </Button>

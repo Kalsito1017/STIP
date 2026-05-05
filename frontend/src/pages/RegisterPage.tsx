@@ -159,7 +159,7 @@ export function RegisterPage() {
                 className="w-full"
               >
                 {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserPlus className="w-4 h-4" />}
-                {isPending ? 'Creating account...' : 'Create Account'}
+                {isPending ? t('creating_account') : t('create_account')}
               </Button>
             </form>
           )}

@@ -2,12 +2,11 @@ import { useAppStore } from '../store/useAppStore';
 import { Skeleton } from '../components/Skeleton';
 import { useTranslation } from 'react-i18next';
 
-function formatDelay(seconds: number | null): string {
+function formatDelay(seconds: number | null, unitMin: string, unitSec: string): string {
   if (seconds === null || seconds === undefined) return '\u2014';
-  const sign = seconds >= 0 ? '+' : '';
   const mins = Math.floor(Math.abs(seconds) / 60);
   const secs = Math.abs(seconds) % 60;
-  return `${sign}${seconds >= 0 ? '' : '-'}${mins}m ${secs}s`;
+  return `${seconds >= 0 ? '+' : '-'}${mins}${unitMin} ${secs}${unitSec}`;
 }
 
 function delayColor(seconds: number | null): string {
@@ -19,6 +18,7 @@ function delayColor(seconds: number | null): string {
 
 export function TripUpdatesList() {
   const { t } = useTranslation('dashboard');
+  const { t: tCommon } = useTranslation('common');
   const tripUpdates = useAppStore((s) => s.tripUpdates);
   const connectionState = useAppStore((s) => s.connectionState);
 
@@ -91,7 +91,7 @@ export function TripUpdatesList() {
                       {t('stop')} {stu.stopSequence ?? stu.stopId ?? '?'}
                     </span>
                     <span className={`font-mono ${delayColor(stu.arrivalDelay)}`}>
-                      {formatDelay(stu.arrivalDelay)}
+                      {formatDelay(stu.arrivalDelay, tCommon('min_unit'), tCommon('sec_unit'))}
                     </span>
                   </div>
                 ))}

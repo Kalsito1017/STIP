@@ -6,8 +6,10 @@ import { useLogout } from '../hooks/useAuth';
 import { SearchBar } from './SearchBar';
 import { MobileTabBar } from './MobileTabBar';
 import { Button } from './ui/button';
+import { useTranslation } from 'react-i18next';
 
 export function MapLayout() {
+  const { t } = useTranslation('layout');
   const darkMode = useAppStore((s) => s.darkMode);
   const toggleDarkMode = useAppStore((s) => s.toggleDarkMode);
   const isAuthenticated = useAppStore((s) => s.isAuthenticated);
@@ -41,7 +43,7 @@ export function MapLayout() {
               variant="outline"
               size="icon"
               onClick={toggleDarkMode}
-              aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              aria-label={darkMode ? t('switch_light') : t('switch_dark')}
               className="bg-card shadow-sm h-10 w-10"
             >
               {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -73,7 +75,7 @@ export function MapLayout() {
                       className="flex items-center gap-2 w-full px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-destructive"
                     >
                       <LogOut className="w-4 h-4" />
-                      Sign Out
+                      {t('sign_out')}
                     </button>
                   </div>
                 )}
@@ -85,7 +87,7 @@ export function MapLayout() {
                 className="shadow-sm gap-2 h-10"
               >
                 <LogIn className="w-4 h-4" />
-                <span className="hidden sm:inline">Sign In</span>
+                <span className="hidden sm:inline">{t('sign_in')}</span>
               </Button>
             )}
           </div>

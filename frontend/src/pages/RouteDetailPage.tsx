@@ -14,6 +14,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
 import { useTranslation } from 'react-i18next';
+import { getLocale } from '../lib/utils';
 
 export function RouteDetailPage() {
   const { t } = useTranslation('routes');
@@ -104,7 +105,7 @@ export function RouteDetailPage() {
 
             {lastUpdated && (
               <p className="text-[10px] text-muted-foreground/60 mt-3 text-right">
-                Updated {new Date(lastUpdated).toLocaleString()}
+                {t('updated')} {new Date(lastUpdated).toLocaleString(getLocale())}
               </p>
             )}
           </Card>

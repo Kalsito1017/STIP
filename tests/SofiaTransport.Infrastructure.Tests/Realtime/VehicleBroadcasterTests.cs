@@ -11,26 +11,17 @@ namespace SofiaTransport.Infrastructure.Tests.Realtime;
 
 public class VehicleBroadcasterTests
 {
-    private static Mock<IHubContext<VehicleHub>> CreateMockHubContext()
+    [Fact]
+    public async Task BroadcastAsync_SendsVehicleUpdatedToAllClients()
     {
+        // Arrange
+        var mockAllClients = new Mock<IClientProxy>();
         var mockClients = new Mock<IHubClients>();
-        var mockClientProxy = new Mock<IClientProxy>();
-        var mockGroupManager = new Mock<IGroupManager>();
-
-        mockClients.Setup(c => c.Group(It.IsAny<string>())).Returns(mockClientProxy.Object);
+        mockClients.Setup(c => c.All).Returns(mockAllClients.Object);
 
         var mockHubContext = new Mock<IHubContext<VehicleHub>>();
         mockHubContext.Setup(h => h.Clients).Returns(mockClients.Object);
-        mockHubContext.Setup(h => h.Groups).Returns(mockGroupManager.Object);
 
-        return mockHubContext;
-    }
-
-    [Fact]
-    public async Task BroadcastAsync_WithRouteId_SendsToRouteGroup()
-    {
-        // Arrange
-        var mockHubContext = CreateMockHubContext();
         var broadcaster = new VehicleBroadcaster(mockHubContext.Object);
         var vehicle = new Vehicle
         {
@@ -47,15 +38,21 @@ public class VehicleBroadcasterTests
         // Act
         await broadcaster.BroadcastAsync(vehicle);
 
-        // Assert
-        mockHubContext.Verify(h => h.Clients, Times.AtLeastOnce);
+        // Assert - verify Clients.All was used (not a route-specific group)
+        mockClients.Verify(c => c.All, Times.Once);
     }
 
     [Fact]
-    public async Task BroadcastAsync_WithoutRouteId_DoesNotSendToGroup()
+    public async Task BroadcastAsync_WithoutRouteId_SendsToAllClients()
     {
         // Arrange
-        var mockHubContext = CreateMockHubContext();
+        var mockAllClients = new Mock<IClientProxy>();
+        var mockClients = new Mock<IHubClients>();
+        mockClients.Setup(c => c.All).Returns(mockAllClients.Object);
+
+        var mockHubContext = new Mock<IHubContext<VehicleHub>>();
+        mockHubContext.Setup(h => h.Clients).Returns(mockClients.Object);
+
         var broadcaster = new VehicleBroadcaster(mockHubContext.Object);
         var vehicle = new Vehicle
         {
@@ -69,15 +66,21 @@ public class VehicleBroadcasterTests
         // Act
         await broadcaster.BroadcastAsync(vehicle);
 
-        // Assert - Clients.Group should not be called since RouteId is null
-        mockHubContext.Object.Clients.Group(It.IsAny<string>());
+        // Assert - vehicles without RouteId are now broadcast to all clients
+        mockClients.Verify(c => c.All, Times.Once);
     }
 
     [Fact]
-    public async Task BroadcastAsync_WithEmptyRouteId_DoesNotSendToGroup()
+    public async Task BroadcastAsync_WithEmptyRouteId_SendsToAllClients()
     {
         // Arrange
-        var mockHubContext = CreateMockHubContext();
+        var mockAllClients = new Mock<IClientProxy>();
+        var mockClients = new Mock<IHubClients>();
+        mockClients.Setup(c => c.All).Returns(mockAllClients.Object);
+
+        var mockHubContext = new Mock<IHubContext<VehicleHub>>();
+        mockHubContext.Setup(h => h.Clients).Returns(mockClients.Object);
+
         var broadcaster = new VehicleBroadcaster(mockHubContext.Object);
         var vehicle = new Vehicle
         {
@@ -88,9 +91,10 @@ public class VehicleBroadcasterTests
             RecordedAt = DateTime.UtcNow
         };
 
-        // Act - should not throw
+        // Act
         await broadcaster.BroadcastAsync(vehicle);
 
-        // Assert - no exception thrown; group send skipped for empty route id
+        // Assert - vehicles with empty RouteId are now broadcast to all clients
+        mockClients.Verify(c => c.All, Times.Once);
     }
 }

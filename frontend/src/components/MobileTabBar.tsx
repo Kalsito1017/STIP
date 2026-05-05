@@ -1,44 +1,46 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Map, LayoutDashboard, Bus, TrendingUp } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useTranslation } from 'react-i18next';
 
 interface Tab {
   path: string;
-  label: string;
+  labelKey: string;
   icon: React.ComponentType<{ className?: string }>;
   match: (pathname: string) => boolean;
 }
 
-const tabs: Tab[] = [
-  {
-    path: '/',
-    label: 'Map',
-    icon: Map,
-    match: (p) => p === '/' || p === '/map',
-  },
-  {
-    path: '/dashboard',
-    label: 'Dashboard',
-    icon: LayoutDashboard,
-    match: (p) => p.startsWith('/dashboard'),
-  },
-  {
-    path: '/routes',
-    label: 'Routes',
-    icon: Bus,
-    match: (p) => p.startsWith('/routes'),
-  },
-  {
-    path: '/analytics',
-    label: 'Analytics',
-    icon: TrendingUp,
-    match: (p) => p.startsWith('/analytics'),
-  },
-];
-
 export function MobileTabBar() {
+  const { t } = useTranslation('layout');
   const location = useLocation();
   const navigate = useNavigate();
+
+  const tabs: Tab[] = [
+    {
+      path: '/',
+      labelKey: t('live_map'),
+      icon: Map,
+      match: (p) => p === '/' || p === '/map',
+    },
+    {
+      path: '/dashboard',
+      labelKey: t('dashboard'),
+      icon: LayoutDashboard,
+      match: (p) => p.startsWith('/dashboard'),
+    },
+    {
+      path: '/routes',
+      labelKey: t('routes'),
+      icon: Bus,
+      match: (p) => p.startsWith('/routes'),
+    },
+    {
+      path: '/analytics',
+      labelKey: t('analytics'),
+      icon: TrendingUp,
+      match: (p) => p.startsWith('/analytics'),
+    },
+  ];
 
   const activeIndex = tabs.findIndex((t) => t.match(location.pathname));
   const active = activeIndex >= 0 ? activeIndex : 0;
@@ -53,7 +55,7 @@ export function MobileTabBar() {
               key={tab.path}
               onClick={() => navigate(tab.path)}
               className="relative flex flex-col items-center justify-center gap-0.5 h-full flex-1 tap-highlight-transparent"
-              aria-label={tab.label}
+              aria-label={tab.labelKey}
               aria-current={isActive ? 'page' : undefined}
             >
               {isActive && (
@@ -73,7 +75,7 @@ export function MobileTabBar() {
                   isActive ? 'text-primary' : 'text-muted-foreground'
                 }`}
               >
-                {tab.label}
+                {tab.labelKey}
               </span>
             </button>
           );

@@ -2,6 +2,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, Navigation, Gauge, Clock } from 'lucide-react';
 import { useAppStore, type Vehicle } from '../../store/useAppStore';
 import { TransitTypeRouteColor } from '../../constants/transit';
+import { useTranslation } from 'react-i18next';
+import { getLocale } from '../../lib/utils';
 
 function getRouteType(routeId: string | null): number | undefined {
   if (!routeId) return undefined;
@@ -21,6 +23,8 @@ interface Props {
 }
 
 export function VehicleDetailSheet({ routeNames }: Props) {
+  const { t } = useTranslation('map');
+  const { t: tCommon } = useTranslation('common');
   const selectedVehicle = useAppStore((s) => s.selectedVehicle);
   const setSelectedVehicle = useAppStore((s) => s.setSelectedVehicle);
 
@@ -56,7 +60,7 @@ export function VehicleDetailSheet({ routeNames }: Props) {
                   </div>
                   <div className="min-w-0">
                     <h2 className="text-lg sm:text-xl font-bold text-foreground truncate">
-                      {displayRoute ?? 'Unknown route'}
+                      {displayRoute ?? tCommon('unknown_route')}
                     </h2>
                     <p className="text-xs sm:text-sm text-muted-foreground truncate">
                       {vehicle.vehicleId}
@@ -66,7 +70,7 @@ export function VehicleDetailSheet({ routeNames }: Props) {
                 <button
                   onClick={() => setSelectedVehicle(null)}
                   className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors flex-shrink-0"
-                  aria-label="Close vehicle details"
+                  aria-label={t('close_details')}
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -78,7 +82,7 @@ export function VehicleDetailSheet({ routeNames }: Props) {
                   <p className="text-lg sm:text-xl font-bold text-foreground">
                     {vehicle.speed.toFixed(0)}
                   </p>
-                  <p className="text-[10px] sm:text-xs text-muted-foreground">km/h</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">{tCommon('km_h')}</p>
                 </div>
                 <div className="bg-secondary rounded-xl p-3 text-center">
                   <Navigation
@@ -93,16 +97,16 @@ export function VehicleDetailSheet({ routeNames }: Props) {
                 <div className="bg-secondary rounded-xl p-3 text-center">
                   <Clock className="w-4 h-4 text-muted-foreground mx-auto mb-1" />
                   <p className="text-xs sm:text-sm font-semibold text-foreground">
-                    {new Date(vehicle.recordedAt).toLocaleTimeString()}
+                    {new Date(vehicle.recordedAt).toLocaleTimeString(getLocale())}
                   </p>
-                  <p className="text-[10px] sm:text-xs text-muted-foreground">Updated</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">{t('updated_label')}</p>
                 </div>
               </div>
 
               {vehicle.tripId && (
                 <div className="mt-3 pt-3 border-t border-border">
                   <p className="text-xs text-muted-foreground">
-                    Trip: <span className="text-foreground font-mono">{vehicle.tripId}</span>
+                    {tCommon('trip_label')} <span className="text-foreground font-mono">{vehicle.tripId}</span>
                   </p>
                 </div>
               )}

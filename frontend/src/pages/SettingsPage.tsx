@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AlertTriangle, Loader2, Sun, Moon, Globe } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 import { useDeleteAccount } from '../hooks/useAuth';
@@ -30,6 +30,12 @@ export function SettingsPage() {
   const deleteAccount = useDeleteAccount();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
+  useEffect(() => {
+    if (deleteAccount.isSuccess) {
+      setDeleteDialogOpen(false);
+    }
+  }, [deleteAccount.isSuccess]);
+
   return (
     <div className="space-y-6 max-w-2xl">
       <h1 className="text-2xl font-bold text-foreground">{t('title')}</h1>
@@ -56,7 +62,7 @@ export function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Globe className="w-4 h-4" />
-            Language
+            {t('language')}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -79,19 +85,19 @@ export function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             {darkMode ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-            Appearance
+            {t('appearance')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-foreground font-medium">Dark mode</p>
+              <p className="text-sm text-foreground font-medium">{t('dark_mode')}</p>
               <p className="text-xs text-muted-foreground">
-                {darkMode ? 'Dark theme is active' : 'Light theme is active'}
+                {darkMode ? t('dark_active') : t('light_active')}
               </p>
             </div>
             <Button variant="outline" size="sm" onClick={toggleDarkMode}>
-              {darkMode ? 'Switch to light' : 'Switch to dark'}
+              {darkMode ? t('switch_to_light') : t('switch_to_dark')}
             </Button>
           </div>
         </CardContent>
@@ -135,7 +141,6 @@ export function SettingsPage() {
             variant="destructive"
             onClick={() => {
               deleteAccount.mutate();
-              setDeleteDialogOpen(false);
             }}
             disabled={deleteAccount.isPending}
           >

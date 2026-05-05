@@ -1,5 +1,5 @@
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
-import { MapContainer, TileLayer, useMap, ZoomControl } from 'react-leaflet';
+import { MapContainer, useMap, ZoomControl } from 'react-leaflet';
 import * as L from 'leaflet';
 import { useAppStore } from '../store/useAppStore';
 import { useRealtime } from '../hooks/useRealtime';
@@ -8,14 +8,18 @@ import { useLiveVehicles } from '../hooks/useVehicles';
 import { useStops } from '../hooks/useStops';
 import { useAllRouteShapes } from '../hooks/useRouteShapes';
 import { useDelayHeatmap } from '../hooks/useHeatmap';
+import { useStopCongestionAll, useNearbyStops } from '../hooks/useAnalytics';
 import { AlertBanner } from '../components/AlertBanner';
 import { ErrorAlert } from '../components/ErrorAlert';
 import { MapLoadingOverlay } from '../components/MapLoadingOverlay';
+import { MapLibreBasemap } from '../components/map/MapLibreBasemap';
 import { RouteShapeLayer } from '../components/map/RouteShapeLayer';
 import { StopLayer } from '../components/map/StopLayer';
 import { VehicleLayer } from '../components/map/VehicleLayer';
 import { VehicleClusterLayer } from '../components/map/VehicleClusterLayer';
 import { DelayHeatmapLayer } from '../components/map/DelayHeatmapLayer';
+import { StopCongestionLayer } from '../components/map/StopCongestionLayer';
+import { NearbyStopsLayer } from '../components/map/NearbyStopsLayer';
 import { VehicleDetailSheet } from '../components/map/VehicleDetailSheet';
 import { MapControls } from '../components/map/MapControls';
 import { VehicleStatsBar } from '../components/map/VehicleStatsBar';
@@ -78,18 +82,39 @@ export function LiveMapPage() {
   const { data: routes, isLoading: routesLoading, isError: routesError, error: routesErr, refetch: refetchRoutes } = useRoutes();
   const { data: stops, isLoading: stopsLoading } = useStops();
   const { data: liveVehicles, isLoading: vehiclesLoading } = useLiveVehicles();
-  const { data: shapes, isLoading: shapesLoading } = useAllRouteShapes();
+  const { data: shapes, isLoading: shapesLoading, isError: shapesError, error: shapesErr, refetch: refetchShapes } = useAllRouteShapes();
   const { data: heatmap, isLoading: heatmapLoading } = useDelayHeatmap();
+  const { data: congestion, isLoading: congestionLoading } = useStopCongestionAll();
   const [clusterMode, setClusterMode] = useState(false);
   const [showRoutes, setShowRoutes] = useState(true);
   const [showStops, setShowStops] = useState(true);
   const [showHeatmap, setShowHeatmap] = useState(true);
   const [showVehicles, setShowVehicles] = useState(true);
+  const [showCongestion, setShowCongestion] = useState(false);
+  const [showNearby, setShowNearby] = useState(false);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null);
   const mapRef = useRef<L.Map | null>(null);
 
   const handleLocate = useCallback(() => {
     mapRef.current?.locate({ setView: true, maxZoom: 16, enableHighAccuracy: true });
   }, []);
+
+  const handleToggleNearby = useCallback(() => {
+    if (!showNearby && !userLocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => setUserLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+        () => {},
+        { enableHighAccuracy: true, timeout: 5000 }
+      );
+    }
+    setShowNearby((v) => !v);
+  }, [showNearby, userLocation]);
+
+  const { data: nearbyStops } = useNearbyStops(
+    userLocation?.lat ?? null,
+    userLocation?.lon ?? null,
+    0.5
+  );
 
   const routeNames = useMemo(() => {
     const map: Record<string, string> = {};
@@ -108,13 +133,14 @@ export function LiveMapPage() {
 
   const routeLines = shapes ?? { type: 'FeatureCollection' as const, features: [] };
 
-  const mapLoading = routesLoading || stopsLoading || vehiclesLoading || shapesLoading || heatmapLoading;
+  const mapLoading = routesLoading || stopsLoading || vehiclesLoading || shapesLoading || heatmapLoading || congestionLoading;
   const loadingLayers = [
     { label: 'Routes', loaded: !routesLoading },
     { label: 'Stops', loaded: !stopsLoading },
     { label: 'Vehicles', loaded: !vehiclesLoading },
     { label: 'Route shapes', loaded: !shapesLoading },
     { label: 'Delay heatmap', loaded: !heatmapLoading },
+    { label: 'Stop congestion', loaded: !congestionLoading },
   ];
 
   return (
@@ -125,6 +151,11 @@ export function LiveMapPage() {
         <div className="absolute top-16 left-4 right-4 z-[1000] max-w-md">
           <ErrorAlert message={routesErr.message} onRetry={() => refetchRoutes()} />
         </div>
+      {shapesError && (
+        <div className="absolute top-28 left-4 right-4 z-[1000] max-w-md">
+          <ErrorAlert message={shapesErr?.message ?? 'Failed to load route shapes'} onRetry={() => refetchShapes()} />
+        </div>
+      )
       )}
 
       <MapContainer
@@ -138,21 +169,15 @@ export function LiveMapPage() {
         <FitBoundsOnShapes />
         <FlyToTarget />
 
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          opacity={darkMode ? 0 : 1}
+        <MapLibreBasemap
+          styleUrl={darkMode ? '/map-styles/dark.json' : '/map-styles/light.json'}
         />
-        {darkMode && (
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>, &copy; <a href="https://carto.com/">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-          />
-        )}
 
         {showRoutes && <RouteShapeLayer data={routeLines} />}
         {showStops && <StopLayer data={stopGeojson} />}
         {showHeatmap && heatmap && heatmap.length > 0 && <DelayHeatmapLayer points={heatmap} />}
+        {showCongestion && congestion && congestion.length > 0 && <StopCongestionLayer points={congestion} />}
+        {showNearby && nearbyStops && nearbyStops.length > 0 && <NearbyStopsLayer stops={nearbyStops} />}
         {showVehicles && (clusterMode ? (
           <VehicleClusterLayer vehicles={displayVehicles} routeNames={routeNames} />
         ) : (
@@ -173,10 +198,14 @@ export function LiveMapPage() {
         showStops={showStops}
         showHeatmap={showHeatmap}
         showVehicles={showVehicles}
+        showCongestion={showCongestion}
+        showNearby={showNearby}
         onToggleRoutes={() => setShowRoutes((v) => !v)}
         onToggleStops={() => setShowStops((v) => !v)}
         onToggleHeatmap={() => setShowHeatmap((v) => !v)}
         onToggleVehicles={() => setShowVehicles((v) => !v)}
+        onToggleCongestion={() => setShowCongestion((v) => !v)}
+        onToggleNearby={handleToggleNearby}
         onLocate={handleLocate}
       />
 

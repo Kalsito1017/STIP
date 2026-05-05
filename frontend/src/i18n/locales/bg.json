@@ -11,7 +11,20 @@
     "no_data": "Няма данни",
     "unknown": "Неизвестен",
     "show_less": "Покажи по-малко",
-    "more_alerts": "още предупреждения"
+    "more_alerts": "още предупреждения",
+    "total": "Общо",
+    "unknown_route": "Неизвестен маршрут",
+    "view_on_map": "Виж на живата карта",
+    "view_on_map_aria": "Виж на картата",
+    "km_h": "км/ч",
+    "trip_label": "Курс:",
+    "score_label": "Оценка:",
+    "id_label": "ИД:",
+    "updating": "Обновяване",
+    "switch_to_english": "Превключи на английски",
+    "switch_to_bulgarian": "Превключи на български",
+    "min_unit": "м",
+    "sec_unit": "с"
   },
   "landing": {
     "hero_title_1": "Вижте какво се случва",
@@ -73,6 +86,7 @@
     "settings": "Настройки",
     "route_detail": "Детайли за маршрут",
     "stop_detail": "Детайли за спирка",
+    "sign_in": "Вход",
     "sign_out": "Изход",
     "open_menu": "Отвори меню",
     "close_menu": "Затвори меню",
@@ -105,7 +119,9 @@
     "canceled": "Отменен",
     "stop": "Спирка",
     "more_stops": "+{{count}} още спирки",
-    "trip": "Курс"
+    "trip": "Курс",
+    "updating": "Обновяване",
+    "score": "Оценка:"
   },
   "routes": {
     "title": "Маршрути",
@@ -123,7 +139,8 @@
     "avg_delay": "Средно закъснение",
     "samples": "Проби",
     "delay_by_hour": "Закъснение по час",
-    "no_delay_pattern": "Няма данни за закъснения"
+    "no_delay_pattern": "Няма данни за закъснения",
+    "updated": "Обновено"
   },
   "stops": {
     "title": "Спирки",
@@ -139,7 +156,10 @@
     "stop_id": "ИД на спирка",
     "hourly_congestion": "Почасова натовареност",
     "no_congestion_data": "Няма данни за натовареност",
-    "view_details": "Детайли за спирка {{name}}"
+    "view_details": "Детайли за спирка {{name}}",
+    "route_count": "{{count}} маршрута",
+    "view_on_map": "Виж на живата карта",
+    "view_on_map_aria": "Виж на картата"
   },
   "analytics": {
     "title": "Анализи",
@@ -169,7 +189,35 @@
     "switch_light": "Превключи на светъл режим",
     "switch_dark": "Превключи на тъмен режим",
     "toggle_dark_mode": "Превключи тъмен режим",
-    "scroll_to_learn": "Скролирай, за да научиш повече"
+    "scroll_to_learn": "Скролирай, за да научиш повече",
+    "map_layers": "Слоеве на картата",
+    "vehicles": "Превозни средства",
+    "route_shapes": "Форми на маршрути",
+    "stops_label": "Спирки",
+    "delay_heatmap": "Топлинна карта на закъснения",
+    "stop_congestion": "Натовареност на спирки",
+    "nearby_stops": "Близки спирки",
+    "locate_me": "Намери ме",
+    "show_location": "Покажи местоположението ми",
+    "toggle_layers": "Слоеве на картата",
+    "loading_map_data": "Зареждане на картови данни",
+    "loading_routes_stops": "Зареждане на маршрути и спирки...",
+    "no_results": "Няма намерени резултати",
+    "search_placeholder": "Търси маршрути или спирки...",
+    "close_details": "Затвори детайли за превозно средство",
+    "updated_label": "Обновено",
+    "on_time": "Навреме",
+    "slight_delay": "Леко закъснение",
+    "moderate_delay": "Умерено закъснение",
+    "severe_delay": "Тежко закъснение",
+    "avg_delay_label": "Средно закъснение:",
+    "samples_label": "Проби:",
+    "status_label": "Статус:",
+    "trips_today": "Курсове днес:",
+    "severity_label": "Тежест:",
+    "loading_routes": "Зареждане на маршрути...",
+    "filters": "Филтри",
+    "vehicles_count": "{{count}} превозни средства"
   },
   "settings": {
     "title": "Настройки",
@@ -181,7 +229,14 @@
     "delete_account": "Изтрий акаунт",
     "delete_dialog_title": "Изтрий акаунт",
     "delete_dialog_description": "Сигурни ли сте, че искате да изтриете акаунта си? Всички ваши данни ще бъдат перманентно премахнати. Това действие не може да бъде отменено.",
-    "yes_delete": "Да, изтрий моя акаунт"
+    "yes_delete": "Да, изтрий моя акаунт",
+    "language": "Език",
+    "appearance": "Външен вид",
+    "dark_mode": "Тъмен режим",
+    "dark_active": "Тъмната тема е активна",
+    "light_active": "Светлата тема е активна",
+    "switch_to_light": "Към светъл",
+    "switch_to_dark": "Към тъмен"
   },
   "predict": {
     "title": "ML Прогноза за закъснение",

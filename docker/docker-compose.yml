@@ -132,6 +132,19 @@ services:
       postgres:
         condition: service_healthy
 
+  tileserver:
+    profiles:
+      - tiles
+    image: maptiler/tileserver-gl:latest
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ../tiles:/data
+    environment:
+      TILESERVER_HOST: 0.0.0.0
+      TILESERVER_PORT: 8080
+
 volumes:
   pgdata:
   pgadmin_data:

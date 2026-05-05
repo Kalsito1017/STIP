@@ -4,6 +4,9 @@ using SofiaTransport.Infrastructure.Persistence;
 using SofiaTransport.Infrastructure.Persistence.Repositories;
 using Xunit;
 
+// NOTE: GetHeatmapAggregatedAsync uses Database.SqlQuery<T>() with PostGIS SQL
+// and cannot be tested with InMemory EF Core. Tested via integration tests.
+
 namespace SofiaTransport.Infrastructure.Tests.Repositories;
 
 public class DelayLogRepositoryTests

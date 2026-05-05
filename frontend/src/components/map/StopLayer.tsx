@@ -1,6 +1,7 @@
 import { GeoJSON } from 'react-leaflet';
 import * as L from 'leaflet';
 import type { StopFeatureCollection } from '../../types/map';
+import i18n from '../../i18n';
 
 interface Props {
   data: StopFeatureCollection;
@@ -24,8 +25,8 @@ export function StopLayer({ data }: Props) {
         const { stopName, stopId } = feature.properties;
         layer.bindPopup(
           `<div class="text-sm">
-            <strong>${stopName ?? 'Unknown'}</strong><br/>
-            ID: ${stopId ?? 'N/A'}
+            <strong>${stopName ?? i18n.t('common:unknown')}</strong><br/>
+            ${i18n.t('common:id_label')} ${stopId ?? 'N/A'}
           </div>`
         );
       }}

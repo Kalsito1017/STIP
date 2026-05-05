@@ -11,7 +11,20 @@
     "no_data": "No data",
     "unknown": "Unknown",
     "show_less": "Show less",
-    "more_alerts": "more alerts"
+    "more_alerts": "more alerts",
+    "total": "Total",
+    "unknown_route": "Unknown route",
+    "view_on_map": "View on live map",
+    "view_on_map_aria": "View on map",
+    "km_h": "km/h",
+    "trip_label": "Trip:",
+    "score_label": "Score:",
+    "id_label": "ID:",
+    "updating": "Updating",
+    "switch_to_english": "Switch to English",
+    "switch_to_bulgarian": "Switch to Bulgarian",
+    "min_unit": "m",
+    "sec_unit": "s"
   },
   "landing": {
     "hero_title_1": "See what happens",
@@ -73,6 +86,7 @@
     "settings": "Settings",
     "route_detail": "Route Detail",
     "stop_detail": "Stop Detail",
+    "sign_in": "Sign In",
     "sign_out": "Sign Out",
     "open_menu": "Open menu",
     "close_menu": "Close menu",
@@ -105,7 +119,9 @@
     "canceled": "Canceled",
     "stop": "Stop",
     "more_stops": "+{{count}} more stops",
-    "trip": "Trip"
+    "trip": "Trip",
+    "updating": "Updating",
+    "score": "Score:"
   },
   "routes": {
     "title": "Routes",
@@ -123,7 +139,8 @@
     "avg_delay": "Avg Delay",
     "samples": "Samples",
     "delay_by_hour": "Delay by Hour",
-    "no_delay_pattern": "No delay pattern data available"
+    "no_delay_pattern": "No delay pattern data available",
+    "updated": "Updated"
   },
   "stops": {
     "title": "Stops",
@@ -139,7 +156,10 @@
     "stop_id": "Stop ID",
     "hourly_congestion": "Hourly Congestion",
     "no_congestion_data": "No congestion data available",
-    "view_details": "View details for stop {{name}}"
+    "view_details": "View details for stop {{name}}",
+    "route_count": "{{count}} routes",
+    "view_on_map": "View on live map",
+    "view_on_map_aria": "View on map"
   },
   "analytics": {
     "title": "Analytics",
@@ -169,7 +189,35 @@
     "switch_light": "Switch to light mode",
     "switch_dark": "Switch to dark mode",
     "toggle_dark_mode": "Toggle dark mode",
-    "scroll_to_learn": "Scroll to learn more"
+    "scroll_to_learn": "Scroll to learn more",
+    "map_layers": "Map Layers",
+    "vehicles": "Vehicles",
+    "route_shapes": "Route Shapes",
+    "stops_label": "Stops",
+    "delay_heatmap": "Delay Heatmap",
+    "stop_congestion": "Stop Congestion",
+    "nearby_stops": "Nearby Stops",
+    "locate_me": "Locate me",
+    "show_location": "Show my location",
+    "toggle_layers": "Map layers",
+    "loading_map_data": "Loading map data",
+    "loading_routes_stops": "Loading routes and stops...",
+    "no_results": "No results found",
+    "search_placeholder": "Search routes or stops...",
+    "close_details": "Close vehicle details",
+    "updated_label": "Updated",
+    "on_time": "On time",
+    "slight_delay": "Slight delay",
+    "moderate_delay": "Moderate delay",
+    "severe_delay": "Severe delay",
+    "avg_delay_label": "Avg Delay:",
+    "samples_label": "Samples:",
+    "status_label": "Status:",
+    "trips_today": "Trips today:",
+    "severity_label": "Severity:",
+    "loading_routes": "Loading routes...",
+    "filters": "Filters",
+    "vehicles_count": "{{count}} vehicles"
   },
   "settings": {
     "title": "Settings",
@@ -181,7 +229,14 @@
     "delete_account": "Delete Account",
     "delete_dialog_title": "Delete Account",
     "delete_dialog_description": "Are you sure you want to delete your account? All your data will be permanently removed. This action cannot be undone.",
-    "yes_delete": "Yes, delete my account"
+    "yes_delete": "Yes, delete my account",
+    "language": "Language",
+    "appearance": "Appearance",
+    "dark_mode": "Dark mode",
+    "dark_active": "Dark theme is active",
+    "light_active": "Light theme is active",
+    "switch_to_light": "Switch to light",
+    "switch_to_dark": "Switch to dark"
   },
   "predict": {
     "title": "ML Delay Prediction",

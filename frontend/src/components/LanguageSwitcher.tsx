@@ -1,5 +1,6 @@
 import { useAppStore } from '../store/useAppStore';
 import { type Locale, SUPPORTED_LOCALES } from '../i18n';
+import { useTranslation } from 'react-i18next';
 
 const LABELS: Record<Locale, string> = {
   en: 'EN',
@@ -7,6 +8,7 @@ const LABELS: Record<Locale, string> = {
 };
 
 export function LanguageSwitcher() {
+  const { t } = useTranslation('common');
   const language = useAppStore((s) => s.language);
   const setLanguage = useAppStore((s) => s.setLanguage);
 
@@ -16,7 +18,7 @@ export function LanguageSwitcher() {
     <button
       onClick={() => setLanguage(next)}
       className="flex items-center gap-2 w-full px-3 py-1.5 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
-      aria-label={`Switch to ${next === 'en' ? 'English' : 'Bulgarian'}`}
+      aria-label={next === 'en' ? t('switch_to_english') : t('switch_to_bulgarian')}
     >
       <span className="font-mono text-xs">{LABELS[language]}</span>
       <span className="text-slate-400 text-xs">→ {LABELS[next]}</span>

@@ -114,7 +114,7 @@ export function StopsPage() {
                   <span className="font-mono">{s.stopId}</span>
                   <div className="flex items-center gap-2">
                     {s.routeCount != null && (
-                      <span className="text-xs">{s.routeCount} routes</span>
+                      <span className="text-xs">{t('route_count', { count: s.routeCount })}</span>
                     )}
                     <span className="font-mono">{s.lat?.toFixed(4) ?? '\u2014'}, {s.lon?.toFixed(4) ?? '\u2014'}</span>
                   </div>
@@ -186,8 +186,8 @@ export function StopsPage() {
                             navigate('/');
                           }}
                           className="p-1.5 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
-                          aria-label={`View ${s.stopName} on map`}
-                          title="View on map"
+                          aria-label={`${t('view_on_map_aria')} ${s.stopName}`}
+                          title={t('view_on_map_aria')}
                         >
                           <Map className="w-4 h-4" />
                         </button>

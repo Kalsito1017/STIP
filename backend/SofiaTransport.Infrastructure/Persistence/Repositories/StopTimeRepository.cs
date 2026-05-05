@@ -37,7 +37,7 @@ public class StopTimeRepository : IStopTimeRepository
         return await _db.StopTimes
             .AsNoTracking()
             .Include(st => st.Trip)
-            .Where(st => st.StopId == stopId && st.Trip.RouteId == routeId)
+            .Where(st => st.StopId == stopId && st.Trip != null && st.Trip.RouteId == routeId)
             .ToListAsync();
     }
 }

@@ -45,4 +45,12 @@ public class AnalyticsController : ControllerBase
         var peakHours = await _mediator.Send(new GetPeakHoursQuery(date));
         return Ok(peakHours);
     }
+
+    [HttpGet("stop-congestion")]
+    [ProducesResponseType(typeof(IReadOnlyList<StopCongestionAllDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IReadOnlyList<StopCongestionAllDto>>> GetStopCongestion([FromQuery] DateTime? date)
+    {
+        var congestion = await _mediator.Send(new GetAllStopCongestionQuery(date));
+        return Ok(congestion);
+    }
 }

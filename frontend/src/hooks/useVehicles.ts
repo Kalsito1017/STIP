@@ -5,5 +5,6 @@ export function useLiveVehicles() {
   return useQuery({
     queryKey: ['liveVehicles'],
     queryFn: () => vehiclesApi.getLive(),
+    refetchInterval: 15_000,
   });
 }

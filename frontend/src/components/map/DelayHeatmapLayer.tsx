@@ -1,4 +1,5 @@
 import { CircleMarker, Popup } from 'react-leaflet';
+import { useTranslation } from 'react-i18next';
 
 interface HeatmapPoint {
   lat: number;
@@ -18,18 +19,20 @@ function delayColor(seconds: number): string {
   return '#ef4444';
 }
 
-function delayLabel(seconds: number): string {
-  if (seconds <= 60) return 'On time';
-  if (seconds <= 180) return 'Slight delay';
-  if (seconds <= 300) return 'Moderate delay';
-  return 'Severe delay';
-}
-
 function pointRadius(sampleCount: number): number {
   return Math.max(8, Math.min(30, 6 * Math.log1p(sampleCount)));
 }
 
 export function DelayHeatmapLayer({ points }: Props) {
+  const { t } = useTranslation('map');
+
+  const delayLabel = (seconds: number): string => {
+    if (seconds <= 60) return t('on_time');
+    if (seconds <= 180) return t('slight_delay');
+    if (seconds <= 300) return t('moderate_delay');
+    return t('severe_delay');
+  };
+
   return (
     <>
       {points.map((p) => (
@@ -46,9 +49,9 @@ export function DelayHeatmapLayer({ points }: Props) {
         >
           <Popup>
             <div className="text-sm">
-              <p><strong>Avg Delay:</strong> {p.avgDelaySeconds.toFixed(0)}s</p>
-              <p><strong>Samples:</strong> {p.sampleCount}</p>
-              <p><strong>Status:</strong> {delayLabel(p.avgDelaySeconds)}</p>
+              <p><strong>{t('avg_delay_label')}</strong> {p.avgDelaySeconds.toFixed(0)}s</p>
+              <p><strong>{t('samples_label')}</strong> {p.sampleCount}</p>
+              <p><strong>{t('status_label')}</strong> {delayLabel(p.avgDelaySeconds)}</p>
             </div>
           </Popup>
         </CircleMarker>

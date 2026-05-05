@@ -5,12 +5,10 @@ import { useAppStore } from '../store/useAppStore';
 import type { Vehicle, TripUpdate, ServiceAlert } from '../store/useAppStore';
 
 export function useRealtime() {
-  const setVehicles = useAppStore((s) => s.setVehicles);
   const updateVehicle = useAppStore((s) => s.updateVehicle);
-  const setTripUpdates = useAppStore((s) => s.setTripUpdates);
   const updateTripUpdate = useAppStore((s) => s.updateTripUpdate);
-  const setAlerts = useAppStore((s) => s.setAlerts);
   const addAlert = useAppStore((s) => s.addAlert);
+  const removeExpiredAlerts = useAppStore((s) => s.removeExpiredAlerts);
   const setConnectionState = useAppStore((s) => s.setConnectionState);
   const setVehicleTimestamp = useAppStore((s) => s.setVehicleTimestamp);
   const token = useAppStore((s) => s.token);
@@ -20,7 +18,7 @@ export function useRealtime() {
     let cancelled = false;
     const connection = new signalR.HubConnectionBuilder()
       .withUrl('/hubs/vehicles', {
-        accessTokenFactory: () => token ?? '',
+        accessTokenFactory: () => useAppStore.getState().token ?? '',
       })
       .withAutomaticReconnect()
       .build();
@@ -28,13 +26,6 @@ export function useRealtime() {
     connection.on('VehicleUpdated', (vehicle: Vehicle) => {
       if (!cancelled) {
         updateVehicle(vehicle);
-        setVehicleTimestamp();
-      }
-    });
-
-    connection.on('VehicleBatch', (vehicles: Vehicle[]) => {
-      if (!cancelled) {
-        setVehicles(vehicles);
         setVehicleTimestamp();
       }
     });
@@ -63,6 +54,7 @@ export function useRealtime() {
       if (!cancelled) {
         setConnectionState('connected');
         toast.success('Reconnected', { id: 'signalr-connection' });
+        removeExpiredAlerts();
       }
     });
 
@@ -87,7 +79,7 @@ export function useRealtime() {
       setConnectionState('disconnected');
       connection.stop().catch(() => { /* ignore stop errors */ });
     };
-  }, [token, setVehicles, updateVehicle, setTripUpdates, updateTripUpdate, setAlerts, addAlert, setConnectionState, setVehicleTimestamp]);
+  }, [token, updateVehicle, updateTripUpdate, addAlert, removeExpiredAlerts, setConnectionState, setVehicleTimestamp]);
 
   return connectionRef;
 }

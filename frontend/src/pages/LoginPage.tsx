@@ -87,7 +87,7 @@ export function LoginPage() {
               className="w-full"
             >
               {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogIn className="w-4 h-4" />}
-              {isPending ? 'Signing in...' : 'Sign In'}
+              {isPending ? t('signing_in') : t('sign_in')}
             </Button>
           </form>
 

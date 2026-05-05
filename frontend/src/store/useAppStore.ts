@@ -82,10 +82,12 @@ interface AppState {
   language: Locale;
   setVehicles: (vehicles: Vehicle[]) => void;
   updateVehicle: (vehicle: Vehicle) => void;
+  removeStaleVehicles: (activeIds: string[]) => void;
   setTripUpdates: (updates: TripUpdate[]) => void;
   updateTripUpdate: (update: TripUpdate) => void;
   setAlerts: (alerts: ServiceAlert[]) => void;
   addAlert: (alert: ServiceAlert) => void;
+  removeExpiredAlerts: () => void;
   setSelectedRoute: (routeId: string | null) => void;
   setRouteFilter: (routeId: string) => void;
   setFlyToTarget: (target: { lat: number; lon: number; zoom: number } | null) => void;
@@ -98,9 +100,33 @@ interface AppState {
   setLanguage: (lang: Locale) => void;
 }
 
+function safeLocalStorageGet(key: string): string | null {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function safeLocalStorageSet(key: string, value: string): void {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    // Storage full or unavailable — ignore silently
+  }
+}
+
+function safeLocalStorageRemove(key: string): void {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    // ignore
+  }
+}
+
 function loadUser(): User | null {
   try {
-    const raw = localStorage.getItem('user');
+    const raw = safeLocalStorageGet('user');
     return raw ? JSON.parse(raw) : null;
   } catch {
     return null;
@@ -108,17 +134,20 @@ function loadUser(): User | null {
 }
 
 function loadLanguage(): Locale {
-  const stored = localStorage.getItem('language');
-  if (stored && (SUPPORTED_LOCALES as string[]).includes(stored)) {
-    return stored as Locale;
+  const detected = i18n.language;
+  if (detected && (SUPPORTED_LOCALES as string[]).includes(detected)) {
+    return detected as Locale;
   }
   return DEFAULT_LOCALE;
 }
 
-const initialToken = localStorage.getItem('token');
+const initialToken = safeLocalStorageGet('token');
 const initialUser = loadUser();
-const initialDarkMode = localStorage.getItem('darkMode') === 'true';
+const initialDarkMode = safeLocalStorageGet('darkMode') === 'true';
 const initialLanguage = loadLanguage();
+
+const ALERT_TTL_MS = 30 * 60 * 1000; // 30 minutes
+const TRIP_UPDATE_TTL_MS = 30 * 60 * 1000;
 
 export const useAppStore = create<AppState>((set) => ({
   vehicles: [],
@@ -143,6 +172,12 @@ export const useAppStore = create<AppState>((set) => ({
         vehicle,
       ],
     })),
+  removeStaleVehicles: (activeIds) =>
+    set((state) => {
+      const activeSet = new Set(activeIds);
+      const filtered = state.vehicles.filter((v) => activeSet.has(v.vehicleId));
+      return filtered.length === state.vehicles.length ? state : { vehicles: filtered };
+    }),
   setTripUpdates: (tripUpdates) => set({ tripUpdates }),
   updateTripUpdate: (update) =>
     set((state) => ({
@@ -159,30 +194,46 @@ export const useAppStore = create<AppState>((set) => ({
         alert,
       ],
     })),
+  removeExpiredAlerts: () =>
+    set((state) => {
+      const now = Date.now();
+      const filtered = state.alerts.filter((a) => {
+        const recorded = new Date(a.recordedAt).getTime();
+        return now - recorded < ALERT_TTL_MS;
+      });
+      const filteredTrips = state.tripUpdates.filter((tu) => {
+        const recorded = new Date(tu.recordedAt).getTime();
+        return now - recorded < TRIP_UPDATE_TTL_MS;
+      });
+      const changes: Partial<AppState> = {};
+      if (filtered.length !== state.alerts.length) changes.alerts = filtered;
+      if (filteredTrips.length !== state.tripUpdates.length) changes.tripUpdates = filteredTrips;
+      return Object.keys(changes).length > 0 ? changes : state;
+    }),
   setSelectedRoute: (routeId) => set({ selectedRoute: routeId }),
   setRouteFilter: (routeFilter) => set({ routeFilter }),
   setFlyToTarget: (flyToTarget) => set({ flyToTarget }),
   toggleDarkMode: () =>
     set((state) => {
       const next = !state.darkMode;
-      localStorage.setItem('darkMode', String(next));
+      safeLocalStorageSet('darkMode', String(next));
       return { darkMode: next };
     }),
   setConnectionState: (connectionState) => set({ connectionState }),
   setSelectedVehicle: (selectedVehicle) => set({ selectedVehicle }),
   setVehicleTimestamp: () => set({ lastUpdatedAt: new Date().toISOString() }),
   setAuth: (token, user) => {
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
+    safeLocalStorageSet('token', token);
+    safeLocalStorageSet('user', JSON.stringify(user));
     set({ token, user, isAuthenticated: true });
   },
   clearAuth: () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    safeLocalStorageRemove('token');
+    safeLocalStorageRemove('user');
     set({ token: null, user: null, isAuthenticated: false });
   },
   setLanguage: (lang) => {
-    localStorage.setItem('language', lang);
+    safeLocalStorageSet('language', lang);
     i18n.changeLanguage(lang);
     set({ language: lang });
   },

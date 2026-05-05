@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { useMap } from 'react-leaflet';
 import * as L from 'leaflet';
 import type { Vehicle } from '../../store/useAppStore';
 import { useAppStore } from '../../store/useAppStore';
 import { TransitTypeRouteColor } from '../../constants/transit';
+import i18n from '../../i18n';
 
 const trailStore = new Map<string, { positions: L.LatLng[]; routeType?: number }>();
 const TRAIL_LENGTH = 8;
@@ -25,19 +26,28 @@ export function VehicleLayer({ vehicles, routeNames }: Props) {
   const map = useMap();
   const markerRefs = useRef<Map<string, L.Marker>>(new Map());
   const trailGroupRef = useRef<L.LayerGroup | null>(null);
+  const pendingUpdate = useRef<number | null>(null);
+  const latestVehicles = useRef<Vehicle[]>(vehicles);
+  const latestRouteNames = useRef(routeNames);
+  latestVehicles.current = vehicles;
+  latestRouteNames.current = routeNames;
 
   useEffect(() => {
     if (!trailGroupRef.current) {
       trailGroupRef.current = L.layerGroup().addTo(map);
     }
     return () => {
+      trailStore.clear();
       trailGroupRef.current?.remove();
       trailGroupRef.current = null;
     };
   }, [map]);
 
-  useEffect(() => {
-    const currentMarkers = new Set(vehicles.map((v) => v.vehicleId));
+  const flushUpdate = useCallback(() => {
+    pendingUpdate.current = null;
+    const currentVehicles = latestVehicles.current;
+    const currentRouteNames = latestRouteNames.current;
+    const currentMarkers = new Set(currentVehicles.map((v) => v.vehicleId));
     const existing = markerRefs.current;
 
     for (const [id, marker] of existing) {
@@ -48,7 +58,7 @@ export function VehicleLayer({ vehicles, routeNames }: Props) {
       }
     }
 
-    for (const v of vehicles) {
+    for (const v of currentVehicles) {
       const routeType = getVehicleRouteType(v);
       const color = routeType != null ? (TransitTypeRouteColor[routeType] ?? '#2563eb') : '#2563eb';
 
@@ -77,7 +87,7 @@ export function VehicleLayer({ vehicles, routeNames }: Props) {
             }
           }
         }
-        existingMarker.setTooltipContent(getTooltip(v, color, routeNames));
+        existingMarker.setTooltipContent(getTooltip(v, color, currentRouteNames));
       } else {
         const icon = L.divIcon({
           className: 'vehicle-marker',
@@ -104,7 +114,7 @@ export function VehicleLayer({ vehicles, routeNames }: Props) {
         });
 
         const marker = L.marker(pos, { icon }).addTo(map);
-        marker.bindTooltip(getTooltip(v, color, routeNames), {
+        marker.bindTooltip(getTooltip(v, color, currentRouteNames), {
           direction: 'top',
           offset: [0, -20],
           opacity: 1,
@@ -130,9 +140,20 @@ export function VehicleLayer({ vehicles, routeNames }: Props) {
         trailGroupRef.current.addLayer(polyline);
       }
     }
+  }, [map]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [vehicles, routeNames]);
+  useEffect(() => {
+    if (pendingUpdate.current !== null) {
+      cancelAnimationFrame(pendingUpdate.current);
+    }
+    pendingUpdate.current = requestAnimationFrame(flushUpdate);
+
+    return () => {
+      if (pendingUpdate.current !== null) {
+        cancelAnimationFrame(pendingUpdate.current);
+      }
+    };
+  }, [vehicles, routeNames, flushUpdate]);
 
   useEffect(() => {
     return () => {
@@ -154,7 +175,7 @@ function getTooltip(v: Vehicle, color: string, routeNames: Record<string, string
         <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${color}"></span>
         <strong>${displayRoute}</strong>
       </div>
-      <span style="color:#64748b">${v.speed.toFixed(0)} km/h</span>
+      <span style="color:#64748b">${v.speed.toFixed(0)} ${i18n.t('common:km_h')}</span>
     </div>
   `;
 }

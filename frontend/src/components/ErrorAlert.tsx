@@ -14,7 +14,7 @@ export function ErrorAlert({ message, onRetry, className = '' }: ErrorAlertProps
     : t('errors.something_wrong');
 
   return (
-    <div className={`bg-red-50 border border-red-200 rounded-lg p-4 sm:p-5 shadow-sm ${className}`}>
+    <div role="alert" aria-live="assertive" className={`bg-red-50 border border-red-200 rounded-lg p-4 sm:p-5 shadow-sm ${className}`}>
       <div className="flex items-start gap-3">
         <AlertTriangle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
         <div className="min-w-0 flex-1">
