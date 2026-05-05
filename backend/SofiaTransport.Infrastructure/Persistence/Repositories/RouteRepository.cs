@@ -24,6 +24,12 @@ public class RouteRepository : IRouteRepository
     public async Task<Route?> GetByShortNameAsync(string shortName) =>
         await _db.Routes.FirstOrDefaultAsync(r => r.ShortName == shortName);
 
+    public async Task<IReadOnlyList<Route>> GetByIdsAsync(IReadOnlyList<string> routeIds)
+    {
+        if (routeIds.Count == 0) return Array.Empty<Route>();
+        return await _db.Routes.Where(r => routeIds.Contains(r.RouteId)).AsNoTracking().ToListAsync();
+    }
+
     public async Task<Route> AddAsync(Route entity, CancellationToken ct = default) { _db.Routes.Add(entity); await _db.SaveChangesAsync(ct); return entity; }
 
     public async Task UpdateAsync(Route entity, CancellationToken ct = default) { _db.Routes.Update(entity); await _db.SaveChangesAsync(ct); }

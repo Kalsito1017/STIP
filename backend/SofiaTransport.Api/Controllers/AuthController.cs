@@ -50,4 +50,18 @@ public class AuthController : ControllerBase
         var user = await _mediator.Send(new GetUserProfileQuery(userId));
         return user is not null ? Ok(user) : NotFound();
     }
+
+    [HttpDelete("profile")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> DeleteProfile()
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userIdClaim is null || !Guid.TryParse(userIdClaim, out var userId))
+            return Unauthorized();
+
+        await _mediator.Send(new DeleteUserCommand(userId));
+        return NoContent();
+    }
 }

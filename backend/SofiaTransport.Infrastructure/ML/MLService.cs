@@ -45,4 +45,18 @@ public class MLService : IMLService
         var result = JsonSerializer.Deserialize<TravelTimePredictionResponse>(resultJson, JsonOptions);
         return result ?? new TravelTimePredictionResponse(0, new List<double>(), "unknown");
     }
+
+    public async Task<BatchPredictDelayResponse> PredictDelaysBatchAsync(
+        BatchPredictDelayRequest request, CancellationToken ct)
+    {
+        var json = JsonSerializer.Serialize(new { items = request.Items }, JsonOptions);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PostAsync("/predict/batch", content, ct);
+        response.EnsureSuccessStatusCode();
+
+        var resultJson = await response.Content.ReadAsStringAsync(ct);
+        var result = JsonSerializer.Deserialize<BatchPredictDelayResponse>(resultJson, JsonOptions);
+        return result ?? new BatchPredictDelayResponse(new List<BatchPredictDelayItem>());
+    }
 }

@@ -27,6 +27,7 @@ public class DelayAggregationJob : IJob
         var yesterday = DateTime.UtcNow.Date.AddDays(-1);
         var logs = await db.DelayLogs
             .Where(d => d.RecordedAt >= yesterday && d.RecordedAt < yesterday.AddDays(1))
+            .Select(d => new { d.RouteId, d.DelaySeconds, Hour = d.ScheduledArrival.Hour })
             .ToListAsync(context.CancellationToken);
 
         var scores = logs
@@ -39,7 +40,7 @@ public class DelayAggregationJob : IJob
                     ? (double)entries.Count(e => Math.Abs(e.DelaySeconds!.Value) <= 60) / entries.Count
                     : 0;
                 var avgDelay = entries.Average(e => e.DelaySeconds) ?? 0;
-                var peakEntries = entries.Where(e => e.ScheduledArrival.Hour is >= 7 and <= 9 or >= 17 and <= 19).ToList();
+                var peakEntries = entries.Where(e => e.Hour is >= 7 and <= 9 or >= 17 and <= 19).ToList();
                 var peakOnTime = peakEntries.Count > 0
                     ? (double)peakEntries.Count(e => Math.Abs(e.DelaySeconds!.Value) <= 60) / peakEntries.Count
                     : onTime;

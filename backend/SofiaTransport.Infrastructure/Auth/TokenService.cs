@@ -33,8 +33,8 @@ public class TokenService : ITokenService
         };
 
         var token = new JwtSecurityToken(
-            issuer: null,
-            audience: null,
+            issuer: _configuration["Jwt:Issuer"] ?? "STIP",
+            audience: _configuration["Jwt:Audience"] ?? "STIP",
             claims: claims,
             expires: DateTime.UtcNow.AddHours(24),
             signingCredentials: credentials

@@ -13,7 +13,7 @@ public sealed class FeedMessage
 
         while (input.ReadTag() is uint tag)
         {
-            if (WireFormat.GetTagFieldNumber(tag) == 1)
+            if (WireFormat.GetTagFieldNumber(tag) == 2)
             {
                 var bytes = input.ReadBytes();
                 var sub = new CodedInputStream(bytes.ToByteArray());
@@ -192,13 +192,15 @@ public sealed class TripUpdate
                 case 2:
                     {
                         var b2 = input.ReadBytes();
-                        tu.Vehicle = VehicleDescriptor.Parse(new CodedInputStream(b2.ToByteArray()));
+                        tu.StopTimeUpdates.Add(StopTimeEventUpdate.Parse(new CodedInputStream(b2.ToByteArray())));
                         break;
                     }
                 case 3:
-                    var b3 = input.ReadBytes();
-                    tu.StopTimeUpdates.Add(StopTimeEventUpdate.Parse(new CodedInputStream(b3.ToByteArray())));
-                    break;
+                    {
+                        var b3 = input.ReadBytes();
+                        tu.Vehicle = VehicleDescriptor.Parse(new CodedInputStream(b3.ToByteArray()));
+                        break;
+                    }
                 default:
                     if (!ProtobufHelpers.TrySkipField(input))
                         return tu;
@@ -224,17 +226,21 @@ public sealed class StopTimeEventUpdate
         {
             switch (WireFormat.GetTagFieldNumber(tag))
             {
-                case 2: stu.StopSequence = (int)input.ReadUInt32(); break;
+                case 1: stu.StopSequence = (int)input.ReadUInt32(); break;
+                case 2:
+                    {
+                        var b2 = input.ReadBytes();
+                        stu.Arrival = StopTimeEvent.Parse(new CodedInputStream(b2.ToByteArray()));
+                        break;
+                    }
+                case 3:
+                    {
+                        var b3 = input.ReadBytes();
+                        stu.Departure = StopTimeEvent.Parse(new CodedInputStream(b3.ToByteArray()));
+                        break;
+                    }
                 case 4: stu.StopId = input.ReadString(); break;
-                case 12:
-                    var b12 = input.ReadBytes();
-                    stu.Arrival = StopTimeEvent.Parse(new CodedInputStream(b12.ToByteArray()));
-                    break;
-                case 13:
-                    var b13 = input.ReadBytes();
-                    stu.Departure = StopTimeEvent.Parse(new CodedInputStream(b13.ToByteArray()));
-                    break;
-                case 21: stu.ScheduleRelationship = (int)input.ReadUInt64(); break;
+                case 5: stu.ScheduleRelationship = (int)input.ReadUInt64(); break;
                 default:
                     if (!ProtobufHelpers.TrySkipField(input))
                         return stu;

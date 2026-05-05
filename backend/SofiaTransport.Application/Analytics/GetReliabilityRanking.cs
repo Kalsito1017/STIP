@@ -19,7 +19,9 @@ public class GetReliabilityRankingHandler : IRequestHandler<GetReliabilityRankin
     public async Task<IReadOnlyList<ReliabilityRankingDto>> Handle(GetReliabilityRankingQuery request, CancellationToken ct)
     {
         var ranking = await _scoreRepo.GetRankingAsync(request.Top, request.Best);
-        var routes = await _routeRepo.GetAllAsync();
+        var routeIds = ranking.Select(s => s.RouteId).Distinct().ToList();
+
+        var routes = await _routeRepo.GetByIdsAsync(routeIds);
         var routeDict = routes.ToDictionary(r => r.RouteId);
 
         return ranking

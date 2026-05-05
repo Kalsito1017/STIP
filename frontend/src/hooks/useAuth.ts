@@ -19,6 +19,12 @@ export function useRegister() {
       toast.success('Account created successfully');
       navigate('/dashboard');
     },
+    onError: (error: Error) => {
+      const msg = (error as { response?: { data?: { details?: string[]; error?: string } } }).response?.data?.details?.join?.(', ')
+        ?? (error as { response?: { data?: { error?: string } } }).response?.data?.error
+        ?? error.message;
+      toast.error(msg);
+    },
   });
 }
 
@@ -37,6 +43,12 @@ export function useLogin() {
       toast.success('Signed in successfully');
       navigate('/dashboard');
     },
+    onError: (error: Error) => {
+      const msg = (error as { response?: { data?: { details?: string[]; error?: string } } }).response?.data?.details?.join?.(', ')
+        ?? (error as { response?: { data?: { error?: string } } }).response?.data?.error
+        ?? error.message;
+      toast.error(msg);
+    },
   });
 }
 
@@ -48,4 +60,23 @@ export function useLogout() {
     clearAuth();
     navigate('/login');
   };
+}
+
+export function useDeleteAccount() {
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: () => authApi.deleteAccount(),
+    onSuccess: () => {
+      useAppStore.getState().clearAuth();
+      toast.success('Account deleted successfully');
+      navigate('/');
+    },
+    onError: (error: Error) => {
+      const msg = (error as { response?: { data?: { details?: string[]; error?: string } } }).response?.data?.details?.join?.(', ')
+        ?? (error as { response?: { data?: { error?: string } } }).response?.data?.error
+        ?? error.message;
+      toast.error(msg);
+    },
+  });
 }

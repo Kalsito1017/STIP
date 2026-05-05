@@ -10,21 +10,31 @@ public class RedisAlertCache : IAlertCache
 {
     private readonly IDatabase _db;
     private const string KeyPrefix = "alert:";
+    private const string IndexKey = "alert:index";
     private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
     public RedisAlertCache(IConnectionMultiplexer redis) => _db = redis.GetDatabase();
 
     public async Task<IReadOnlyList<ServiceAlert>> GetAllAsync()
     {
-        var server = _db.Multiplexer.GetServer(_db.Multiplexer.GetEndPoints()[0]);
-        var keys = new List<RedisKey>();
-        await foreach (var key in server.KeysAsync(pattern: $"{KeyPrefix}*"))
-            keys.Add(key);
+        var members = await _db.SetMembersAsync(IndexKey);
+        if (members.Length == 0) return Array.Empty<ServiceAlert>();
 
-        if (keys.Count == 0) return Array.Empty<ServiceAlert>();
+        var keys = members.Select(m => (RedisKey)$"{KeyPrefix}{m}").ToArray();
+        var values = await _db.StringGetAsync(keys);
 
-        var values = await _db.StringGetAsync(keys.ToArray());
-        return values.Select(v => Deserialize(v!)).Where(v => v is not null).Select(v => v!).ToList();
+        return values
+            .Select((v, i) => (value: v, member: members[i]))
+            .Where(x =>
+            {
+                if (x.value.HasValue) return true;
+                _db.SetRemoveAsync(IndexKey, x.member);
+                return false;
+            })
+            .Select(x => Deserialize(x.value!))
+            .Where(v => v is not null)
+            .Select(v => v!)
+            .ToList();
     }
 
     public async Task<IReadOnlyList<ServiceAlert>> GetByRouteAsync(string routeId)
@@ -48,11 +58,21 @@ public class RedisAlertCache : IAlertCache
             InformedEntities = alert.InformedEntities.Select(ie => new { ie.AgencyId, ie.RouteId, ie.RouteType, ie.TripId, ie.StopId }),
             alert.RecordedAt
         }, JsonOptions);
-        return _db.StringSetAsync($"{KeyPrefix}{alert.AlertId}", json, TimeSpan.FromSeconds(300));
+        var batch = _db.CreateBatch();
+        batch.StringSetAsync($"{KeyPrefix}{alert.AlertId}", json, TimeSpan.FromSeconds(300));
+        batch.SetAddAsync(IndexKey, alert.AlertId);
+        batch.Execute();
+        return Task.CompletedTask;
     }
 
-    public Task RemoveAsync(string alertId) =>
-        _db.KeyDeleteAsync($"{KeyPrefix}{alertId}");
+    public Task RemoveAsync(string alertId)
+    {
+        var batch = _db.CreateBatch();
+        batch.KeyDeleteAsync($"{KeyPrefix}{alertId}");
+        batch.SetRemoveAsync(IndexKey, alertId);
+        batch.Execute();
+        return Task.CompletedTask;
+    }
 
     private static ServiceAlert? Deserialize(RedisValue value)
     {

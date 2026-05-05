@@ -28,6 +28,12 @@ public class StopRepository : IStopRepository
             .ToListAsync();
     }
 
+    public async Task<IReadOnlyList<Stop>> GetByIdsAsync(IReadOnlyList<string> stopIds)
+    {
+        if (stopIds.Count == 0) return Array.Empty<Stop>();
+        return await _db.Stops.Where(s => stopIds.Contains(s.StopId)).AsNoTracking().ToListAsync();
+    }
+
     public async Task<Stop> AddAsync(Stop entity, CancellationToken ct = default) { _db.Stops.Add(entity); await _db.SaveChangesAsync(ct); return entity; }
 
     public async Task UpdateAsync(Stop entity, CancellationToken ct = default) { _db.Stops.Update(entity); await _db.SaveChangesAsync(ct); }

@@ -9,21 +9,31 @@ public class RedisTripUpdateCache : ITripUpdateCache
 {
     private readonly IDatabase _db;
     private const string KeyPrefix = "tripupdate:";
+    private const string IndexKey = "tripupdate:index";
     private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
     public RedisTripUpdateCache(IConnectionMultiplexer redis) => _db = redis.GetDatabase();
 
     public async Task<IReadOnlyList<TripUpdate>> GetAllAsync()
     {
-        var server = _db.Multiplexer.GetServer(_db.Multiplexer.GetEndPoints()[0]);
-        var keys = new List<RedisKey>();
-        await foreach (var key in server.KeysAsync(pattern: $"{KeyPrefix}*"))
-            keys.Add(key);
+        var members = await _db.SetMembersAsync(IndexKey);
+        if (members.Length == 0) return Array.Empty<TripUpdate>();
 
-        if (keys.Count == 0) return Array.Empty<TripUpdate>();
+        var keys = members.Select(m => (RedisKey)$"{KeyPrefix}{m}").ToArray();
+        var values = await _db.StringGetAsync(keys);
 
-        var values = await _db.StringGetAsync(keys.ToArray());
-        return values.Select(v => Deserialize(v!)).Where(v => v is not null).Select(v => v!).ToList();
+        return values
+            .Select((v, i) => (value: v, member: members[i]))
+            .Where(x =>
+            {
+                if (x.value.HasValue) return true;
+                _db.SetRemoveAsync(IndexKey, x.member);
+                return false;
+            })
+            .Select(x => Deserialize(x.value!))
+            .Where(v => v is not null)
+            .Select(v => v!)
+            .ToList();
     }
 
     public async Task<IReadOnlyList<TripUpdate>> GetByRouteAsync(string routeId)
@@ -54,11 +64,21 @@ public class RedisTripUpdateCache : ITripUpdateCache
             }),
             tripUpdate.RecordedAt
         }, JsonOptions);
-        return _db.StringSetAsync($"{KeyPrefix}{tripUpdate.TripId}", json, TimeSpan.FromSeconds(120));
+        var batch = _db.CreateBatch();
+        batch.StringSetAsync($"{KeyPrefix}{tripUpdate.TripId}", json, TimeSpan.FromSeconds(120));
+        batch.SetAddAsync(IndexKey, tripUpdate.TripId);
+        batch.Execute();
+        return Task.CompletedTask;
     }
 
-    public Task RemoveAsync(string tripId) =>
-        _db.KeyDeleteAsync($"{KeyPrefix}{tripId}");
+    public Task RemoveAsync(string tripId)
+    {
+        var batch = _db.CreateBatch();
+        batch.KeyDeleteAsync($"{KeyPrefix}{tripId}");
+        batch.SetRemoveAsync(IndexKey, tripId);
+        batch.Execute();
+        return Task.CompletedTask;
+    }
 
     private static TripUpdate? Deserialize(RedisValue value)
     {

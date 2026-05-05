@@ -257,6 +257,20 @@ class RetrainRequest(BaseModel):
     delay_logs: list[dict] = Field(..., min_length=1, max_length=50_000)
 
 
+class BatchPredictionRequest(BaseModel):
+    items: list[PredictionRequest] = Field(..., min_length=1, max_length=50)
+
+
+class BatchPredictionItem(BaseModel):
+    predicted_delay_seconds: float
+    confidence_interval: list[float]
+    model_version: str
+    input: PredictionRequest
+
+class BatchPredictionResponse(BaseModel):
+    results: list[BatchPredictionItem]
+
+
 # ---------------------------------------------------------------------------
 # Endpoints
 # ---------------------------------------------------------------------------
@@ -307,6 +321,49 @@ def predict(request: Request, body: PredictionRequest):
         confidence_interval=[round(lower, 2), round(upper, 2)],
         model_version=state["meta"].get("version", "unknown"),
     )
+
+
+@app.post("/predict/batch", response_model=BatchPredictionResponse)
+@limiter.limit("20/minute")
+def predict_batch(request: Request, body: BatchPredictionRequest):
+    state = _model_state
+    if state["model"] is None:
+        raise HTTPException(status_code=503, detail="Model not loaded")
+
+    rows = []
+    for item in body.items:
+        route_encoded = state["route_encoding"].get(item.route_id, 0)
+        hist_avg = _lookup_historical_avg_delay(item.route_id, item.hour)
+        rows.append([
+            item.hour,
+            item.day_of_week,
+            1 if item.hour in PEAK_HOURS else 0,
+            1 if item.day_of_week >= 5 else 0,
+            route_encoded,
+            item.stop_sequence,
+            hist_avg,
+            0,
+        ])
+
+    features = pd.DataFrame(rows, columns=FEATURE_NAMES)
+    preds = state["model"].predict(features)
+
+    ci_half = 1.96 * abs(state["residual_std"])
+    model_version = state["meta"].get("version", "unknown")
+
+    results = []
+    for i, item in enumerate(body.items):
+        pred = max(0.0, float(preds[i]))
+        lower = max(0.0, pred - ci_half)
+        upper = pred + ci_half
+        results.append(BatchPredictionItem(
+            predicted_delay_seconds=pred,
+            confidence_interval=[round(lower, 2), round(upper, 2)],
+            model_version=model_version,
+            input=item,
+        ))
+
+    return BatchPredictionResponse(results=results)
 
 
 @app.post("/internal/retrain")

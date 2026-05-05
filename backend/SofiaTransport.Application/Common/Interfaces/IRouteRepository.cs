@@ -6,4 +6,5 @@ public interface IRouteRepository : IRepository<Route>
 {
     Task<Route?> GetByShortNameAsync(string shortName);
     Task<IReadOnlyList<Route>> GetByTypeAsync(Domain.Enums.TransitType type);
+    Task<IReadOnlyList<Route>> GetByIdsAsync(IReadOnlyList<string> routeIds);
 }

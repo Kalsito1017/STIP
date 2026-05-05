@@ -26,28 +26,38 @@ public class GetPredictedArrivalsHandler : IRequestHandler<GetPredictedArrivalsQ
 
         var upcomingStopTimes = await _stopTimeRepo.GetUpcomingByStopAsync(request.StopId, currentTimeOfDay, 5);
 
-        var results = new List<PredictedArrivalDto>();
-
-        foreach (var st in upcomingStopTimes)
+        var predictionItems = upcomingStopTimes.Select(st =>
         {
             var scheduledMinutes = (int)(st.ArrivalTime - currentTimeOfDay).TotalMinutes;
             if (scheduledMinutes < 0) scheduledMinutes += 24 * 60;
 
-            var prediction = await _mlService.PredictDelayAsync(
+            return (st, scheduledMinutes, req: new PredictDelayRequest(
                 st.Trip.RouteId,
                 request.StopId,
                 currentHour,
                 currentDayOfWeek,
-                st.StopSequence,
-                ct);
+                st.StopSequence
+            ));
+        }).ToList();
+
+        if (predictionItems.Count == 0) return Array.Empty<PredictedArrivalDto>();
+
+        var batchResponse = await _mlService.PredictDelaysBatchAsync(
+            new BatchPredictDelayRequest(predictionItems.Select(p => p.req).ToList()), ct);
+
+        var results = new List<PredictedArrivalDto>();
+        for (var i = 0; i < predictionItems.Count; i++)
+        {
+            var (st, scheduledMinutes, _) = predictionItems[i];
+            var prediction = i < batchResponse.Results.Count ? batchResponse.Results[i] : null;
 
             results.Add(new PredictedArrivalDto(
                 st.Trip.RouteId,
                 st.Trip.Route.ShortName,
                 st.Trip.Route.LongName ?? string.Empty,
                 scheduledMinutes,
-                (int?)prediction.PredictedDelaySeconds,
-                prediction.ModelVersion
+                (int?)prediction?.PredictedDelaySeconds,
+                prediction?.ModelVersion
             ));
         }
 

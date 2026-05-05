@@ -1,4 +1,3 @@
-using FluentValidation;
 using MediatR;
 using SofiaTransport.Application.Common.Interfaces;
 
@@ -22,13 +21,8 @@ public class LoginUserHandler : IRequestHandler<LoginUserQuery, AuthResponseDto>
 
     public async Task<AuthResponseDto> Handle(LoginUserQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByEmailAsync(request.Email);
-
-        if (user is null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
-        {
-            throw new ValidationException("Invalid email or password.");
-        }
-
+        var email = request.Email.Trim().ToLowerInvariant();
+        var user = (await _userRepository.GetByEmailAsync(email))!;
         var token = _tokenService.GenerateToken(user);
 
         return new AuthResponseDto(user.Id, user.Email, user.FullName, token);

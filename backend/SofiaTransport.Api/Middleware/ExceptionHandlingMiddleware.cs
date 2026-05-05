@@ -26,6 +26,8 @@ public class ExceptionHandlingMiddleware
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             context.Response.ContentType = "application/json";
             var errors = ex.Errors.Select(e => e.ErrorMessage).ToArray();
+            if (errors.Length == 0)
+                errors = new[] { ex.Message };
             var error = new { error = "Validation failed", details = errors };
             await context.Response.WriteAsync(JsonSerializer.Serialize(error));
         }

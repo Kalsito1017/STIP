@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Map, LayoutDashboard, Bus, MapPin, TrendingUp, User, LogOut, X } from 'lucide-react';
+import { Map, LayoutDashboard, Bus, MapPin, TrendingUp, Settings, User, LogOut, X } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 import { useLogout } from '../hooks/useAuth';
 import { Button } from './ui/button';
@@ -10,6 +10,7 @@ const navItems = [
   { to: '/routes', label: 'Routes', icon: Bus },
   { to: '/stops', label: 'Stops', icon: MapPin },
   { to: '/analytics', label: 'Analytics', icon: TrendingUp },
+  { to: '/settings', label: 'Settings', icon: Settings },
 ];
 
 interface SidebarProps {

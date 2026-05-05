@@ -24,18 +24,18 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, AuthResp
 
     public async Task<AuthResponseDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var existingUser = await _userRepository.GetByEmailAsync(request.Email);
-        if (existingUser is not null)
-        {
+        var email = request.Email.Trim().ToLowerInvariant();
+
+        var existing = await _userRepository.GetByEmailAsync(email);
+        if (existing is not null)
             throw new ValidationException("A user with this email already exists.");
-        }
 
         var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password, workFactor: 12);
 
         var user = new User
         {
             Id = Guid.NewGuid(),
-            Email = request.Email,
+            Email = email,
             PasswordHash = passwordHash,
             FullName = request.FullName,
             CreatedAt = DateTime.UtcNow

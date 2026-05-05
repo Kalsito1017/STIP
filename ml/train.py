@@ -177,7 +177,7 @@ def train(delay_logs: list[dict] | None = None) -> str:
     # ── Feature engineering (before split for encoding, but stats on train only) ─
     df = engineer_features(df, route_encoding, historical_stats=None)
 
-    X = df[FEATURE_NAMES].copy()
+    X = df[FEATURE_NAMES + ["route_id"]].copy()
     y = df["delay_seconds"].copy()
 
     # ── Time-based 80/20 split ───────────────────────────────────────────
@@ -191,10 +191,20 @@ def train(delay_logs: list[dict] | None = None) -> str:
     historical_stats = compute_historical_avg_delay(train_hist_df)
 
     # Merge historical stats into train and val (using train-only stats for both)
-    X_train = X_train.merge(historical_stats, on=["route_id", "hour_of_day"], how="left")
+    # Drop pre-existing historical_avg_delay (set to 0 by engineer_features) so the merge
+    # adds it cleanly without _x/_y suffix collisions
+    X_train = X_train.drop(columns=["historical_avg_delay"]).merge(
+        historical_stats, on=["route_id", "hour_of_day"], how="left"
+    )
     X_train["historical_avg_delay"] = X_train["historical_avg_delay"].fillna(0)
-    X_val = X_val.merge(historical_stats, on=["route_id", "hour_of_day"], how="left")
+    X_val = X_val.drop(columns=["historical_avg_delay"]).merge(
+        historical_stats, on=["route_id", "hour_of_day"], how="left"
+    )
     X_val["historical_avg_delay"] = X_val["historical_avg_delay"].fillna(0)
+
+    # Drop route_id before training (not a feature, only used for merging stats)
+    X_train = X_train.drop(columns=["route_id"])
+    X_val = X_val.drop(columns=["route_id"])
 
     # ── Train XGBoost ────────────────────────────────────────────────────
     from xgboost import XGBRegressor

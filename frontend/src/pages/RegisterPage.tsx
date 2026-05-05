@@ -136,10 +136,12 @@ export function RegisterPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    minLength={6}
                     autoComplete="new-password"
-                    placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
+                    placeholder="••••••••"
                     className="pl-10"
                   />
+                  <p className="text-xs text-slate-400 mt-1">Must be at least 6 characters.</p>
                 </div>
               </div>
 

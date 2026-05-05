@@ -61,12 +61,17 @@ public class RealtimeBroadcaster : IRealtimeBroadcaster
             alert.RecordedAt
         };
 
-        await _hub.Clients.All.SendAsync("AlertUpdated", payload);
+        var tasks = new List<Task> { _hub.Clients.All.SendAsync("AlertUpdated", payload) };
 
-        foreach (var ie in alert.InformedEntities)
-        {
-            if (!string.IsNullOrEmpty(ie.RouteId))
-                await _hub.Clients.Group($"route:{ie.RouteId}").SendAsync("AlertUpdated", payload);
-        }
+        var routeGroups = alert.InformedEntities
+            .Where(ie => !string.IsNullOrEmpty(ie.RouteId))
+            .Select(ie => $"route:{ie.RouteId}")
+            .Distinct()
+            .ToList();
+
+        if (routeGroups.Count > 0)
+            tasks.Add(_hub.Clients.Groups(routeGroups).SendAsync("AlertUpdated", payload));
+
+        await Task.WhenAll(tasks);
     }
 }

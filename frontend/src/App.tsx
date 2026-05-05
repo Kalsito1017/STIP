@@ -14,7 +14,7 @@ import { RouteDetailPage } from './pages/RouteDetailPage';
 import { StopsPage } from './pages/StopsPage';
 import { StopDetailPage } from './pages/StopDetailPage';
 import { AnalyticsPage } from './pages/AnalyticsPage';
-import { NotFoundPage } from './pages/NotFoundPage';
+import { SettingsPage } from './pages/SettingsPage';
 import { useAppStore } from './store/useAppStore';
 
 const queryClient = new QueryClient({
@@ -22,6 +22,7 @@ const queryClient = new QueryClient({
     queries: {
       retry: 1,
       refetchOnWindowFocus: false,
+      staleTime: 60_000,
     },
   },
 });
@@ -54,6 +55,7 @@ function App() {
               <Route path="/stops" element={<StopsPage />} />
               <Route path="/stops/:id" element={<StopDetailPage />} />
               <Route path="/analytics" element={<AnalyticsPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
             </Route>
           </Route>
           <Route path="*" element={<NotFoundPage />} />

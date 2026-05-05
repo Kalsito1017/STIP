@@ -23,7 +23,9 @@ public class GetDelayHeatmapHandler : IRequestHandler<GetDelayHeatmapQuery, IRea
 
         var logs = await _delayRepo.GetForHeatmapAsync(from, to);
         var stops = await _stopRepo.GetAllAsync();
-        var stopDict = stops.ToDictionary(s => s.StopId);
+        var stopDict = stops
+            .Where(s => s.Geometry is not null)
+            .ToDictionary(s => s.StopId);
 
         return logs
             .Where(l => l.StopId is not null && stopDict.ContainsKey(l.StopId))
@@ -31,10 +33,9 @@ public class GetDelayHeatmapHandler : IRequestHandler<GetDelayHeatmapQuery, IRea
             .Select(g =>
             {
                 var stop = stopDict[g.Key];
-                return new HeatmapPointDto(
-                    stop.Lat, stop.Lon,
-                    g.Average(l => l.DelaySeconds) ?? 0, g.Count()
-                );
+                var delays = g.Where(l => l.DelaySeconds.HasValue).Select(l => (double)l.DelaySeconds!.Value).ToList();
+                var avgDelay = delays.Count > 0 ? delays.Average() : 0;
+                return new HeatmapPointDto(stop.Lat, stop.Lon, avgDelay, g.Count());
             })
             .ToList();
     }

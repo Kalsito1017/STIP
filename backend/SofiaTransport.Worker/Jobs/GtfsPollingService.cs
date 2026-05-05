@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SofiaTransport.Application.Common.Interfaces;
 using SofiaTransport.Domain.Entities;
-using SofiaTransport.Infrastructure.Cache;
 using SofiaTransport.Infrastructure.Persistence;
 using SofiaTransport.Infrastructure.Realtime;
 
@@ -90,14 +89,48 @@ public class GtfsPollingService : BackgroundService
         var vehicles = await feedClient.FetchVehiclePositionsAsync(ct);
         _logger.LogInformation("Fetched {Count} vehicle positions", vehicles.Count);
 
-        foreach (var vehicle in vehicles)
+        if (vehicles.Count == 0) return;
+
+        foreach (var v in vehicles) v.RecordedAt = DateTime.UtcNow;
+
+        // Batch load existing vehicles
+        var vehicleIds = vehicles.Select(v => v.VehicleId).ToList();
+        var existingVehicles = await db.Vehicles
+            .Where(v => vehicleIds.Contains(v.VehicleId))
+            .AsNoTracking()
+            .ToListAsync(ct);
+        var existingDict = existingVehicles.ToDictionary(v => v.VehicleId);
+
+        // Batch load stop times for all trip IDs
+        var tripIds = vehicles.Where(v => !string.IsNullOrEmpty(v.TripId))
+            .Select(v => v.TripId!).Distinct().ToList();
+        var stopTimes = tripIds.Count > 0
+            ? await db.StopTimes.Where(st => tripIds.Contains(st.TripId)).AsNoTracking().ToListAsync(ct)
+            : new List<Domain.Entities.StopTime>();
+        var stopTimesByTrip = stopTimes.GroupBy(st => st.TripId).ToDictionary(g => g.Key, g => g.ToList());
+
+        // Batch check recently logged delays
+        var recentCheckTasks = vehicles
+            .Where(v => !string.IsNullOrEmpty(v.TripId) && !string.IsNullOrEmpty(v.RouteId))
+            .Select(async v =>
+            {
+                var tripStops = stopTimesByTrip.GetValueOrDefault(v.TripId!);
+                if (tripStops is null || tripStops.Count == 0) return ((Vehicle v, Domain.Entities.StopTime?, bool))(v, null, false);
+                var nearest = FindNearestStopTime(tripStops);
+                if (nearest is null) return ((Vehicle v, Domain.Entities.StopTime?, bool))(v, null, false);
+                var shouldLog = !await db.DelayLogs.AnyAsync(d =>
+                    d.VehicleId == v.VehicleId && d.TripId == v.TripId &&
+                    d.StopId == nearest.StopId && d.RecordedAt >= DateTime.UtcNow.AddMinutes(-5), ct);
+                return (v, nearest, shouldLog);
+            });
+        var checkResults = await Task.WhenAll(recentCheckTasks);
+
+        foreach (var (vehicle, stopTime, shouldLog) in checkResults)
         {
-            vehicle.RecordedAt = DateTime.UtcNow;
             await cache.SetAsync(vehicle);
             await broadcaster.BroadcastAsync(vehicle);
 
-            var existing = await db.Vehicles.FindAsync(new object[] { vehicle.VehicleId }, ct);
-            if (existing is not null)
+            if (existingDict.TryGetValue(vehicle.VehicleId, out var existing))
             {
                 db.Entry(existing).CurrentValues.SetValues(vehicle);
             }
@@ -106,11 +139,25 @@ public class GtfsPollingService : BackgroundService
                 db.Vehicles.Add(vehicle);
             }
 
-            await WriteDelayLogAsync(db, vehicle, ct);
+            if (shouldLog && stopTime is not null)
+            {
+                var scheduled = DateTime.UtcNow.Date.Add(stopTime.ArrivalTime);
+                var delay = (int)(DateTime.UtcNow - scheduled).TotalSeconds;
+                db.DelayLogs.Add(new DelayLog
+                {
+                    VehicleId = vehicle.VehicleId,
+                    StopId = stopTime.StopId,
+                    TripId = vehicle.TripId,
+                    RouteId = vehicle.RouteId,
+                    ScheduledArrival = scheduled,
+                    ActualArrival = DateTime.UtcNow,
+                    DelaySeconds = delay,
+                    RecordedAt = DateTime.UtcNow
+                });
+            }
         }
 
-        if (vehicles.Count > 0)
-            await db.SaveChangesAsync(ct);
+        await db.SaveChangesAsync(ct);
     }
 
     private async Task CleanupStaleVehiclesAsync(CancellationToken ct)
@@ -120,17 +167,17 @@ public class GtfsPollingService : BackgroundService
         var cache = scope.ServiceProvider.GetRequiredService<IVehicleCache>();
 
         var staleThreshold = DateTime.UtcNow.AddMinutes(-10);
-        var staleVehicles = await db.Vehicles.Where(v => v.RecordedAt < staleThreshold).ToListAsync(ct);
+        var staleVehicles = await db.Vehicles
+            .Where(v => v.RecordedAt < staleThreshold)
+            .Select(v => v.VehicleId)
+            .ToListAsync(ct);
 
         if (staleVehicles.Count > 0)
         {
-            db.Vehicles.RemoveRange(staleVehicles);
-            await db.SaveChangesAsync(ct);
+            await db.Vehicles.Where(v => staleVehicles.Contains(v.VehicleId)).ExecuteDeleteAsync(ct);
 
-            foreach (var vehicle in staleVehicles)
-            {
-                await cache.RemoveAsync(vehicle.VehicleId);
-            }
+            foreach (var vid in staleVehicles)
+                await cache.RemoveAsync(vid);
 
             _logger.LogInformation("Cleaned up {Count} stale vehicles", staleVehicles.Count);
         }
@@ -172,56 +219,11 @@ public class GtfsPollingService : BackgroundService
         }
     }
 
-    private async Task WriteDelayLogAsync(TransportDbContext db, Vehicle vehicle, CancellationToken ct)
+    private static Domain.Entities.StopTime? FindNearestStopTime(List<Domain.Entities.StopTime> stopTimes)
     {
-        if (string.IsNullOrEmpty(vehicle.TripId) || string.IsNullOrEmpty(vehicle.RouteId))
-            return;
-
-        var stopTime = await FindNearestStopTimeAsync(db, vehicle, ct);
-        if (stopTime is null) return;
-
-        if (!await ShouldLogDelayAsync(db, vehicle, stopTime, ct))
-            return;
-
-        var scheduled = DateTime.UtcNow.Date.Add(stopTime.ArrivalTime);
-        var delay = (int)(DateTime.UtcNow - scheduled).TotalSeconds;
-
-        db.DelayLogs.Add(new DelayLog
-        {
-            VehicleId = vehicle.VehicleId,
-            StopId = stopTime.StopId,
-            TripId = vehicle.TripId,
-            RouteId = vehicle.RouteId,
-            ScheduledArrival = scheduled,
-            ActualArrival = DateTime.UtcNow,
-            DelaySeconds = delay,
-            RecordedAt = DateTime.UtcNow
-        });
-    }
-
-    private static async Task<Domain.Entities.StopTime?> FindNearestStopTimeAsync(TransportDbContext db, Vehicle vehicle, CancellationToken ct)
-    {
-        if (string.IsNullOrEmpty(vehicle.TripId))
-            return null;
-
         var now = DateTime.UtcNow.TimeOfDay;
-
-        var stopTimes = await db.StopTimes
-            .Where(st => st.TripId == vehicle.TripId)
-            .ToListAsync(ct);
-
         return stopTimes
             .OrderBy(st => Math.Abs((st.ArrivalTime - now).TotalSeconds))
             .FirstOrDefault();
-    }
-
-    private static async Task<bool> ShouldLogDelayAsync(TransportDbContext db, Vehicle vehicle, Domain.Entities.StopTime stopTime, CancellationToken ct)
-    {
-        var recentlyLogged = await db.DelayLogs
-            .AnyAsync(d => d.VehicleId == vehicle.VehicleId
-                        && d.TripId == vehicle.TripId
-                        && d.StopId == stopTime.StopId
-                        && d.RecordedAt >= DateTime.UtcNow.AddMinutes(-5), ct);
-        return !recentlyLogged;
     }
 }

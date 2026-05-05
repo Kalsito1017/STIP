@@ -18,8 +18,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 400) {
-      const isRegisterRoute = error.config?.url?.includes('/auth/register');
-      if (!isRegisterRoute) {
+      const isAuthRoute = error.config?.url?.includes('/auth/register') || error.config?.url?.includes('/auth/login');
+      if (!isAuthRoute) {
         const data = error.response?.data;
         const message = data?.details?.join?.(', ') || data?.error || 'Bad request';
         toast.error(message);
@@ -27,9 +27,8 @@ api.interceptors.response.use(
     }
 
     if (error.response?.status === 401) {
-      import('../store/useAppStore').then(({ useAppStore }) => {
-        useAppStore.getState().clearAuth();
-      });
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
       window.location.href = '/login';
     }
     return Promise.reject(error);
@@ -59,6 +58,8 @@ export const authApi = {
     api.post<AuthResponse>('/auth/register', data).then(r => r.data),
   login: (data: LoginRequest) =>
     api.post<AuthResponse>('/auth/login', data).then(r => r.data),
+  deleteAccount: () =>
+    api.delete('/auth/profile').then(r => r.data),
 };
 
 export const routesApi = {

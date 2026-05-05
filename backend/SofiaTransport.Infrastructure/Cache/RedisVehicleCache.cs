@@ -12,21 +12,31 @@ public class RedisVehicleCache : IVehicleCache
 {
     private readonly IDatabase _db;
     private const string KeyPrefix = "vehicle:";
+    private const string IndexKey = "vehicle:index";
     private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
     public RedisVehicleCache(IConnectionMultiplexer redis) => _db = redis.GetDatabase();
 
     public async Task<IReadOnlyList<Vehicle>> GetAllAsync()
     {
-        var server = _db.Multiplexer.GetServer(_db.Multiplexer.GetEndPoints()[0]);
-        var keys = new List<RedisKey>();
-        await foreach (var key in server.KeysAsync(pattern: $"{KeyPrefix}*"))
-            keys.Add(key);
+        var members = await _db.SetMembersAsync(IndexKey);
+        if (members.Length == 0) return Array.Empty<Vehicle>();
 
-        if (keys.Count == 0) return Array.Empty<Vehicle>();
+        var keys = members.Select(m => (RedisKey)$"{KeyPrefix}{m}").ToArray();
+        var values = await _db.StringGetAsync(keys);
 
-        var values = await _db.StringGetAsync(keys.ToArray());
-        return values.Select(v => Deserialize(v!)).Where(v => v is not null).Select(v => v!).ToList();
+        return values
+            .Select((v, i) => (value: v, member: members[i]))
+            .Where(x =>
+            {
+                if (x.value.HasValue) return true;
+                _db.SetRemoveAsync(IndexKey, x.member); // clean up stale index entry
+                return false;
+            })
+            .Select(x => Deserialize(x.value!))
+            .Where(v => v is not null)
+            .Select(v => v!)
+            .ToList();
     }
 
     public async Task<IReadOnlyList<Vehicle>> GetByRouteAsync(string routeId)
@@ -54,11 +64,22 @@ public class RedisVehicleCache : IVehicleCache
             vehicle.Speed,
             recordedAt = vehicle.RecordedAt
         }, JsonOptions);
-        return _db.StringSetAsync($"{KeyPrefix}{vehicle.VehicleId}", json, TimeSpan.FromSeconds(120));
+        var key = $"{KeyPrefix}{vehicle.VehicleId}";
+        var batch = _db.CreateBatch();
+        batch.StringSetAsync(key, json, TimeSpan.FromSeconds(120));
+        batch.SetAddAsync(IndexKey, vehicle.VehicleId);
+        batch.Execute();
+        return Task.CompletedTask;
     }
 
-    public Task RemoveAsync(string vehicleId) =>
-        _db.KeyDeleteAsync($"{KeyPrefix}{vehicleId}");
+    public Task RemoveAsync(string vehicleId)
+    {
+        var batch = _db.CreateBatch();
+        batch.KeyDeleteAsync($"{KeyPrefix}{vehicleId}");
+        batch.SetRemoveAsync(IndexKey, vehicleId);
+        batch.Execute();
+        return Task.CompletedTask;
+    }
 
     private static Vehicle? Deserialize(RedisValue value)
     {

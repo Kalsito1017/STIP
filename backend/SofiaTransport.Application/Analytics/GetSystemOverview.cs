@@ -32,7 +32,8 @@ public class GetSystemOverviewHandler : IRequestHandler<GetSystemOverviewQuery, 
 
         var from = DateTime.UtcNow.AddHours(-1);
         var logs = await _delayRepo.GetForHeatmapAsync(from, DateTime.UtcNow);
-        var avgDelay = logs.Any() ? logs.Average(l => l.DelaySeconds) ?? 0 : 0;
+        var delays = logs.Where(l => l.DelaySeconds.HasValue).Select(l => (double)l.DelaySeconds!.Value).ToList();
+        var avgDelay = delays.Count > 0 ? delays.Average() : 0;
 
         return new SystemOverviewDto(
             vehicles.Count,

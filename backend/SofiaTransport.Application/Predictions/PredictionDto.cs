@@ -14,6 +14,21 @@ public record PredictDelayResponse(
     string ModelVersion
 );
 
+public record BatchPredictDelayRequest(
+    List<PredictDelayRequest> Items
+);
+
+public record BatchPredictDelayResponse(
+    List<BatchPredictDelayItem> Results
+);
+
+public record BatchPredictDelayItem(
+    double PredictedDelaySeconds,
+    List<double> ConfidenceInterval,
+    string ModelVersion,
+    PredictDelayRequest Input
+);
+
 public record TravelTimePredictionResponse(
     double PredictedTravelTimeSeconds,
     List<double> ConfidenceInterval,
