@@ -12,14 +12,15 @@ import { MobileTabBar } from './MobileTabBar';
 import { useTranslation } from 'react-i18next';
 
 const PAGE_TITLE_KEYS: Record<string, string> = {
-  '/dashboard': 'layout.dashboard',
-  '/routes': 'layout.routes',
-  '/stops': 'layout.stops',
-  '/analytics': 'layout.analytics',
+  '/dashboard': 'dashboard',
+  '/routes': 'routes',
+  '/stops': 'stops',
+  '/analytics': 'analytics',
 };
 
 export function Layout() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('layout');
+  const { t: tCommon } = useTranslation('common');
   const location = useLocation();
   const user = useAppStore((s) => s.user);
   const connectionState = useAppStore((s) => s.connectionState);
@@ -27,10 +28,10 @@ export function Layout() {
 
   const getPageTitle = (pathname: string): string => {
     if (PAGE_TITLE_KEYS[pathname]) return t(PAGE_TITLE_KEYS[pathname]);
-    if (pathname.startsWith('/routes/')) return t('layout.route_detail');
-    if (pathname.startsWith('/stops/')) return t('layout.stop_detail');
-    if (pathname.startsWith('/settings')) return t('layout.settings');
-    return t('common.appName');
+    if (pathname.startsWith('/routes/')) return t('route_detail');
+    if (pathname.startsWith('/stops/')) return t('stop_detail');
+    if (pathname.startsWith('/settings')) return t('settings');
+    return tCommon('appName');
   };
 
   const pageTitle = getPageTitle(location.pathname);
@@ -42,8 +43,8 @@ export function Layout() {
   const handleClose = useCallback(() => setSidebarOpen(false), []);
 
   const connectionLabel =
-    connectionState === 'connected' ? t('layout.connected') :
-    connectionState === 'reconnecting' ? t('layout.reconnecting') : t('layout.disconnected');
+    connectionState === 'connected' ? t('connected') :
+    connectionState === 'reconnecting' ? t('reconnecting') : t('disconnected');
 
   return (
     <div className="min-h-screen bg-background">
@@ -65,7 +66,7 @@ export function Layout() {
               size="icon"
               onClick={() => setSidebarOpen(true)}
               className="lg:hidden"
-              aria-label={t('layout.open_menu')}
+              aria-label={t('open_menu')}
             >
               <Menu className="w-5 h-5" />
             </Button>

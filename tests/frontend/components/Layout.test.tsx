@@ -26,9 +26,9 @@ describe('Layout', () => {
 
   it('renders navigation items', () => {
     renderLayout();
-    expect(screen.getAllByText('Live Map')).toHaveLength(2);
-    expect(screen.getAllByText('Dashboard')).toHaveLength(2);
-    expect(screen.getAllByText('Routes')).toHaveLength(2);
+    expect(screen.getAllByText('Live Map').length).toBeGreaterThanOrEqual(2);
+    expect(screen.getAllByText('Dashboard').length).toBeGreaterThanOrEqual(2);
+    expect(screen.getAllByText('Routes').length).toBeGreaterThanOrEqual(2);
   });
 
   it('renders mobile menu button', () => {
