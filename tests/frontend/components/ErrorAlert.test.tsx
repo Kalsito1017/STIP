@@ -2,8 +2,8 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '../../i18n';
-import { ErrorAlert } from '../ErrorAlert';
+import i18n from '@/i18n';
+import { ErrorAlert } from '@/components/ErrorAlert';
 
 function renderWithI18n(ui: React.ReactElement) {
   return render(

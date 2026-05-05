@@ -3,9 +3,9 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '../../i18n';
-import { useAppStore } from '../../store/useAppStore';
-import { Sidebar } from '../Sidebar';
+import i18n from '@/i18n';
+import { useAppStore } from '@/store/useAppStore';
+import { Sidebar } from '@/components/Sidebar';
 import { render } from '@testing-library/react';
 
 const initialState = useAppStore.getInitialState();
@@ -13,7 +13,7 @@ const initialState = useAppStore.getInitialState();
 // Mock useLogout
 const mockLogoutFn = vi.fn();
 
-vi.mock('../../hooks/useAuth', () => ({
+vi.mock('@/hooks/useAuth', () => ({
   useLogout: () => mockLogoutFn,
 }));
 

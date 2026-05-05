@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '../../i18n';
-import { RouteBadge } from '../RouteBadge';
+import i18n from '@/i18n';
+import { RouteBadge } from '@/components/RouteBadge';
 
 function renderWithI18n(ui: React.ReactElement) {
   return render(

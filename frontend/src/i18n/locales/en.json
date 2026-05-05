@@ -9,7 +9,9 @@
     "loading": "Loading...",
     "error": "Error",
     "no_data": "No data",
-    "unknown": "Unknown"
+    "unknown": "Unknown",
+    "show_less": "Show less",
+    "more_alerts": "more alerts"
   },
   "landing": {
     "hero_title_1": "See what happens",

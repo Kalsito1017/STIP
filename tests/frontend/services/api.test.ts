@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
-import api from '../api';
+import api from '@/services/api';
 
 // Mock sonner toast
 vi.mock('sonner', () => ({

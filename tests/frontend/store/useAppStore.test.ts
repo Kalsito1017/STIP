@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { useAppStore } from '../useAppStore';
+import { useAppStore } from '@/store/useAppStore';
 
 const initialState = useAppStore.getInitialState();
 

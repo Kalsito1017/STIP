@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useAppStore } from '../../store/useAppStore';
-import { LanguageSwitcher } from '../LanguageSwitcher';
+import { useAppStore } from '@/store/useAppStore';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
 const initialState = useAppStore.getInitialState();
 

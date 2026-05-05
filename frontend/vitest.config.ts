@@ -9,17 +9,18 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+    preserveSymlinks: true,
   },
   test: {
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
-    include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    include: ['./tests/**/*.{test,spec}.{ts,tsx}'],
     exclude: ['node_modules', 'dist', 'e2e'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],
-      include: ['src/**/*.{ts,tsx}'],
+      include: ['src/**/*.{ts,tsx}', './tests/**/*.{ts,tsx}'],
       exclude: ['src/test/**', 'src/**/*.d.ts'],
     },
   },

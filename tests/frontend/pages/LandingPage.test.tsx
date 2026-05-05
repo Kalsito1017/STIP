@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '../../i18n';
-import { LandingPage } from '../../pages/LandingPage';
+import i18n from '@/i18n';
+import { LandingPage } from '@/pages/LandingPage';
 
 function renderWithProviders(ui: React.ReactElement) {
   return render(

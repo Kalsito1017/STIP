@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '../../i18n';
-import { NotFoundPage } from '../../pages/NotFoundPage';
+import i18n from '@/i18n';
+import { NotFoundPage } from '@/pages/NotFoundPage';
 
 function renderWithProviders(ui: React.ReactElement) {
   return render(

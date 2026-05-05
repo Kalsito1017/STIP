@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { TransitType, TransitTypeName, TransitTypeRouteColor, TransitTypeBadgeClass } from '../../constants/transit';
+import { TransitType, TransitTypeName, TransitTypeRouteColor, TransitTypeBadgeClass } from '@/constants/transit';
 
 describe('transit constants', () => {
   it('TransitType has correct values', () => {

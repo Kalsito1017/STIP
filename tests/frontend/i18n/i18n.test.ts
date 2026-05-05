@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import en from '../../i18n/locales/en.json';
-import bg from '../../i18n/locales/bg.json';
+import en from '@/i18n/locales/en.json';
+import bg from '@/i18n/locales/bg.json';
 
 function getAllKeys(obj: Record<string, unknown>, prefix = ''): string[] {
   const keys: string[] = [];

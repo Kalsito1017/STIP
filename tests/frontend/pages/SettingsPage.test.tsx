@@ -4,9 +4,9 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import i18n from '../../i18n';
-import { useAppStore } from '../../store/useAppStore';
-import { SettingsPage } from '../../pages/SettingsPage';
+import i18n from '@/i18n';
+import { useAppStore } from '@/store/useAppStore';
+import { SettingsPage } from '@/pages/SettingsPage';
 
 const initialState = useAppStore.getInitialState();
 
@@ -18,7 +18,7 @@ const mockDeleteAccount = {
   error: null,
 };
 
-vi.mock('../../hooks/useAuth', () => ({
+vi.mock('@/hooks/useAuth', () => ({
   useDeleteAccount: () => mockDeleteAccount,
 }));
 

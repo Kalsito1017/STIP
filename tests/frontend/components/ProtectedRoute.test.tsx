@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { useAppStore } from '../../store/useAppStore';
-import { ProtectedRoute } from '../ProtectedRoute';
+import { useAppStore } from '@/store/useAppStore';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 const initialState = useAppStore.getInitialState();
 

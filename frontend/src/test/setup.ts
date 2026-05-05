@@ -35,9 +35,6 @@ window.IntersectionObserver = IntersectionObserverMock as unknown as typeof Inte
 
 HTMLCanvasElement.prototype.getContext = () => null;
 
-const originalScrollTo = window.scrollTo;
-window.scrollTo = () => {};
-
 Object.defineProperty(window, 'scrollTo', {
   writable: true,
   value: () => {},
