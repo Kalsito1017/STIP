@@ -136,6 +136,7 @@ public class TransportDbContext : DbContext
         {
             e.ToTable("delay_logs");
             e.HasKey(d => d.Id);
+            e.Property(d => d.Id).HasColumnName("id");
             e.Property(d => d.VehicleId).HasColumnName("vehicle_id");
             e.Property(d => d.StopId).HasColumnName("stop_id");
             e.Property(d => d.TripId).HasColumnName("trip_id");

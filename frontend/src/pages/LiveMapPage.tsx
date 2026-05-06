@@ -151,11 +151,11 @@ export function LiveMapPage() {
         <div className="absolute top-16 left-4 right-4 z-[1000] max-w-md">
           <ErrorAlert message={routesErr.message} onRetry={() => refetchRoutes()} />
         </div>
+      )}
       {shapesError && (
         <div className="absolute top-28 left-4 right-4 z-[1000] max-w-md">
           <ErrorAlert message={shapesErr?.message ?? 'Failed to load route shapes'} onRetry={() => refetchShapes()} />
         </div>
-      )
       )}
 
       <MapContainer

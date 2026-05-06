@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Layers, Bus, MapPin, Thermometer, Car, Crosshair, Radio } from 'lucide-react';
 import { Button } from '../ui/button';
+import { LanguageSwitcher } from '../LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
@@ -43,9 +44,14 @@ export function MapControls({
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="absolute bottom-20 lg:bottom-6 right-3 sm:right-4 z-[1000] pointer-events-auto flex flex-col gap-2">
-      <AnimatePresence>
-        {expanded && (
+    <>
+      <div className="absolute top-4 right-3 sm:right-4 z-[1000] pointer-events-auto">
+        <LanguageSwitcher compact />
+      </div>
+
+      <div className="absolute bottom-20 lg:bottom-6 right-3 sm:right-4 z-[1000] pointer-events-auto flex flex-col gap-2">
+        <AnimatePresence>
+          {expanded && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 8 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -104,6 +110,7 @@ export function MapControls({
         </Button>
       </div>
     </div>
+    </>
   );
 }
 

@@ -14,6 +14,9 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  optimizeDeps: {
+    include: ['leaflet', 'maplibre-gl'],
+  },
   server: {
     port: 5173,
     proxy: {

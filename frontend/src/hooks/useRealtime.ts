@@ -11,7 +11,6 @@ export function useRealtime() {
   const removeExpiredAlerts = useAppStore((s) => s.removeExpiredAlerts);
   const setConnectionState = useAppStore((s) => s.setConnectionState);
   const setVehicleTimestamp = useAppStore((s) => s.setVehicleTimestamp);
-  const token = useAppStore((s) => s.token);
   const connectionRef = useRef<signalR.HubConnection | null>(null);
 
   useEffect(() => {
@@ -79,7 +78,7 @@ export function useRealtime() {
       setConnectionState('disconnected');
       connection.stop().catch(() => { /* ignore stop errors */ });
     };
-  }, [token, updateVehicle, updateTripUpdate, addAlert, removeExpiredAlerts, setConnectionState, setVehicleTimestamp]);
+  }, [updateVehicle, updateTripUpdate, addAlert, removeExpiredAlerts, setConnectionState, setVehicleTimestamp]);
 
   return connectionRef;
 }
