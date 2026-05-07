@@ -1,6 +1,7 @@
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import { MapContainer, useMap, ZoomControl } from 'react-leaflet';
 import * as L from 'leaflet';
+import { Search } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 import { useRealtime } from '../hooks/useRealtime';
 import { useRoutes } from '../hooks/useRoutes';
@@ -23,6 +24,7 @@ import { NearbyStopsLayer } from '../components/map/NearbyStopsLayer';
 import { VehicleDetailSheet } from '../components/map/VehicleDetailSheet';
 import { MapControls } from '../components/map/MapControls';
 import { VehicleStatsBar } from '../components/map/VehicleStatsBar';
+import { TransitFilterChips } from '../components/map/TransitFilterChips';
 import type { StopFeatureCollection } from '../types/map';
 
 const SOFIA_CENTER: L.LatLngTuple = [42.6977, 23.3219];
@@ -82,9 +84,6 @@ export function LiveMapPage() {
   const { data: routes, isLoading: routesLoading, isError: routesError, error: routesErr, refetch: refetchRoutes } = useRoutes();
   const { data: stops, isLoading: stopsLoading } = useStops();
   const { data: liveVehicles, isLoading: vehiclesLoading } = useLiveVehicles();
-  const { data: shapes, isLoading: shapesLoading, isError: shapesError, error: shapesErr, refetch: refetchShapes } = useAllRouteShapes();
-  const { data: heatmap, isLoading: heatmapLoading } = useDelayHeatmap();
-  const { data: congestion, isLoading: congestionLoading } = useStopCongestionAll();
   const [clusterMode, setClusterMode] = useState(false);
   const [showRoutes, setShowRoutes] = useState(true);
   const [showStops, setShowStops] = useState(true);
@@ -92,8 +91,12 @@ export function LiveMapPage() {
   const [showVehicles, setShowVehicles] = useState(true);
   const [showCongestion, setShowCongestion] = useState(false);
   const [showNearby, setShowNearby] = useState(false);
+  const [activeTransitTypes, setActiveTransitTypes] = useState<Set<number>>(new Set([0, 1, 3, 11]));
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null);
   const mapRef = useRef<L.Map | null>(null);
+  const { data: shapes, isLoading: shapesLoading, isError: shapesError, error: routesShapeErr, refetch: refetchShapes } = useAllRouteShapes(showRoutes);
+  const { data: heatmap, isLoading: heatmapLoading } = useDelayHeatmap(showHeatmap);
+  const { data: congestion, isLoading: congestionLoading } = useStopCongestionAll(showCongestion);
 
   const handleLocate = useCallback(() => {
     mapRef.current?.locate({ setView: true, maxZoom: 16, enableHighAccuracy: true });
@@ -109,6 +112,18 @@ export function LiveMapPage() {
     }
     setShowNearby((v) => !v);
   }, [showNearby, userLocation]);
+
+  const handleToggleTransitType = useCallback((type: number) => {
+    setActiveTransitTypes((prev) => {
+      const next = new Set(prev);
+      if (next.has(type)) {
+        if (next.size > 1) next.delete(type);
+      } else {
+        next.add(type);
+      }
+      return next;
+    });
+  }, []);
 
   const { data: nearbyStops } = useNearbyStops(
     userLocation?.lat ?? null,
@@ -126,8 +141,18 @@ export function LiveMapPage() {
 
   const displayVehicles = useMemo(() => {
     const source = connectionState === 'connected' && vehicles.length > 0 ? vehicles : (liveVehicles ?? []);
-    return routeFilter ? source.filter((v: { routeId: string | null }) => v.routeId === routeFilter) : source;
-  }, [vehicles, liveVehicles, routeFilter, connectionState]);
+    let filtered = routeFilter ? source.filter((v: { routeId: string | null }) => v.routeId === routeFilter) : source;
+    if (activeTransitTypes.size < 4) {
+      filtered = filtered.filter((v: { routeId: string | null }) => {
+        if (!v.routeId) return activeTransitTypes.has(3);
+        if (v.routeId.includes('-tram-')) return activeTransitTypes.has(0);
+        if (v.routeId.startsWith('r-m')) return activeTransitTypes.has(1);
+        if (v.routeId.includes('-trol-')) return activeTransitTypes.has(11);
+        return activeTransitTypes.has(3);
+      });
+    }
+    return filtered;
+  }, [vehicles, liveVehicles, routeFilter, connectionState, activeTransitTypes]);
 
   const stopGeojson = useMemo(() => stopsToGeoJSON(stops), [stops]);
 
@@ -154,7 +179,7 @@ export function LiveMapPage() {
       )}
       {shapesError && (
         <div className="absolute top-28 left-4 right-4 z-[1000] max-w-md">
-          <ErrorAlert message={shapesErr?.message ?? 'Failed to load route shapes'} onRetry={() => refetchShapes()} />
+          <ErrorAlert message={routesShapeErr?.message ?? 'Failed to load route shapes'} onRetry={() => refetchShapes()} />
         </div>
       )}
 
@@ -164,6 +189,7 @@ export function LiveMapPage() {
         zoom={12}
         style={{ width: '100%', height: '100%' }}
         zoomControl={false}
+        preferCanvas
       >
         <ZoomControl position="topright" />
         <FitBoundsOnShapes />
@@ -189,6 +215,12 @@ export function LiveMapPage() {
         <AlertBanner />
       </div>
 
+      <div className="absolute top-14 right-3 sm:right-4 z-[999] pointer-events-auto">
+        <div className="bg-card/80 backdrop-blur-md rounded-full shadow-md border border-border/60 px-2 py-1.5">
+          <TransitFilterChips activeTypes={activeTransitTypes} onToggle={handleToggleTransitType} />
+        </div>
+      </div>
+
       <VehicleStatsBar vehicles={displayVehicles} />
 
       <MapControls
@@ -210,6 +242,20 @@ export function LiveMapPage() {
       />
 
       <VehicleDetailSheet routeNames={routeNames} />
+
+      {!mapLoading && displayVehicles.length === 0 && (
+        <div className="absolute inset-0 z-[998] pointer-events-none flex items-center justify-center">
+          <div className="bg-card/80 backdrop-blur-md border border-border/60 rounded-2xl shadow-lg px-6 py-4 text-center max-w-xs">
+            <Search className="w-5 h-5 text-muted-foreground mx-auto mb-2" />
+            <p className="text-sm font-medium text-foreground">
+              {routeFilter ? 'No vehicles on this route' : 'No vehicles in view'}
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {routeFilter ? 'Try selecting a different route' : 'Zoom out or change filters to see vehicles'}
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

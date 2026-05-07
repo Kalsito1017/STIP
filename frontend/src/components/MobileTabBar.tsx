@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Map, LayoutDashboard, Bus, TrendingUp } from 'lucide-react';
+import { Map, LayoutDashboard, Bus, Star, TrendingUp } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 
@@ -33,6 +33,12 @@ export function MobileTabBar() {
       labelKey: t('routes'),
       icon: Bus,
       match: (p) => p.startsWith('/routes'),
+    },
+    {
+      path: '/favorites',
+      labelKey: t('favorites', { defaultValue: 'Favorites' }),
+      icon: Star,
+      match: (p) => p.startsWith('/favorites'),
     },
     {
       path: '/analytics',

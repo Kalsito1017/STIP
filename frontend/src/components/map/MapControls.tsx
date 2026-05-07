@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Layers, Bus, MapPin, Thermometer, Car, Crosshair, Radio } from 'lucide-react';
+import { Layers, Bus, MapPin, Thermometer, Car, Crosshair, Radio, Navigation } from 'lucide-react';
 import { Button } from '../ui/button';
 import { LanguageSwitcher } from '../LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
@@ -57,7 +57,7 @@ export function MapControls({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 8 }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
-            className="bg-card border border-border rounded-2xl shadow-lg p-3 w-48"
+            className="bg-card/95 backdrop-blur-md border border-border/60 rounded-2xl shadow-xl p-3 w-52"
           >
             <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">
               {t('map_layers')}
@@ -69,7 +69,7 @@ export function MapControls({
               <ToggleRow icon={Thermometer} label={t('delay_heatmap')} checked={showHeatmap} onChange={onToggleHeatmap} />
               <ToggleRow icon={Radio} label={t('stop_congestion')} checked={showCongestion} onChange={onToggleCongestion} />
             </div>
-            <div className="pt-2 mt-2 border-t border-border">
+            <div className="pt-2 mt-2 border-t border-border/60">
               <ToggleRow
                 icon={Layers}
                 label={clusterMode ? t('cluster_markers') : t('individual_markers')}
@@ -77,7 +77,7 @@ export function MapControls({
                 onChange={onToggleCluster}
               />
               <ToggleRow
-                icon={MapPin}
+                icon={Navigation}
                 label={t('nearby_stops')}
                 checked={showNearby}
                 onChange={onToggleNearby}
@@ -92,7 +92,7 @@ export function MapControls({
           variant="outline"
           size="icon"
           onClick={onLocate}
-          className="bg-card shadow-lg border-border rounded-full h-10 w-10"
+          className="bg-card/90 backdrop-blur-md shadow-lg border-border/60 rounded-full h-10 w-10 hover:bg-card transition-colors"
           aria-label={t('locate_me')}
           title={t('show_location')}
         >
@@ -102,7 +102,9 @@ export function MapControls({
           variant="outline"
           size="icon"
           onClick={() => setExpanded((v) => !v)}
-          className={`bg-card shadow-lg border-border rounded-full h-10 w-10 ${expanded ? 'ring-2 ring-primary' : ''}`}
+          className={`bg-card/90 backdrop-blur-md shadow-lg border-border/60 rounded-full h-10 w-10 transition-all hover:bg-card ${
+            expanded ? 'ring-2 ring-primary shadow-primary/20' : ''
+          }`}
           aria-label={t('toggle_layers')}
           title={t('toggle_layers')}
         >
@@ -121,15 +123,16 @@ function ToggleRow({ icon: Icon, label, checked, onChange }: {
   onChange: () => void;
 }) {
   return (
-    <label className="flex items-center gap-2.5 py-1.5 px-1 cursor-pointer text-sm text-foreground hover:bg-secondary rounded-md transition-colors">
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={onChange}
-        className="rounded border-input text-primary focus:ring-primary"
-      />
-      <Icon className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
-      <span className="truncate">{label}</span>
+    <label onClick={onChange} className={`flex items-center gap-2.5 py-1.5 px-2 cursor-pointer text-sm rounded-lg transition-colors ${
+      checked ? 'bg-primary/5 text-foreground' : 'text-muted-foreground hover:bg-secondary/50'
+    }`}>
+      <Icon className={`w-3.5 h-3.5 flex-shrink-0 transition-colors ${checked ? 'text-primary' : 'text-muted-foreground/60'}`} />
+      <span className="flex-1 truncate">{label}</span>
+      <div className={`relative w-8 h-[18px] rounded-full transition-colors ${checked ? 'bg-primary' : 'bg-border'}`}>
+        <div className={`absolute top-[2px] w-[14px] h-[14px] rounded-full bg-white shadow-sm transition-transform duration-200 ${
+          checked ? 'translate-x-[14px]' : 'translate-x-[2px]'
+        }`} />
+      </div>
     </label>
   );
 }

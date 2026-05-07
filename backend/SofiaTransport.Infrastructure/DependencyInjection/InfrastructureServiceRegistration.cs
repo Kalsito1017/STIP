@@ -85,7 +85,9 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IReliabilityScoreRepository, ReliabilityScoreRepository>();
         services.AddScoped<IShapeRepository, ShapeRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserFavoriteRepository, UserFavoriteRepository>();
 
+        services.AddHttpContextAccessor();
         services.AddSingleton<ITokenService, TokenService>();
 
         return services;

@@ -87,6 +87,7 @@ public class GtfsPollingService : BackgroundService
         var db = scope.ServiceProvider.GetRequiredService<TransportDbContext>();
 
         var vehicles = await feedClient.FetchVehiclePositionsAsync(ct);
+        vehicles = vehicles.DistinctBy(v => v.VehicleId).ToList();
         _logger.LogInformation("Fetched {Count} vehicle positions", vehicles.Count);
 
         if (vehicles.Count == 0) return;
@@ -158,6 +159,7 @@ public class GtfsPollingService : BackgroundService
         }
 
         await db.SaveChangesAsync(ct);
+        db.ChangeTracker.Clear();
     }
 
     private async Task CleanupStaleVehiclesAsync(CancellationToken ct)

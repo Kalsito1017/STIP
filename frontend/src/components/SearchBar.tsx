@@ -78,7 +78,7 @@ export function SearchBar() {
   return (
     <div className="relative" ref={containerRef}>
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 z-10" />
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground z-10" />
         <Input
           ref={inputRef}
           type="text"
@@ -86,13 +86,13 @@ export function SearchBar() {
           value={query}
           onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
           onFocus={() => { if (results.length > 0) setOpen(true); }}
-          className="pl-10 pr-4 h-10 bg-white shadow-sm border-slate-200 rounded-lg w-full"
+          className="pl-10 pr-4 h-11 bg-card/80 backdrop-blur-md shadow-md border-border/60 rounded-full w-full focus:ring-2 focus:ring-primary/30 transition-shadow"
         />
       </div>
       {open && query.length >= 1 && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-lg overflow-hidden z-50">
+        <div className="absolute top-full left-0 right-0 mt-1.5 bg-card/95 backdrop-blur-md border border-border/60 rounded-xl shadow-xl overflow-hidden z-50">
           {(routesLoading || stopsLoading) ? (
-            <div className="flex items-center gap-2 px-3 py-3 text-sm text-slate-400">
+            <div className="flex items-center gap-2 px-4 py-3 text-sm text-muted-foreground">
               <Loader2 className="w-4 h-4 animate-spin" />
               {t('loading_routes_stops')}
             </div>
@@ -101,23 +101,23 @@ export function SearchBar() {
               <button
                 key={`${r.type}-${r.id}`}
                 onClick={() => handleSelect(r)}
-                className="flex items-center gap-3 w-full px-3 py-2 text-sm text-left hover:bg-slate-50"
+                className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-left hover:bg-accent transition-colors"
               >
                 {r.type === 'route' ? (
-                  <Bus className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                  <Bus className="w-4 h-4 text-primary flex-shrink-0" />
                 ) : (
-                  <MapPin className="w-4 h-4 text-red-500 flex-shrink-0" />
+                  <MapPin className="w-4 h-4 text-destructive flex-shrink-0" />
                 )}
                 <div className="min-w-0">
-                  <p className="text-slate-900 truncate">{r.label}</p>
+                  <p className="text-foreground truncate">{r.label}</p>
                   {r.secondary && (
-                    <p className="text-xs text-slate-400 truncate">{r.secondary}</p>
+                    <p className="text-xs text-muted-foreground truncate">{r.secondary}</p>
                   )}
                 </div>
               </button>
             ))
           ) : (
-            <p className="px-3 py-3 text-sm text-slate-400">{t('no_results')}</p>
+            <p className="px-4 py-3 text-sm text-muted-foreground">{t('no_results')}</p>
           )}
         </div>
       )}

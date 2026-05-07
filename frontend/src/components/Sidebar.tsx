@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Map, LayoutDashboard, Bus, MapPin, TrendingUp, Settings, User, LogOut, X, Lock, LogIn, Sun, Moon } from 'lucide-react';
+import { Map, LayoutDashboard, Bus, MapPin, TrendingUp, Brain, Star, Settings, User, LogOut, X, Lock, LogIn, Sun, Moon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../store/useAppStore';
 import { useLogout } from '../hooks/useAuth';
@@ -25,7 +25,9 @@ export function Sidebar({ open, onClose }: SidebarProps) {
     { to: '/dashboard', label: t('dashboard'), icon: LayoutDashboard, protected: false },
     { to: '/routes', label: t('routes'), icon: Bus, protected: false },
     { to: '/stops', label: t('stops'), icon: MapPin, protected: false },
+    { to: '/favorites', label: t('favorites', { defaultValue: 'Favorites' }), icon: Star, protected: true },
     { to: '/analytics', label: t('analytics'), icon: TrendingUp, protected: true },
+    { to: '/predictions', label: t('predictions'), icon: Brain, protected: true },
     { to: '/settings', label: t('settings'), icon: Settings, protected: true },
   ];
 

@@ -8,7 +8,7 @@
       "maxzoom": 14
     }
   },
-  "glyphs": "https://fonts.protomaps.com/{fontstack}/{range}/{range}.pbf",
+  "glyphs": "https://fonts.protomaps.com/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "background",

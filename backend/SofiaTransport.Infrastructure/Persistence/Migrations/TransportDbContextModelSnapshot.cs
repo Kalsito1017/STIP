@@ -41,8 +41,10 @@ namespace SofiaTransport.Infrastructure.Persistence.Migrations
                         .HasColumnName("delay_seconds");
 
                     b.Property<DateTime>("RecordedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("recorded_at");
+                        .HasColumnName("recorded_at")
+                        .HasDefaultValueSql("now()");
 
                     b.Property<string>("RouteId")
                         .HasColumnType("text")
@@ -108,7 +110,9 @@ namespace SofiaTransport.Infrastructure.Persistence.Migrations
                         .HasColumnName("peak_score");
 
                     b.Property<int>("SampleCount")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
+                        .HasDefaultValue(0)
                         .HasColumnName("sample_count");
 
                     b.Property<double>("Score")
@@ -182,7 +186,7 @@ namespace SofiaTransport.Infrastructure.Persistence.Migrations
                         new
                         {
                             RouteId = "r-tram-1",
-                            LongName = "Ivan Vazov – Nadezhda",
+                            LongName = "Sofia University – Mladost 1",
                             ShortName = "1",
                             Type = 0
                         },
@@ -287,6 +291,7 @@ namespace SofiaTransport.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("RouteId", "Sequence")
+                        .IsUnique()
                         .HasDatabaseName("idx_shapes_route_sequence");
 
                     b.ToTable("shapes", (string)null);
@@ -299,6 +304,7 @@ namespace SofiaTransport.Infrastructure.Persistence.Migrations
                         .HasColumnName("stop_id");
 
                     b.Property<Point>("Geometry")
+                        .IsRequired()
                         .HasColumnType("geography(POINT, 4326)")
                         .HasColumnName("location");
 
@@ -308,6 +314,11 @@ namespace SofiaTransport.Infrastructure.Persistence.Migrations
                         .HasColumnName("stop_name");
 
                     b.HasKey("StopId");
+
+                    b.HasIndex("Geometry")
+                        .HasDatabaseName("idx_stops_location");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Geometry"), "GIST");
 
                     b.HasIndex("StopName")
                         .HasDatabaseName("idx_stops_name");
@@ -439,6 +450,10 @@ namespace SofiaTransport.Infrastructure.Persistence.Migrations
                         .HasColumnType("interval")
                         .HasColumnName("arrival_time");
 
+                    b.Property<TimeSpan?>("DepartureTime")
+                        .HasColumnType("interval")
+                        .HasColumnName("departure_time");
+
                     b.Property<string>("StopId")
                         .IsRequired()
                         .HasColumnType("text")
@@ -448,6 +463,9 @@ namespace SofiaTransport.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("StopId", "ArrivalTime")
                         .HasDatabaseName("idx_stop_times_stop_arrival");
+
+                    b.HasIndex("TripId", "StopId")
+                        .HasDatabaseName("idx_stop_times_trip_stop");
 
                     b.ToTable("stop_times", (string)null);
                 });
@@ -525,12 +543,15 @@ namespace SofiaTransport.Infrastructure.Persistence.Migrations
                         .HasColumnName("bearing");
 
                     b.Property<Point>("Geometry")
+                        .IsRequired()
                         .HasColumnType("geography(POINT, 4326)")
                         .HasColumnName("location");
 
                     b.Property<DateTime>("RecordedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("recorded_at");
+                        .HasColumnName("recorded_at")
+                        .HasDefaultValueSql("now()");
 
                     b.Property<string>("RouteId")
                         .HasColumnType("text")
@@ -546,11 +567,20 @@ namespace SofiaTransport.Infrastructure.Persistence.Migrations
 
                     b.HasKey("VehicleId");
 
+                    b.HasIndex("Geometry")
+                        .HasDatabaseName("idx_vehicles_location");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Geometry"), "GIST");
+
                     b.HasIndex("RecordedAt")
                         .IsDescending()
                         .HasDatabaseName("idx_vehicles_recorded_at");
 
-                    b.HasIndex("RouteId")
+                    b.HasIndex("TripId")
+                        .HasDatabaseName("idx_vehicles_trip_id");
+
+                    b.HasIndex("RouteId", "RecordedAt")
+                        .IsDescending(false, true)
                         .HasDatabaseName("idx_vehicles_route_id");
 
                     b.ToTable("vehicles", (string)null);

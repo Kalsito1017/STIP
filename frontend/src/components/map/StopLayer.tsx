@@ -3,19 +3,19 @@ import * as L from 'leaflet';
 import type { StopFeatureCollection } from '../../types/map';
 import i18n from '../../i18n';
 
-interface Props {
+interface StopLayerProps {
   data: StopFeatureCollection;
 }
 
 const circleOptions: L.CircleMarkerOptions = {
-  radius: 5,
+  radius: 6,
   fillColor: '#ef4444',
   color: '#ffffff',
-  weight: 2,
-  fillOpacity: 1,
+  weight: 2.5,
+  fillOpacity: 0.9,
 };
 
-export function StopLayer({ data }: Props) {
+export function StopLayer({ data }: StopLayerProps) {
   return (
     <GeoJSON
       data={data}
@@ -23,6 +23,11 @@ export function StopLayer({ data }: Props) {
       onEachFeature={(feature, layer) => {
         if (!feature.properties) return;
         const { stopName, stopId } = feature.properties;
+        layer.bindTooltip(stopName ?? i18n.t('common:unknown'), {
+          direction: 'top',
+          offset: [0, -8],
+          className: 'rounded-lg px-3 py-1.5 text-sm font-medium shadow-md border-0 bg-card text-foreground',
+        });
         layer.bindPopup(
           `<div class="text-sm">
             <strong>${stopName ?? i18n.t('common:unknown')}</strong><br/>

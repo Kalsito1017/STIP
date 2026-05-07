@@ -46,8 +46,8 @@ CREATE INDEX IF NOT EXISTS idx_stop_times_trip_stop ON stop_times(trip_id, stop_
 -- Vehicles (live tracking)
 CREATE TABLE IF NOT EXISTS vehicles (
     vehicle_id  TEXT PRIMARY KEY,
-    route_id    TEXT REFERENCES routes(route_id) ON DELETE SET NULL,
-    trip_id     TEXT REFERENCES trips(trip_id) ON DELETE SET NULL,
+    route_id    TEXT,
+    trip_id     TEXT,
     location    GEOGRAPHY(POINT, 4326),
     bearing     FLOAT DEFAULT 0,
     speed       FLOAT DEFAULT 0,
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS delay_logs (
     vehicle_id        TEXT REFERENCES vehicles(vehicle_id) ON DELETE SET NULL,
     stop_id           TEXT REFERENCES stops(stop_id) ON DELETE SET NULL,
     trip_id           TEXT REFERENCES trips(trip_id) ON DELETE SET NULL,
-    route_id          TEXT REFERENCES routes(route_id) ON DELETE SET NULL,
+    route_id          TEXT,
     scheduled_arrival TIMESTAMPTZ,
     actual_arrival    TIMESTAMPTZ,
     delay_seconds     INT,  -- application-calculated, nullable

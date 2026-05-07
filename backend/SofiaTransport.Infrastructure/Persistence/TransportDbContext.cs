@@ -17,6 +17,7 @@ public class TransportDbContext : DbContext
     public DbSet<ReliabilityScore> ReliabilityScores => Set<ReliabilityScore>();
     public DbSet<Shape> Shapes => Set<Shape>();
     public DbSet<User> Users => Set<User>();
+    public DbSet<UserFavorite> UserFavorites => Set<UserFavorite>();
 
     public TransportDbContext(DbContextOptions<TransportDbContext> options) : base(options) { }
 
@@ -187,6 +188,19 @@ public class TransportDbContext : DbContext
             e.Property(u => u.PasswordHash).HasColumnName("password_hash").IsRequired();
             e.Property(u => u.FullName).HasColumnName("full_name").IsRequired();
             e.Property(u => u.CreatedAt).HasColumnName("created_at");
+        });
+
+        modelBuilder.Entity<UserFavorite>(e =>
+        {
+            e.ToTable("user_favorites");
+            e.HasKey(f => f.Id);
+            e.Property(f => f.Id).HasColumnName("id").ValueGeneratedOnAdd();
+            e.Property(f => f.UserId).HasColumnName("user_id").IsRequired();
+            e.Property(f => f.EntityType).HasColumnName("entity_type").IsRequired().HasMaxLength(20);
+            e.Property(f => f.EntityId).HasColumnName("entity_id").IsRequired().HasMaxLength(50);
+            e.Property(f => f.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+            e.HasIndex(f => new { f.UserId, f.EntityType, f.EntityId }).IsUnique().HasDatabaseName("idx_user_favorites_unique");
+            e.HasIndex(f => f.UserId).HasDatabaseName("idx_user_favorites_user");
         });
     }
 }

@@ -38,7 +38,7 @@ public class GtfsFeedClientTests
         entityOutput.WriteTag(1, WireFormat.WireType.LengthDelimited);
         entityOutput.WriteString("e1");
 
-        // field 8: VehiclePosition
+        // field 4: VehiclePosition
         using var vpMs = new MemoryStream();
         using var vpOut = new CodedOutputStream(vpMs);
 
@@ -63,7 +63,7 @@ public class GtfsFeedClientTests
         posOut.WriteFloat(23.33f);
         posOut.WriteTag(3, WireFormat.WireType.Fixed32);
         posOut.WriteFloat(90f);
-        posOut.WriteTag(6, WireFormat.WireType.Fixed32);
+        posOut.WriteTag(5, WireFormat.WireType.Fixed32);
         posOut.WriteFloat(40f);
         posOut.Flush();
 
@@ -81,7 +81,7 @@ public class GtfsFeedClientTests
         vpOut.WriteBytes(Google.Protobuf.ByteString.CopyFrom(vdMs.ToArray()));
         vpOut.Flush();
 
-        entityOutput.WriteTag(8, WireFormat.WireType.LengthDelimited);
+        entityOutput.WriteTag(4, WireFormat.WireType.LengthDelimited);
         entityOutput.WriteBytes(Google.Protobuf.ByteString.CopyFrom(vpMs.ToArray()));
         entityOutput.Flush();
 

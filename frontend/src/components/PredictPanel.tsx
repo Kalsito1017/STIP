@@ -58,34 +58,34 @@ export function PredictPanel({ routeId, stopId: initialStopId, stopSequence = 1 
 
   const bucketColor =
     delayBucket === t('on_time')
-      ? 'text-green-600'
+      ? 'text-green-600 dark:text-green-400'
       : delayBucket === t('slight_delay')
-        ? 'text-amber-600'
+        ? 'text-amber-600 dark:text-amber-400'
         : delayBucket === t('moderate_delay')
-          ? 'text-orange-600'
-          : 'text-red-600';
+          ? 'text-orange-600 dark:text-orange-400'
+          : 'text-red-600 dark:text-red-400';
 
   const bucketBg =
     delayBucket === t('on_time')
-      ? 'bg-green-50'
+      ? 'bg-green-50 dark:bg-green-950'
       : delayBucket === t('slight_delay')
-        ? 'bg-amber-50'
+        ? 'bg-amber-50 dark:bg-amber-950'
         : delayBucket === t('moderate_delay')
-          ? 'bg-orange-50'
-          : 'bg-red-50';
+          ? 'bg-orange-50 dark:bg-orange-950'
+          : 'bg-red-50 dark:bg-red-950';
 
   return (
-    <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-5 shadow-sm">
-      <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-4">
+    <div className="bg-card border border-border rounded-lg p-4 sm:p-5 shadow-sm">
+      <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-4">
         <Zap className="w-4 h-4 text-purple-500" /> {t('title')}
       </h3>
 
       <div className="mb-3">
-        <label className="block text-xs text-slate-500 mb-1">{t('stop_label')}</label>
+        <label className="block text-xs text-muted-foreground mb-1">{t('stop_label')}</label>
         <select
           value={selectedStopId}
           onChange={(e) => setSelectedStopId(e.target.value)}
-          className="w-full text-sm border border-slate-300 rounded-md px-2 sm:px-3 py-1.5 bg-white"
+          className="w-full text-sm border border-border rounded-md px-2 sm:px-3 py-1.5 bg-background text-foreground"
         >
           <option value="">{t('select_stop')}</option>
           {sortedStops.map((s: { stopId: string; stopName: string }) => (
@@ -98,11 +98,11 @@ export function PredictPanel({ routeId, stopId: initialStopId, stopSequence = 1 
 
       <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4">
         <div>
-          <label className="block text-xs text-slate-500 mb-1">{t('day_label')}</label>
+          <label className="block text-xs text-muted-foreground mb-1">{t('day_label')}</label>
           <select
             value={dayOfWeek}
             onChange={(e) => setDayOfWeek(Number(e.target.value))}
-            className="w-full text-sm border border-slate-300 rounded-md px-2 sm:px-3 py-1.5 bg-white"
+            className="w-full text-sm border border-border rounded-md px-2 sm:px-3 py-1.5 bg-background text-foreground"
           >
             {DAYS.map((d, i) => (
               <option key={d} value={i}>{d}</option>
@@ -110,11 +110,11 @@ export function PredictPanel({ routeId, stopId: initialStopId, stopSequence = 1 
           </select>
         </div>
         <div>
-          <label className="block text-xs text-slate-500 mb-1">{t('hour_label')}</label>
+          <label className="block text-xs text-muted-foreground mb-1">{t('hour_label')}</label>
           <select
             value={hour}
             onChange={(e) => setHour(Number(e.target.value))}
-            className="w-full text-sm border border-slate-300 rounded-md px-2 sm:px-3 py-1.5 bg-white"
+            className="w-full text-sm border border-border rounded-md px-2 sm:px-3 py-1.5 bg-background text-foreground"
           >
             {HOURS.map((h) => (
               <option key={h} value={h}>{String(h).padStart(2, '0')}:00</option>
@@ -124,7 +124,7 @@ export function PredictPanel({ routeId, stopId: initialStopId, stopSequence = 1 
       </div>
 
       {isPeak && (
-        <div className="bg-amber-50 border border-amber-200 rounded-md px-3 py-1.5 text-xs text-amber-700 mb-4">
+        <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-md px-3 py-1.5 text-xs text-amber-700 dark:text-amber-300 mb-4">
           {t('peak_warning')}
         </div>
       )}
@@ -147,7 +147,7 @@ export function PredictPanel({ routeId, stopId: initialStopId, stopSequence = 1 
       </button>
 
       {prediction.error && (
-        <p className="text-red-600 text-xs mt-3 bg-red-50 border border-red-200 rounded-md p-2">
+        <p className="text-destructive text-xs bg-destructive/10 border border-destructive/20 rounded-md p-2 mt-3">
           {(prediction.error as AxiosError<{ error?: string; details?: string[] }>).response?.data?.details?.join?.(', ')
             ?? (prediction.error as AxiosError<{ error?: string }>).response?.data?.error
             ?? prediction.error.message}
@@ -157,7 +157,7 @@ export function PredictPanel({ routeId, stopId: initialStopId, stopSequence = 1 
       {prediction.data && (
         <div className={`mt-4 rounded-md p-3 sm:p-4 ${bucketBg}`}>
           <div className="flex items-center justify-between mb-2 flex-wrap gap-1">
-            <span className="text-xs text-slate-500">{t('predicted_delay')}</span>
+            <span className="text-xs text-muted-foreground">{t('predicted_delay')}</span>
             <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${bucketBg} ${bucketColor}`}>
               {delayBucket}
             </span>
@@ -166,11 +166,11 @@ export function PredictPanel({ routeId, stopId: initialStopId, stopSequence = 1 
             <span className={`text-2xl sm:text-3xl font-bold ${bucketColor}`}>
               {Math.round(prediction.data.predictedDelaySeconds)}s
             </span>
-            <span className="text-xs text-slate-500">
-              \u00B1{Math.round(prediction.data.confidenceInterval[1] - prediction.data.predictedDelaySeconds)}s
+            <span className="text-xs text-muted-foreground">
+              ±{Math.round(prediction.data.confidenceInterval[1] - prediction.data.predictedDelaySeconds)}s
             </span>
           </div>
-          <div className="mt-2 space-y-1 text-xs text-slate-500">
+          <div className="mt-2 space-y-1 text-xs text-muted-foreground">
             <div className="flex flex-wrap items-center justify-between gap-1">
               <span>{t('confidence_range')}</span>
               <span>
@@ -186,7 +186,7 @@ export function PredictPanel({ routeId, stopId: initialStopId, stopSequence = 1 
       )}
 
       {!prediction.data && !prediction.isPending && !prediction.error && (
-        <p className="text-xs text-slate-400 mt-3 text-center">
+        <p className="text-xs text-muted-foreground mt-3 text-center">
           {t('instruction')}
         </p>
       )}

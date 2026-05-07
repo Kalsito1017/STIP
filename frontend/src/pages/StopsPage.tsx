@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useStops } from '../hooks/useStops';
 import { SkeletonCard, SkeletonTable } from '../components/Skeleton';
 import { MapPin, ArrowUpDown, ArrowUp, ArrowDown, Map } from 'lucide-react';
+import { FavoriteButton } from '../components/FavoriteButton';
 import { useAppStore } from '../store/useAppStore';
 import { motion } from 'motion/react';
 import { EmptyState } from '../components/EmptyState';
@@ -172,6 +173,7 @@ export function StopsPage() {
                         <div className="flex items-center gap-2">
                           <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
                           <span className="font-medium text-foreground">{s.stopName}</span>
+                          <FavoriteButton entityType="stop" entityId={s.stopId} size="sm" />
                         </div>
                       </td>
                       <td className="p-3 text-muted-foreground font-mono text-xs">{s.stopId}</td>

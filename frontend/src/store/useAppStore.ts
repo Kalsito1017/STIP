@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import i18n, { type Locale, SUPPORTED_LOCALES, DEFAULT_LOCALE } from '../i18n';
 
+let pendingVehicleUpdates = new Map<string, Vehicle>();
+
 export interface User {
   userId: string;
   email: string;
@@ -81,7 +83,8 @@ interface AppState {
   isAuthenticated: boolean;
   language: Locale;
   setVehicles: (vehicles: Vehicle[]) => void;
-  updateVehicle: (vehicle: Vehicle) => void;
+  queueVehicleUpdate: (vehicle: Vehicle) => void;
+  flushVehicleUpdates: () => void;
   removeStaleVehicles: (activeIds: string[]) => void;
   setTripUpdates: (updates: TripUpdate[]) => void;
   updateTripUpdate: (update: TripUpdate) => void;
@@ -165,13 +168,35 @@ export const useAppStore = create<AppState>((set) => ({
   isAuthenticated: !!initialToken && !!initialUser,
   language: initialLanguage,
   setVehicles: (vehicles) => set({ vehicles }),
-  updateVehicle: (vehicle) =>
-    set((state) => ({
-      vehicles: [
-        ...state.vehicles.filter((v) => v.vehicleId !== vehicle.vehicleId),
-        vehicle,
-      ],
-    })),
+  queueVehicleUpdate: (vehicle) => {
+    pendingVehicleUpdates.set(vehicle.vehicleId, vehicle);
+  },
+  flushVehicleUpdates: () => {
+    if (pendingVehicleUpdates.size === 0) return;
+    const updates = pendingVehicleUpdates;
+    pendingVehicleUpdates = new Map();
+    set((state) => {
+      const prev = state.vehicles;
+      let changed = false;
+      const next = new Array(prev.length);
+      const prevById = new Map(prev.map((v, i) => [v.vehicleId, i]));
+      for (const [id, vehicle] of updates) {
+        const idx = prevById.get(id);
+        if (idx !== undefined) {
+          next[idx] = vehicle;
+          if (prev[idx] !== vehicle) changed = true;
+        } else {
+          next.push(vehicle);
+          changed = true;
+        }
+      }
+      if (!changed) return state;
+      for (let i = 0; i < next.length; i++) {
+        if (next[i] === undefined) next[i] = prev[i];
+      }
+      return { vehicles: next, lastUpdatedAt: new Date().toISOString() };
+    });
+  },
   removeStaleVehicles: (activeIds) =>
     set((state) => {
       const activeSet = new Set(activeIds);

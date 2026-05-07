@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { analyticsApi, stopsApi } from '../services/api';
 
-export function useStopCongestionAll() {
+export function useStopCongestionAll(enabled = true) {
   return useQuery({
     queryKey: ['stopCongestionAll'],
     queryFn: () => analyticsApi.getStopCongestionAll(),
+    enabled,
     staleTime: 300_000,
   });
 }

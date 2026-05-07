@@ -85,7 +85,7 @@ public class TripUpdateFeedClientTests
         tuOut.WriteBytes(Google.Protobuf.ByteString.CopyFrom(vdMs.ToArray()));
         tuOut.Flush();
 
-        entityOutput.WriteTag(4, WireFormat.WireType.LengthDelimited);
+        entityOutput.WriteTag(3, WireFormat.WireType.LengthDelimited);
         entityOutput.WriteBytes(Google.Protobuf.ByteString.CopyFrom(tuMs.ToArray()));
         entityOutput.Flush();
 

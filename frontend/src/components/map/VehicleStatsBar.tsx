@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Bus, TramFront, Train, Zap } from 'lucide-react';
 import type { Vehicle } from '../../store/useAppStore';
 import { TransitTypeRouteColor } from '../../constants/transit';
@@ -59,18 +60,39 @@ export function VehicleStatsBar({ vehicles }: Props) {
   return (
     <div className="absolute bottom-20 lg:bottom-6 left-3 sm:left-4 z-[1000] pointer-events-none">
       <div className="flex flex-wrap gap-1.5">
-        {typeCounts.map((tc) => (
-          <div
-            key={tc.type}
-            className="pointer-events-auto bg-card/90 backdrop-blur-sm border border-border rounded-full px-3 py-1.5 flex items-center gap-1.5 shadow-lg text-xs font-medium"
-          >
-            <tc.icon className="w-3 h-3" color={tc.color} />
-            <span className="text-foreground">{tc.count}</span>
-          </div>
-        ))}
-        <div className="pointer-events-auto bg-card/90 backdrop-blur-sm border border-border rounded-full px-3 py-1.5 flex items-center gap-1 shadow-lg text-xs font-medium">
+        <AnimatePresence mode="popLayout">
+          {typeCounts.map((tc) => (
+            <motion.div
+              key={tc.type}
+              layout
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.2 }}
+              className="pointer-events-auto bg-card/90 backdrop-blur-md border border-border/60 rounded-full px-3.5 py-2 flex items-center gap-2 shadow-lg text-sm font-medium"
+            >
+              <tc.icon className="w-3.5 h-3.5" color={tc.color} />
+              <motion.span
+                key={tc.count}
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-foreground tabular-nums"
+              >
+                {tc.count}
+              </motion.span>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+        <div className="pointer-events-auto bg-card/90 backdrop-blur-md border border-border/60 rounded-full px-3.5 py-2 flex items-center gap-2 shadow-lg text-sm font-medium">
           <span className="text-muted-foreground">{tMap('vehicles')}</span>
-          <span className="text-foreground font-bold">{total}</span>
+          <motion.span
+            key={total}
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-foreground font-bold tabular-nums"
+          >
+            {total}
+          </motion.span>
         </div>
       </div>
     </div>

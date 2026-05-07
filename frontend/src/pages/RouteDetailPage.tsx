@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { useRouteDetail } from '../hooks/useRoutes';
 import { useRouteDelayPattern } from '../hooks/useDelays';
 import { PredictPanel } from '../components/PredictPanel';
+import { FavoriteButton } from '../components/FavoriteButton';
 import { ErrorAlert } from '../components/ErrorAlert';
 import { Skeleton, SkeletonCard, SkeletonChart } from '../components/Skeleton';
 import { RouteBadge } from '../components/RouteBadge';
@@ -63,6 +64,7 @@ export function RouteDetailPage() {
                 <div className="flex items-center gap-2">
                   <h1 className="text-xl sm:text-2xl font-bold text-foreground truncate">{route.shortName}</h1>
                   <RouteBadge type={route.type} />
+                  <FavoriteButton entityType="route" entityId={route.routeId} />
                 </div>
                 <p className="text-sm text-muted-foreground truncate">{route.longName ?? t('route')}</p>
               </div>

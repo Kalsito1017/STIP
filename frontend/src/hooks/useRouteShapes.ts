@@ -11,10 +11,11 @@ export function useRouteShape(routeId: string) {
   });
 }
 
-export function useAllRouteShapes() {
+export function useAllRouteShapes(enabled = true) {
   return useQuery<RouteShapeCollection>({
     queryKey: ['allRouteShapes'],
     queryFn: () => routesApi.getAllShapes(),
+    enabled,
     staleTime: 1_800_000,
   });
 }

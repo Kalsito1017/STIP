@@ -5,13 +5,12 @@ import { useAppStore } from '../store/useAppStore';
 import type { Vehicle, TripUpdate, ServiceAlert } from '../store/useAppStore';
 
 export function useRealtime() {
-  const updateVehicle = useAppStore((s) => s.updateVehicle);
   const updateTripUpdate = useAppStore((s) => s.updateTripUpdate);
   const addAlert = useAppStore((s) => s.addAlert);
   const removeExpiredAlerts = useAppStore((s) => s.removeExpiredAlerts);
   const setConnectionState = useAppStore((s) => s.setConnectionState);
-  const setVehicleTimestamp = useAppStore((s) => s.setVehicleTimestamp);
   const connectionRef = useRef<signalR.HubConnection | null>(null);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -23,9 +22,15 @@ export function useRealtime() {
       .build();
 
     connection.on('VehicleUpdated', (vehicle: Vehicle) => {
-      if (!cancelled) {
-        updateVehicle(vehicle);
-        setVehicleTimestamp();
+      if (cancelled) return;
+      useAppStore.getState().queueVehicleUpdate(vehicle);
+      if (rafRef.current === null) {
+        rafRef.current = requestAnimationFrame(() => {
+          rafRef.current = null;
+          if (!cancelled) {
+            useAppStore.getState().flushVehicleUpdates();
+          }
+        });
       }
     });
 
@@ -76,9 +81,13 @@ export function useRealtime() {
     return () => {
       cancelled = true;
       setConnectionState('disconnected');
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
       connection.stop().catch(() => { /* ignore stop errors */ });
     };
-  }, [updateVehicle, updateTripUpdate, addAlert, removeExpiredAlerts, setConnectionState, setVehicleTimestamp]);
+  }, [updateTripUpdate, addAlert, removeExpiredAlerts, setConnectionState]);
 
   return connectionRef;
 }

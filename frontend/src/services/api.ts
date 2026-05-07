@@ -75,14 +75,19 @@ export const routesApi = {
     api.get(`/routes/${id}/shape`).then(r => r.data),
   getAllShapes: () =>
     api.get('/routes/shapes').then(r => r.data),
+  getReliabilityHistory: (id: string, from?: string, to?: string) =>
+    api.get(`/routes/${id}/reliability-history`, { params: { from, to } }).then(r => r.data),
 };
 
 export const stopsApi = {
   getAll: () => api.get('/stops').then(r => r.data),
+  getById: (id: string) => api.get(`/stops/${id}`).then(r => r.data),
   getNearby: (lat: number, lon: number, radiusKm: number = 0.5) =>
     api.get('/stops/nearby', { params: { lat, lon, radiusKm } }).then(r => r.data),
   getCongestion: (id: string, date?: string) =>
     api.get(`/stops/${id}/congestion`, { params: { date } }).then(r => r.data),
+  getPredictedArrivals: (id: string) =>
+    api.get(`/stops/${id}/predicted-arrivals`).then(r => r.data),
 };
 
 export const vehiclesApi = {
@@ -101,6 +106,8 @@ export const alertsApi = {
 };
 
 export const analyticsApi = {
+  getOverview: () =>
+    api.get('/analytics/overview').then(r => r.data),
   getHeatmap: (from?: string, to?: string) =>
     api.get('/analytics/heatmap/delays', { params: { from, to } }).then(r => r.data),
   getRanking: (top = 10, best = true) =>
@@ -136,6 +143,21 @@ export const predictionsApi = {
     api.post<DelayPredictionResponse>('/predictions/delay', body).then(r => r.data),
   predictTravelTime: (routeId: string, fromStopId: string, toStopId: string, departureTime: string) =>
     api.post<TravelTimePredictionResponse>('/predictions/travel-time', { routeId, fromStopId, toStopId, departureTime }).then(r => r.data),
+};
+
+export interface FavoriteDto {
+  id: number;
+  entityType: 'route' | 'stop';
+  entityId: string;
+  createdAt: string;
+}
+
+export const favoritesApi = {
+  getAll: () => api.get<FavoriteDto[]>('/favorites').then(r => r.data),
+  add: (entityType: string, entityId: string) =>
+    api.post<FavoriteDto>('/favorites', { entityType, entityId }).then(r => r.data),
+  remove: (id: number) =>
+    api.delete(`/favorites/${id}`).then(r => r.data),
 };
 
 export default api;

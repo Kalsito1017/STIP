@@ -6,6 +6,7 @@ import { useRoutes } from '../hooks/useRoutes';
 import { ErrorAlert } from '../components/ErrorAlert';
 import { SkeletonCard } from '../components/Skeleton';
 import { RouteBadge } from '../components/RouteBadge';
+import { FavoriteButton } from '../components/FavoriteButton';
 import { Input } from '../components/ui/input';
 import { EmptyState } from '../components/EmptyState';
 import { TransitTypeRouteColor } from '../constants/transit';
@@ -106,7 +107,10 @@ export function RoutesPage() {
               >
                 <div className="flex items-center justify-between mb-1 gap-2">
                   <span className="font-bold text-base sm:text-lg text-foreground truncate">{r.shortName}</span>
-                  <RouteBadge type={r.type} />
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    <RouteBadge type={r.type} />
+                    <FavoriteButton entityType="route" entityId={r.routeId} size="sm" />
+                  </div>
                 </div>
                 <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{r.longName ?? '\u2014'}</p>
               </motion.button>

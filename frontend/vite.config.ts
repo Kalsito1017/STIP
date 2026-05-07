@@ -17,6 +17,17 @@ export default defineConfig({
   optimizeDeps: {
     include: ['leaflet', 'maplibre-gl'],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('maplibre-gl')) return 'maplibre';
+          if (id.includes('recharts')) return 'recharts';
+          if (id.includes('/react-dom/') || id.includes('/react/') || id.includes('/react-router-dom/')) return 'vendor-react';
+        },
+      },
+    },
+  },
   server: {
     port: 5173,
     proxy: {

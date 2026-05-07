@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { createMaplibreGLLayer } from '../../lib/maplibre-gl-leaflet';
@@ -10,6 +10,7 @@ interface Props {
 export function MapLibreBasemap({ styleUrl }: Props) {
   const map = useMap();
   const layerRef = useRef<L.Layer | null>(null);
+  const [fallback, setFallback] = useState(false);
 
   useEffect(() => {
     if (layerRef.current) {
@@ -25,8 +26,9 @@ export function MapLibreBasemap({ styleUrl }: Props) {
       });
       glLayer.addTo(map);
       layerRef.current = glLayer;
+      setFallback(false);
     } catch (err) {
-      console.error('MapLibre GL layer failed, falling back to raster tiles:', err);
+      console.error('[MapLibre] GL layer failed, falling back to OSM raster:', err);
       const raster = (L as any).tileLayer(
         'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
         {
@@ -37,6 +39,7 @@ export function MapLibreBasemap({ styleUrl }: Props) {
       );
       raster.addTo(map);
       layerRef.current = raster;
+      setFallback(true);
     }
 
     return () => {
@@ -47,5 +50,13 @@ export function MapLibreBasemap({ styleUrl }: Props) {
     };
   }, [map, styleUrl]);
 
-  return null;
+  if (!fallback) return null;
+
+  return (
+    <div className="absolute bottom-20 lg:bottom-6 left-1/2 -translate-x-1/2 z-[1000] pointer-events-none">
+      <div className="bg-card/90 backdrop-blur-sm border border-border rounded-full px-3 py-1.5 shadow-lg text-xs text-muted-foreground">
+        Using OpenStreetMap tiles (vector tiles unavailable)
+      </div>
+    </div>
+  );
 }

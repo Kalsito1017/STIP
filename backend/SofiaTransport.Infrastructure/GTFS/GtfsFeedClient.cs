@@ -39,10 +39,22 @@ public class GtfsFeedClient : IGtfsFeedClient
 
         if (feed.ParseErrors.Count > 0)
         {
+            var truncatedCount = feed.ParseErrors.Count(e => e.ErrorType == "Truncated");
+            var invalidTagCount = feed.ParseErrors.Count(e => e.ErrorType == "InvalidTag");
+            var otherCount = feed.ParseErrors.Count - truncatedCount - invalidTagCount;
+
             _logger.LogWarning(
-                "Skipped {SkippedCount} malformed entities in vehicle-positions feed: {Errors}",
-                feed.ParseErrors.Count,
-                string.Join("; ", feed.ParseErrors));
+                "Skipped {SkippedCount} malformed entities in vehicle-positions feed: " +
+                "{TruncatedCount} truncated, {InvalidTagCount} invalid tags, {OtherCount} other",
+                feed.ParseErrors.Count, truncatedCount, invalidTagCount, otherCount);
+
+            foreach (var err in feed.ParseErrors)
+            {
+                _logger.LogDebug(
+                    "Malformed entity #{EntityIndex} [{ErrorType}] at byte offset {ByteOffset}: " +
+                    "{Message} (first bytes: {FirstBytes})",
+                    err.EntityIndex, err.ErrorType, err.ByteOffset, err.Message, err.FirstBytesHex);
+            }
         }
 
         var vehicles = new List<Vehicle>();
