@@ -3,6 +3,7 @@ import { ArrowLeft, MapPin } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useStops, useStopCongestion } from '../hooks/useStops';
 import { ErrorAlert } from '../components/ErrorAlert';
+import { FavoriteButton } from '../components/FavoriteButton';
 import { Skeleton, SkeletonChart } from '../components/Skeleton';
 import { ArrivalsBoard } from '../components/ArrivalsBoard';
 import { StopMap } from '../components/map/StopMap';
