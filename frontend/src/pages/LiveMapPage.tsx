@@ -82,7 +82,7 @@ export function LiveMapPage() {
   const darkMode = useAppStore((s) => s.darkMode);
   const routeFilter = useAppStore((s) => s.routeFilter);
   const { data: routes, isLoading: routesLoading, isError: routesError, error: routesErr, refetch: refetchRoutes } = useRoutes();
-  const { data: stops, isLoading: stopsLoading } = useStops();
+  const { data: stops, isLoading: stopsLoading, isError: stopsError, error: stopsErr, refetch: refetchStops } = useStops();
   const { data: liveVehicles, isLoading: vehiclesLoading } = useLiveVehicles();
   const [clusterMode, setClusterMode] = useState(false);
   const [showRoutes, setShowRoutes] = useState(true);
@@ -156,7 +156,20 @@ export function LiveMapPage() {
 
   const stopGeojson = useMemo(() => stopsToGeoJSON(stops), [stops]);
 
-  const routeLines = shapes ?? { type: 'FeatureCollection' as const, features: [] };
+  const routeLines = useMemo(() => {
+    const all = shapes ?? { type: 'FeatureCollection' as const, features: [] };
+    if (activeTransitTypes.size >= 4) return all;
+    return {
+      ...all,
+      features: all.features.filter((f) => {
+        const t = f.properties?.routeType?.toLowerCase();
+        if (t === 'tram') return activeTransitTypes.has(0);
+        if (t === 'metro') return activeTransitTypes.has(1);
+        if (t === 'trolley') return activeTransitTypes.has(11);
+        return activeTransitTypes.has(3);
+      }),
+    };
+  }, [shapes, activeTransitTypes]);
 
   const mapLoading = routesLoading || stopsLoading || vehiclesLoading || shapesLoading || heatmapLoading || congestionLoading;
   const loadingLayers = [
@@ -180,6 +193,11 @@ export function LiveMapPage() {
       {shapesError && (
         <div className="absolute top-28 left-4 right-4 z-[1000] max-w-md">
           <ErrorAlert message={routesShapeErr?.message ?? 'Failed to load route shapes'} onRetry={() => refetchShapes()} />
+        </div>
+      )}
+      {stopsError && (
+        <div className="absolute top-40 left-4 right-4 z-[1000] max-w-md">
+          <ErrorAlert message={stopsErr?.message ?? 'Failed to load stops'} onRetry={() => refetchStops()} />
         </div>
       )}
 

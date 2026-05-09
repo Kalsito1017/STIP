@@ -35,7 +35,7 @@ export function StopLayer({ data }: StopLayerProps) {
           </div>`
         );
       }}
-      key={JSON.stringify(data.features.length)}
+      key={JSON.stringify(data)}
     />
   );
 }

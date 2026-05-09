@@ -16,7 +16,7 @@ export function RouteShapeLayer({ data }: Props) {
         lineCap: 'round',
         lineJoin: 'round',
       })}
-      key={data.features.length}
+      key={JSON.stringify(data)}
     />
   );
 }

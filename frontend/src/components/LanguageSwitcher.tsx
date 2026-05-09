@@ -25,7 +25,7 @@ export function LanguageSwitcher({ compact = false }: LanguageSwitcherProps) {
           const next = SUPPORTED_LOCALES[(SUPPORTED_LOCALES.indexOf(language) + 1) % SUPPORTED_LOCALES.length];
           setLanguage(next);
         }}
-        className="relative flex items-center justify-center gap-1.5 w-10 h-10 rounded-full bg-card border border-border shadow-lg text-foreground hover:bg-accent transition-colors"
+        className="flex items-center justify-center bg-card/90 backdrop-blur-md shadow-lg border-border/60 border rounded-full h-10 w-10 text-foreground hover:bg-card transition-colors"
         aria-label={language === 'en' ? t('switch_to_bulgarian') : t('switch_to_english')}
         title={language === 'en' ? t('switch_to_bulgarian') : t('switch_to_english')}
       >

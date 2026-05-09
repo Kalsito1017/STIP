@@ -86,6 +86,7 @@ function getMaplibreGL() {
 
     getMaplibreMap(this: any) { return this._glMap; },
     getCanvas(this: any) { return this._glMap.getCanvas(); },
+    hasLoadFailed(this: any) { return this._loadFailed; },
     getSize(this: any) { return this._map.getSize().multiplyBy(1 + this.options.padding * 2); },
     getBounds(this: any) {
       const halfSize = this.getSize().multiplyBy(0.5);
@@ -123,11 +124,19 @@ function getMaplibreGL() {
         attributionControl: false,
       });
       this._glMap = new maplibregl.Map(options);
+      this._loadFailed = false;
 
       const _map = this._map;
       const _currentAttribution = this.getAttribution();
       const _getAttribution = this.getAttribution.bind(this);
+
+      this._glMap.on('error', (e: any) => {
+        console.warn('[MapLibre GL] Error:', e.error?.message || e.message || 'unknown');
+        this._loadFailed = true;
+      });
+
       this._glMap.on('load', () => {
+        this._loadFailed = false;
         if (_map && _map.attributionControl) {
           _map.attributionControl.removeAttribution(_currentAttribution);
           _map.attributionControl.addAttribution(_getAttribution());
@@ -161,7 +170,7 @@ function getMaplibreGL() {
     },
 
     _update(this: any) {
-      if (!this._map) return;
+      if (!this._map || this._loadFailed) return;
       this._offset = this._map.containerPointToLayerPoint([0, 0]);
       if (this._zooming) return;
       const container = this._container;
@@ -193,6 +202,7 @@ function getMaplibreGL() {
     },
 
     _animateZoom(this: any, e: any) {
+      if (this._loadFailed || !this._glMap?._actualCanvas) return;
       const scale = this._map.getZoomScale(e.zoom);
       const padding = this._map.getSize().multiplyBy(this.options.padding * scale);
       const viewHalf = this.getSize()._divideBy(2);
@@ -208,6 +218,10 @@ function getMaplibreGL() {
     _zoomStart() { (this as any)._zooming = true; },
 
     _zoomEnd(this: any) {
+      if (this._loadFailed || !this._glMap?._actualCanvas) {
+        this._zooming = false;
+        return;
+      }
       const scale = this._map.getZoomScale(this._map.getZoom());
       (L as any).DomUtil.setTransform(this._glMap._actualCanvas, null, scale);
       this._zooming = false;
@@ -215,7 +229,9 @@ function getMaplibreGL() {
     },
 
     _transitionEnd(this: any) {
+      if (this._loadFailed || !this._glMap?._actualCanvas) return;
       (L as any).Util.requestAnimFrame(() => {
+        if (this._loadFailed || !this._glMap?._actualCanvas) return;
         const zoom = this._map.getZoom();
         const center = this._map.getCenter();
         const offset = this._map.latLngToContainerPoint(this._map.getBounds().getNorthWest());

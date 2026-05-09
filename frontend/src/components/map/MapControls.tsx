@@ -45,10 +45,6 @@ export function MapControls({
 
   return (
     <>
-      <div className="absolute top-4 right-3 sm:right-4 z-[1000] pointer-events-auto">
-        <LanguageSwitcher compact />
-      </div>
-
       <div className="absolute bottom-20 lg:bottom-6 right-3 sm:right-4 z-[1000] pointer-events-auto flex flex-col gap-2">
         <AnimatePresence>
           {expanded && (
@@ -57,7 +53,7 @@ export function MapControls({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 8 }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
-            className="bg-card/95 backdrop-blur-md border border-border/60 rounded-2xl shadow-xl p-3 w-52"
+            className="bg-card/95 backdrop-blur-md border border-border/60 rounded-2xl shadow-xl p-3 w-64"
           >
             <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">
               {t('map_layers')}
@@ -88,6 +84,7 @@ export function MapControls({
       </AnimatePresence>
 
       <div className="flex flex-col gap-2">
+        <LanguageSwitcher compact />
         <Button
           variant="outline"
           size="icon"
@@ -127,7 +124,7 @@ function ToggleRow({ icon: Icon, label, checked, onChange }: {
       checked ? 'bg-primary/5 text-foreground' : 'text-muted-foreground hover:bg-secondary/50'
     }`}>
       <Icon className={`w-3.5 h-3.5 flex-shrink-0 transition-colors ${checked ? 'text-primary' : 'text-muted-foreground/60'}`} />
-      <span className="flex-1 truncate">{label}</span>
+      <span className="flex-1 text-[13px] leading-tight">{label}</span>
       <div className={`relative w-8 h-[18px] rounded-full transition-colors ${checked ? 'bg-primary' : 'bg-border'}`}>
         <div className={`absolute top-[2px] w-[14px] h-[14px] rounded-full bg-white shadow-sm transition-transform duration-200 ${
           checked ? 'translate-x-[14px]' : 'translate-x-[2px]'
