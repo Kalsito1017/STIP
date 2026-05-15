@@ -6,6 +6,7 @@ RUN dotnet publish SofiaTransport.Worker/SofiaTransport.Worker.csproj -c Release
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
 COPY --from=build /app .
+RUN apt-get update && apt-get install -y --no-install-recommends libgssapi-krb5-2 && rm -rf /var/lib/apt/lists/*
 RUN useradd -m -u 1500 appuser && chown -R appuser:appuser /app
 USER appuser
 ENTRYPOINT ["dotnet", "SofiaTransport.Worker.dll"]
